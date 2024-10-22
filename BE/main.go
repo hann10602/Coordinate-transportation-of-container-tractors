@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -24,10 +25,12 @@ const (
 var allItemStatues = [3]string{"Doing", "Done", "Deleted"}
 
 func (item ItemStatus) String() string {
+	fmt.Println("string ne`")
 	return allItemStatues[item]
 }
 
 func parseStr2ItemStatus(s string) (ItemStatus, error) {
+	fmt.Println("Parse ne`")
 	for i := range allItemStatues {
 		if allItemStatues[i] == s {
 			return ItemStatus(i), nil
@@ -38,6 +41,7 @@ func parseStr2ItemStatus(s string) (ItemStatus, error) {
 }
 
 func (item *ItemStatus) Scan(value interface{}) error {
+	fmt.Println("Scan ne`")
 	bytes, ok := value.([]byte)
 
 	if !ok {
@@ -56,7 +60,27 @@ func (item *ItemStatus) Scan(value interface{}) error {
 }
 
 func (item *ItemStatus) MarshalJSON() ([]byte, error) {
-	return []byte(fmt.Sprintf("%s", item.String())), nil
+	fmt.Println("Marshal ne`")
+	if item == nil {
+		return nil, nil
+	}
+
+	return []byte(fmt.Sprintf("\"%s\"", item.String())), nil
+}
+
+func (item *ItemStatus) UnmarshalJSON(data []byte) error {
+	fmt.Println("Unmarshal ne`")
+	str := strings.ReplaceAll(string(data), "\"", "")
+
+	itemValue, err := parseStr2ItemStatus(str)
+
+	if err != nil {
+		return err
+	}
+
+	*item = itemValue
+
+	return nil
 }
 
 type TodoItem struct {
@@ -73,10 +97,10 @@ func (TodoItem) TableName() string {
 }
 
 type TodoItemCreated struct {
-	Id          int    `json:"id" gorm:"column:id"`
-	Title       string `json:"title" gorm:"column:title"`
-	Description string `json:"description" gorm:"column:description"`
-	Status      string `json:"status" gorm:"column:status"`
+	Id          int         `json:"id" gorm:"column:id"`
+	Title       string      `json:"title" gorm:"column:title"`
+	Description string      `json:"description" gorm:"column:description"`
+	Status      *ItemStatus `json:"status" gorm:"column:status"`
 }
 
 func (TodoItemCreated) TableName() string {
