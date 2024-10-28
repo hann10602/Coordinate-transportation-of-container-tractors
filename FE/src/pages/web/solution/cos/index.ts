@@ -1,0 +1,1 @@
+export { COS } from './COS';

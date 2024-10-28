@@ -4,7 +4,7 @@ import { Header } from './Header';
 
 export const MainLayout = () => {
 	return (
-		<div className="relative h-[2000px] min-h-screen w-screen">
+		<div className="relative w-full h-[2000px] min-h-screen">
 			<Header />
 			<Outlet />
 			<Footer />
