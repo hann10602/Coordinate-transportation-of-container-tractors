@@ -13,10 +13,8 @@ import (
 	"gorm.io/gorm"
 )
 
-
-
 func main() {
-	dsn := "root:mny10602@tcp(172.17.0.2:3307)/gorm?charset=utf8mb4&parseTime=True"
+	dsn := "root:mny10602@tcp(localhost:3306)/gorm?charset=utf8mb4&parseTime=True"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if err != nil {
@@ -30,9 +28,9 @@ func main() {
 		items := v1.Group("/items")
 		{
 			items.GET("", GetItems(db))
-			items.GET("/:id", GetItem(db))
+			items.GET("/:id", ginitem.GetItem(db))
 			items.POST("", ginitem.CreateItem(db))
-			items.PUT("/:id", UpdateItem(db))
+			items.PUT("/:id", ginitem.UpdateItem(db))
 			items.DELETE("/:id", DeleteItem(db))
 		}
 	}
@@ -75,40 +73,6 @@ func GetItems(db *gorm.DB) func(*gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, common.NewSuccessResponse(data, paging, nil))
-	}
-}
-
-func GetItem(db *gorm.DB) func(*gin.Context) {
-	return func(c *gin.Context) {
-		var data model.TodoItem
-
-		id, err := strconv.Atoi(c.Param("id"))
-
-		if err := c.ShouldBind(&data); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		if err := db.Where("id = ?", id).First(&data).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
 	}
 }
 

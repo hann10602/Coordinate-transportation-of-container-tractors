@@ -14,7 +14,8 @@ type TodoItem struct {
 }
 
 var (
-	ErrTitleIsBlank = errors.New("Title cannot be blank")
+	ErrTitleIsBlank      = errors.New("Title cannot be blank")
+	ErrItemStatusDeleted = errors.New("Item was deleted")
 )
 
 func (TodoItem) TableName() string {

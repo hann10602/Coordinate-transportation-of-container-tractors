@@ -2,6 +2,7 @@ package ginitem
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
@@ -11,23 +12,31 @@ import (
 	"gorm.io/gorm"
 )
 
-func CreateItem(db *gorm.DB) func(*gin.Context) {
+func UpdateItem(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data model.TodoItemCreated
+		var data *model.TodoItemUpdated
+
+		id, err := strconv.Atoi(c.Param("id"))
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+
+			return
+		}
 
 		if err := c.ShouldBind(&data); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
-
-			return
 		}
 
 		store := storage.NewSqlStore(db)
 
-		business := biz.NewCreateItemBiz(store)
+		business := biz.NewUpdateItemBiz(store)
 
-		if err := business.CreateNewItem(c.Request.Context(), &data); err != nil {
+		if err := business.UpdateItemById(c, id, data); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
@@ -35,6 +44,6 @@ func CreateItem(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.Id))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse("Successfully"))
 	}
 }
