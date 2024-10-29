@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
 				path: '',
 				children: [
 					{
-						path: '/landing-page',
+						path: '/trang-chu',
 						element: <LandingPage />,
 					},
 					{

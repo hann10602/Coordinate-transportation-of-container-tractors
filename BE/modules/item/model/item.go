@@ -22,10 +22,10 @@ func (TodoItem) TableName() string {
 }
 
 type TodoItemCreated struct {
-	Id          int         `json:"id" gorm:"column:id"`
-	Title       string      `json:"title" gorm:"column:title"`
-	Description string      `json:"description" gorm:"column:description"`
-	Status      *ItemStatus `json:"status" gorm:"column:status"`
+	Id          int    `json:"id" gorm:"column:id"`
+	Title       string `json:"title" gorm:"column:title"`
+	Description string `json:"description" gorm:"column:description"`
+	Status      string `json:"status" gorm:"column:status"`
 }
 
 func (TodoItemCreated) TableName() string {
