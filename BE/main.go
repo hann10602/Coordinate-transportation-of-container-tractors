@@ -1,39 +1,20 @@
 package main
 
 import (
-	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/item/model"
-	ginitem "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/item/transport/gin"
-	"gorm.io/driver/mysql"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/db"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/routes"
 	"gorm.io/gorm"
 )
 
 func main() {
-	dsn := "root:mny10602@tcp(localhost:3306)/gorm?charset=utf8mb4&parseTime=True"
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	r := gin.Default()
-
-	v1 := r.Group("/v1")
-	{
-		items := v1.Group("/items")
-		{
-			items.GET("", GetItems(db))
-			items.GET("/:id", ginitem.GetItem(db))
-			items.POST("", ginitem.CreateItem(db))
-			items.PUT("/:id", ginitem.UpdateItem(db))
-			items.DELETE("/:id", DeleteItem(db))
-		}
-	}
+	db.DbConnection()
+	db.DbMigrate()
+	r := routes.Init()
 
 	r.Run()
 }
@@ -43,20 +24,16 @@ func GetItems(db *gorm.DB) func(*gin.Context) {
 		var paging common.Paging
 
 		if err := c.ShouldBind(&paging); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 
 			return
 		}
 
-		paging.Process()
-
-		var data []model.TodoItem
+		var data []model.TUser
 
 		db = db.Where("status <> ?", "Deleted")
 
-		if err := db.Table(model.TodoItem{}.TableName()).Count(&paging.Total).Error; err != nil {
+		if err := db.Table(model.TUser{}.TableName()).Count(&paging.Total).Error; err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error": err.Error(),
 			})
@@ -73,65 +50,5 @@ func GetItems(db *gorm.DB) func(*gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, common.NewSuccessResponse(data, paging, nil))
-	}
-}
-
-func UpdateItem(db *gorm.DB) func(*gin.Context) {
-	return func(c *gin.Context) {
-		var data model.TodoItemUpdated
-
-		id, err := strconv.Atoi(c.Param("id"))
-
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		if err := c.ShouldBind(&data); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		if err := db.Where("id = ?", id).Updates(&data).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse("Successfully"))
-	}
-}
-
-func DeleteItem(db *gorm.DB) func(*gin.Context) {
-	return func(c *gin.Context) {
-		id, err := strconv.Atoi(c.Param("id"))
-
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		if err := db.Table(model.TodoItem{}.TableName()).Where("id = ?", id).Updates(map[string]interface{}{
-			"status": "Deleted",
-		}).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": err.Error(),
-			})
-
-			return
-		}
-
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse("Successfully"))
 	}
 }
