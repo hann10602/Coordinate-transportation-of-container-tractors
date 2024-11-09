@@ -6,13 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "lint": "eslint",
     "preview": "vite preview",
     "prepare": "husky",
-    "format": "npx prettier --write ."
-  },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "format": "npx prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "dependencies": {
     "@iconify/react": "^5.0.2",

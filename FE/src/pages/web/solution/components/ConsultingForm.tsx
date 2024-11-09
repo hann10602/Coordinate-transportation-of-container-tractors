@@ -1,13 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Button } from '../../../../components';
 import { emailValidation } from '../../../../utils/validate';
-
-type TConsultingField = {
-  fullName: string;
-  email: string;
-  phoneNumber: string;
-  note?: string;
-};
+import { TConsultingField } from './types';
 
 export const ConsultingForm = () => {
   const {
@@ -23,8 +17,8 @@ export const ConsultingForm = () => {
   return (
     <div className="w-full">
       <p className="mb-10 text-4xl font-bold">Tư vấn giải pháp quản lý vận tải</p>
-      <p className="mb-20 text-xl font-bold">
-        Điền thông tin vào đăng ký dưới đây, Smartlog sẽ liên lạc để hẹn một buổi demo giải pháp quản lý vận tải sớm
+      <p className="mb-10 text-xl font-semibold">
+        Điền thông tin vào đăng ký dưới đây, Transportation sẽ liên lạc để hẹn một buổi demo giải pháp quản lý vận tải sớm
         nhất.
       </p>
       <form action="" className="flex flex-col w-full">
@@ -35,7 +29,7 @@ export const ConsultingForm = () => {
           <input
             id="full-name"
             type="text"
-            className="block w-full p-4 text-black"
+            className="block rounded-sm w-full p-4 text-black"
             {...register('fullName', { required: 'Full-name field is required' })}
           />
           {errors.fullName && <p className="text-red-400 absolute -bottom-7 mt-2">{errors.fullName.message}</p>}
@@ -48,7 +42,7 @@ export const ConsultingForm = () => {
           <input
             id="email"
             type="text"
-            className="block w-full p-4 text-black"
+            className="block rounded-sm w-full p-4 text-black"
             {...register('email', {
               required: 'Email field is required',
               validate: {
@@ -65,7 +59,7 @@ export const ConsultingForm = () => {
           <input
             id="phoneNumber"
             type="text"
-            className="block w-full p-4 text-black placeholder:text-xl"
+            className="block rounded-sm w-full p-4 text-black placeholder:text-xl"
             placeholder="0912345678"
             {...register('phoneNumber', { required: 'Phone number field is required' })}
           />
@@ -77,7 +71,7 @@ export const ConsultingForm = () => {
           </label>
           <textarea
             id="note"
-            className="block w-full p-4 text-black h-40 resize-none placeholder:text-xl"
+            className="block rounded-sm w-full p-4 text-black h-40 resize-none placeholder:text-xl"
             placeholder="Nội dung yêu cầu, thắc mắc, hỗ trợ sản phẩm..."
             {...register('note')}
           />

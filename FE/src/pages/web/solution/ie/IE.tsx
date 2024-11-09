@@ -1,7 +1,13 @@
+import { useRef } from 'react';
 import { Button } from '../../../../components';
 import { ConsultingForm } from '../components';
 
 export const IE = () => {
+  const consultingFormRef = useRef<HTMLDivElement>(null);
+  const handleScrollToConsultingForm = () => {
+    consultingFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <div className="text-white">
       <div className="relative flex justify-center items-center h-[680px]">
@@ -13,7 +19,12 @@ export const IE = () => {
           <p className="text-xl mt-3">Vận chuyển container rỗng từ kho khách đem về bãi container</p>
           <div className="flex justify-center items-center space-x-10 mt-6">
             <Button className="w-40 py-3 font-semibold bg-cyan-900 hover:bg-cyan-800">Đặt vận chuyển</Button>
-            <Button className="w-40 py-3 font-semibold bg-teal-500 hover:bg-teal-400">Tư vấn ngay</Button>
+            <Button
+              className="w-40 py-3 font-semibold bg-teal-500 hover:bg-teal-400"
+              onClick={handleScrollToConsultingForm}
+            >
+              Tư vấn ngay
+            </Button>
           </div>
         </div>
       </div>
@@ -135,9 +146,9 @@ export const IE = () => {
       </div>
       <div className="px-32 py-20 w-full flex gap-x-20 items-center bg-sky-800">
         <img className="w-1/2" src="/public/images/time-schedule.png" alt="time-schedule" />
-        	<div className="w-full">
-          					<ConsultingForm />
-        		</div>
+        <div className="w-full" ref={consultingFormRef}>
+          <ConsultingForm />
+        </div>
       </div>
     </div>
   );
