@@ -2,9 +2,10 @@ import React from 'react';
 
 type Props = {
 	children: React.ReactNode;
-	className: string;
+	className?: string;
+	onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 };
 
 export const Button = (props: Props) => {
-	return <button {...props} className={`${props.className} p-4 rounded-md`} />;
+	return <button {...props} className={`${props.className} p-4 bg-black rounded-md`} />;
 };

@@ -1,7 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { MainLayout } from '../layout';
 import { LandingPage } from '../pages/web';
-import { COS, SSM, STM, STX, SWM } from '../pages/web/solution';
+import { OE, OF } from '../pages/web/solution';
+import { IE } from '../pages/web/solution/ie';
+import { IF } from '../pages/web/solution/if';
 
 export const router = createBrowserRouter([
 	{
@@ -16,24 +18,20 @@ export const router = createBrowserRouter([
 						element: <LandingPage />,
 					},
 					{
-						path: '/stm-solution',
-						element: <STM />,
+						path: '/ie',
+						element: <IE />,
 					},
 					{
-						path: '/cos-solution',
-						element: <COS />,
+						path: '/if',
+						element: <IF />,
 					},
 					{
-						path: '/ssm-solution',
-						element: <SSM />,
+						path: '/oe',
+						element: <OE />,
 					},
 					{
-						path: '/swm-solution',
-						element: <SWM />,
-					},
-					{
-						path: '/stx-solution',
-						element: <STX />,
+						path: '/of',
+						element: <OF />,
 					},
 				],
 			},

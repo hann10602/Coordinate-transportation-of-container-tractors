@@ -1,1 +1,0 @@
-export { SWM } from './SWM';

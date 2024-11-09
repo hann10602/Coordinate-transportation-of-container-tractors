@@ -1,8 +1,6 @@
 import { Button } from '../../../components';
 
-type Props = {};
-
-export const LandingPage = (props: Props) => {
+export const LandingPage = () => {
 	return (
 		<div className="w-full relative h-800">
 			<img src="/public/images/stm-solution.jpg" className="w-full h-full object-cover" alt="background" />
