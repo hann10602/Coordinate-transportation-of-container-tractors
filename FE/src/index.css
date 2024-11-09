@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .solution-dropdown:hover .solution-menu {
-	display: block;
+  display: block;
 }

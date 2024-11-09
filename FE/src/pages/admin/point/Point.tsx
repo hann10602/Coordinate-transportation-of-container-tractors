@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 export const Point = (props: Props) => {
-  return (
-    <div>Point</div>
-  )
-}
+  return <div>Point</div>;
+};

@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 export const Order = (props: Props) => {
-  return (
-    <div>Order</div>
-  )
-}
+  return <div>Order</div>;
+};

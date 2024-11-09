@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 export const TratorTruck = (props: Props) => {
-  return (
-    <div>TratorTruck</div>
-  )
-}
+  return <div>TratorTruck</div>;
+};

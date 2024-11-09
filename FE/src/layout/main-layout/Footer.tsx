@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 export const Footer = (props: Props) => {
-  return (
-    <div>Footer</div>
-  )
-}
+  return <div>Footer</div>;
+};
