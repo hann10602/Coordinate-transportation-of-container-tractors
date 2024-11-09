@@ -135,7 +135,7 @@ export const IE = () => {
       </div>
       <div className="px-32 py-20 w-full flex gap-x-20 items-center bg-sky-800">
         <img className="w-1/2" src="/public/images/time-schedule.png" alt="time-schedule" />
-        		<div className="w-full">
+        	<div className="w-full">
           		<ConsultingForm />
         	</div>
       </div>
