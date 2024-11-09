@@ -11,6 +11,9 @@
     "prepare": "husky",
     "format": "npx prettier --write ."
   },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
   "dependencies": {
     "@iconify/react": "^5.0.2",
     "dotenv": "^16.4.5",
