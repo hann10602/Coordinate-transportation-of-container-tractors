@@ -1,0 +1,1 @@
+export { StartLocation } from './StartLocation';

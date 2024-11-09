@@ -12,12 +12,17 @@
     "format": "npx prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\""
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@iconify/react": "^5.0.2",
+    "@types/leaflet": "^1.9.14",
     "dotenv": "^16.4.5",
+    "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.53.1",
-    "react-router-dom": "^6.27.0"
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.27.0",
+    "save": "^2.9.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",

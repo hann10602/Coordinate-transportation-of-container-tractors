@@ -5,6 +5,7 @@ import { Register } from '../pages/auth/Register';
 import { LandingPage } from '../pages/web';
 import { OE, OF } from '../pages/web/solution';
 import { IE } from '../pages/web/solution/ie';
+import { StartLocation } from '../pages/web/solution/ie/steps/start-location';
 import { IF } from '../pages/web/solution/if';
 
 export const router = createBrowserRouter([
@@ -46,7 +47,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: '/ie-request/start-location',
-                element: <></>
+                element: <StartLocation />
               }
             ]
           }
