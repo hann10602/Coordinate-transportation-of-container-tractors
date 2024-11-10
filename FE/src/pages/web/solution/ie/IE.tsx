@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { Button } from '../../../../components';
 import { ConsultingForm } from '../components';
+import { Link } from 'react-router-dom';
 
 export const IE = () => {
   const consultingFormRef = useRef<HTMLDivElement>(null);
@@ -18,7 +19,9 @@ export const IE = () => {
           <p className="text-6xl font-bold">Giải pháp vận chuyển Import Express</p>
           <p className="text-xl mt-3">Vận chuyển container rỗng từ kho khách đem về bãi container</p>
           <div className="flex justify-center items-center space-x-10 mt-6">
-            <Button className="w-40 py-3 font-semibold bg-cyan-900 hover:bg-cyan-800">Đặt vận chuyển</Button>
+            <Link to="/ie-request/location">
+              <Button className="w-40 py-3 font-semibold bg-cyan-900 hover:bg-cyan-800">Đặt vận chuyển</Button>
+            </Link>
             <Button
               className="w-40 py-3 font-semibold bg-teal-500 hover:bg-teal-400"
               onClick={handleScrollToConsultingForm}

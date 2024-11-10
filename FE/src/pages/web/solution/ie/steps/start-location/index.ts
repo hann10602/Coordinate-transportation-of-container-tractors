@@ -1,1 +1,0 @@
-export { StartLocation } from './StartLocation';

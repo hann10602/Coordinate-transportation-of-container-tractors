@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '../../../../components';
 import { ConsultingForm } from '../components';
 
@@ -18,7 +19,9 @@ export const OE = () => {
           <p className="text-6xl font-bold">Giải pháp vận chuyển Outbound Express</p>
           <p className="text-xl mt-3">Vận chuyển container rỗng từ bãi container tới kho khách để thêm hàng</p>
           <div className="flex justify-center items-center space-x-10 mt-6">
-            <Button className="w-40 py-3 font-semibold bg-cyan-900 hover:bg-cyan-800">Đặt vận chuyển</Button>
+            <Link to="/oe-request/location">
+              <Button className="w-40 py-3 font-semibold bg-cyan-900 hover:bg-cyan-800">Đặt vận chuyển</Button>
+            </Link>
             <Button
               className="w-40 py-3 font-semibold bg-teal-500 hover:bg-teal-400"
               onClick={handleScrollToConsultingForm}

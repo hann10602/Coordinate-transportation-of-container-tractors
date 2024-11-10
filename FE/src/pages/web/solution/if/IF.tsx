@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { Button } from '../../../../components';
 import { ConsultingForm } from '../components';
+import { Link } from 'react-router-dom';
 
 export const IF = () => {
   const consultingFormRef = useRef<HTMLDivElement>(null);
@@ -18,7 +19,9 @@ export const IF = () => {
           <p className="text-6xl font-bold">Giải pháp vận chuyển Import Freight</p>
           <p className="text-xl mt-3">Vận chuyển container đầy từ cảng về kho của khách hàng</p>
           <div className="flex justify-center items-center space-x-10 mt-6">
-            <Button className="w-40 py-3 font-semibold bg-cyan-900 hover:bg-cyan-800">Đặt vận chuyển</Button>
+            <Link to="/if-request/location">
+              <Button className="w-40 py-3 font-semibold bg-cyan-900 hover:bg-cyan-800">Đặt vận chuyển</Button>
+            </Link>
             <Button
               className="w-40 py-3 font-semibold bg-teal-500 hover:bg-teal-400"
               onClick={handleScrollToConsultingForm}

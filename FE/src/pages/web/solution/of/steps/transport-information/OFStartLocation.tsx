@@ -1,5 +1,5 @@
 import { Map } from "./Map";
 
-export const StartLocation = () => {
+export const OFStartLocation = () => {
   return <Map />;
 };

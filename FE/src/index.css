@@ -2,10 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .solution-dropdown:hover .solution-menu {
   display: block;
 }
 .leaflet-container {
-  height: 100vh;
-  width: 100wh;
+  height: 100%;
+  width: 100%;
 }

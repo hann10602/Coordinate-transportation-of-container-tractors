@@ -1,0 +1,1 @@
+export { IFStartLocation } from './IFStartLocation';
