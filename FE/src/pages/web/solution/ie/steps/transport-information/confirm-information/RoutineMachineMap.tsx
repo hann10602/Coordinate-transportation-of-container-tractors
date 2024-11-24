@@ -43,10 +43,7 @@ export const RoutineMachineMap = ({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <RoutingMachine
-        waypoints={[startLocation, endLocation, [20.96193312256204, 105.76609500340967]]}
-        setDistance={setDistance}
-      />
+      <RoutingMachine waypoints={[startLocation, endLocation]} setDistance={setDistance} />
     </MapContainer>
   );
 };

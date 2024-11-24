@@ -35,7 +35,7 @@ export const IETransportInformation = () => {
     <StepContext.Provider value={{ setStep }}>
       {IE_STEP_INFORMATION.map((item) =>
         item.step === step ? (
-          <div className="w-full flex flex-1" key={item.step}>
+          <div className="w-full flex flex-1 h-full" key={item.step}>
             {item.menu && <Sidebar menu={item.menu} />}
             <div className="flex-1 px-8 py-16 h-full overflow-y-scroll">
               <div className="w-full h-[600px] space-y-4">{item.component}</div>

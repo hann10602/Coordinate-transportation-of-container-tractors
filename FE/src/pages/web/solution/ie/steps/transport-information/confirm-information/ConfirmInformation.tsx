@@ -26,7 +26,7 @@ export const IEConfirmInformation = () => {
 
   const [distance, setDistance] = useState<number>(0);
 
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const section = searchParams.get('section');
 
   const totalPrice = informationStore.containerType
@@ -42,10 +42,22 @@ export const IEConfirmInformation = () => {
       .then((res) => window.open(res.data.data));
   };
 
+  const handleChangeSection = (step: EIESteps) => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set('section', step);
+
+    setSearchParams(newParams);
+  };
+
   return (
     <>
       <p className="text-3xl font-bold mb-10">Xác nhận thông tin</p>
-      <Card id={EIESteps.DISTANCE} title="Quãng đường" isSelected={section === EIESteps.DISTANCE}>
+      <Card
+        id={EIESteps.DISTANCE}
+        title="Quãng đường"
+        isSelected={section === EIESteps.DISTANCE}
+        onClick={() => handleChangeSection(EIESteps.DISTANCE)}
+      >
         <div className="h-[600px]">
           <RoutineMachineMap
             startLocation={informationStore.startPoint}
@@ -54,7 +66,12 @@ export const IEConfirmInformation = () => {
           />
         </div>
       </Card>
-      <Card id={EIESteps.RESULT} title="Chi phí" isSelected={section === EIESteps.RESULT}>
+      <Card
+        id={EIESteps.RESULT}
+        title="Chi phí"
+        isSelected={section === EIESteps.RESULT}
+        onClick={() => handleChangeSection(EIESteps.RESULT)}
+      >
         <div className="w-full flex justify-between items-center mb-2">
           <p className="font-semibold">Loại container:</p>
           {informationStore.containerType && <p>{containerTypeConvert[informationStore.containerType].title}</p>}
