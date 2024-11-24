@@ -1,1 +1,1 @@
-export { IEStartLocation } from './IEStartLocation';
+export { IETransportInformation } from './IETransportInformation';

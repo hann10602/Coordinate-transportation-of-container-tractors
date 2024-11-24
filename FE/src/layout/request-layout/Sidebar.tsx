@@ -19,7 +19,7 @@ export const Sidebar = ({ menu }: Props) => {
   };
 
   return (
-    <div className="border-r border-gray-400 h-full">
+    <div className="border-r border-gray-400 h-full w-[240px]">
       {menu.map((item) => (
         <div
           key={item.code}

@@ -1,16 +1,21 @@
-import { TRequestSidebarMenu } from '../../types';
-import { Sidebar } from './Sidebar';
+import { Link } from 'react-router-dom';
 
 type Props = {
-  menu: TRequestSidebarMenu[];
   children: React.ReactNode;
 };
 
-export const RequestLayout = ({ menu, children }: Props) => {
+export const RequestLayout = ({ children }: Props) => {
   return (
     <div className="flex h-screen w-full">
-      <Sidebar menu={menu} />
-      <div className="flex-1 px-8 py-16 h-full overflow-y-scroll">{children}</div>
+      <div className="w-full h-full flex flex-col">
+        <div className="w-full h-[64px] px-4 flex justify-between items-center border-b border-gray-400">
+          <Link to="/trang-chu">
+            <img src="/public/images/logo.jpg" className="w-12 h-12 object-cover rounded-full" alt="Logo" />
+          </Link>
+          <div>asd</div>
+        </div>
+        <div className="flex-1">{children}</div>
+      </div>
     </div>
   );
 };

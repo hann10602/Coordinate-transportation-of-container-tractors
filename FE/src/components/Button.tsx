@@ -7,5 +7,10 @@ type Props = {
 };
 
 export const Button = (props: Props) => {
-  return <button {...props} className={`${props.className} p-4 bg-black rounded-md`} />;
+  return (
+    <button
+      {...props}
+      className={`${props.className} flex justify-center items-center h-12 w-40 bg-black rounded-md`}
+    />
+  );
 };

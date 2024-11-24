@@ -21,6 +21,8 @@ func CreateUser(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
+		data.Status = "Exist"
+
 		store := storage.NewSqlStore(db)
 
 		business := biz.NewCreateUserBiz(store)

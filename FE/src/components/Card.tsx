@@ -3,14 +3,19 @@ type Props = {
   id: string;
   isSelected?: boolean;
   children: React.ReactNode;
+  onClick?: () => void;
 };
 
-export const Card = ({ title, id, isSelected, children }: Props) => {
+export const Card = ({ title, id, isSelected, children, onClick }: Props) => {
   return (
-    <div className="border border-gray-400 rounded-lg overflow-hidden flex h-full w-full" id={id}>
-      <div className={`${isSelected ? '' : 'hidden'} h-full w-3 bg-emerald-600`}></div>
-      <div className="p-4 flex-1">
-        <p className="text-sm font-bold">{title}</p>
+    <div
+      className="relative border border-gray-400 rounded-lg overflow-hidden flex h-min w-full"
+      id={id}
+      onClick={onClick}
+    >
+      <div className={`${isSelected ? '' : 'hidden'} absolute left-0 top-0 h-full w-3 bg-emerald-600`}></div>
+      <div className="p-10 flex-1">
+        <p className="font-bold mb-10">{title}</p>
         {children}
       </div>
     </div>

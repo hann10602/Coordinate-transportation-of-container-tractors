@@ -1,13 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { IERequestMenu } from '../constants';
 import { AuthCheck, AuthLayout, MainLayout } from '../layout';
 import { RequestLayout } from '../layout/request-layout';
 import { Login } from '../pages/auth/Login';
 import { Register } from '../pages/auth/Register';
 import { LandingPage } from '../pages/web';
 import { OE, OEStartLocation, OF, OFStartLocation } from '../pages/web/solution';
-import { IE, IEStartLocation } from '../pages/web/solution/ie';
+import { IE, IETransportInformation } from '../pages/web/solution/ie';
 import { IF, IFStartLocation } from '../pages/web/solution/if';
+import { Completed } from '../pages/web/solution/components/completed/Completed';
+import { Failure } from '../pages/web/solution/components/failure/Failure';
 
 export const router = createBrowserRouter([
   {
@@ -49,8 +50,8 @@ export const router = createBrowserRouter([
               {
                 path: '/ie-request/location',
                 element: (
-                  <RequestLayout menu={IERequestMenu}>
-                    <IEStartLocation />
+                  <RequestLayout>
+                    <IETransportInformation />
                   </RequestLayout>
                 )
               }
@@ -62,7 +63,7 @@ export const router = createBrowserRouter([
               {
                 path: '/if-request/location',
                 element: (
-                  <RequestLayout menu={IERequestMenu}>
+                  <RequestLayout>
                     <IFStartLocation />
                   </RequestLayout>
                 )
@@ -75,7 +76,7 @@ export const router = createBrowserRouter([
               {
                 path: '/oe-request/location',
                 element: (
-                  <RequestLayout menu={IERequestMenu}>
+                  <RequestLayout>
                     <OEStartLocation />
                   </RequestLayout>
                 )
@@ -88,8 +89,34 @@ export const router = createBrowserRouter([
               {
                 path: '/of-request/location',
                 element: (
-                  <RequestLayout menu={IERequestMenu}>
+                  <RequestLayout>
                     <OFStartLocation />
+                  </RequestLayout>
+                )
+              }
+            ]
+          },
+          {
+            path: '',
+            children: [
+              {
+                path: '/payment-completed',
+                element: (
+                  <RequestLayout>
+                    <Completed />
+                  </RequestLayout>
+                )
+              }
+            ]
+          },
+          {
+            path: '',
+            children: [
+              {
+                path: '/payment-failure',
+                element: (
+                  <RequestLayout>
+                    <Failure />
                   </RequestLayout>
                 )
               }
