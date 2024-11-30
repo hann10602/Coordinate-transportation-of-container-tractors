@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
+	modeluser "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/user"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/biz"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/storage"
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ import (
 
 func CreateUser(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data model.TUserCreated
+		var data modeluser.UserCreated
 
 		if err := c.ShouldBind(&data); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
@@ -21,7 +21,7 @@ func CreateUser(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		data.Status = "Exist"
+		data.Status = modeluser.ACTIVE
 
 		store := storage.NewSqlStore(db)
 

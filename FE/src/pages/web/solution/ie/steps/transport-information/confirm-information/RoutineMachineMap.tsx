@@ -38,12 +38,12 @@ export const RoutineMachineMap = ({
   setDistance: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   return (
-    <MapContainer center={[20.96193312256204, 105.76609500340967]} zoom={13} scrollWheelZoom={false}>
+    <MapContainer center={[20.96193312256204000, 105.76609500340967000]} zoom={13} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <RoutingMachine waypoints={[startLocation, endLocation]} setDistance={setDistance} />
+      <RoutingMachine waypoints={[startLocation, endLocation, [20.84390000000000000, 106.68810000000000000]]} setDistance={setDistance} />
     </MapContainer>
   );
 };

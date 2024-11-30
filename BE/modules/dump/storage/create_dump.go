@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeluser "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/user"
+	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
 )
 
-func (s *sqlStore) CreateUser(ctx context.Context, data *modeluser.UserCreated) error {
+func (s *sqlStore) CreateDump(ctx context.Context, data *modeldump.DumpCreated) error {
 	if err := s.db.Create(&data).Error; err != nil {
 		return common.ErrDB(err)
 	}

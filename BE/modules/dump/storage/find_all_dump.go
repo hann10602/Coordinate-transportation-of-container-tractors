@@ -4,15 +4,13 @@ import (
 	"context"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeluser "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/user"
+	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
 )
 
-func (s *sqlStore) GetListUser(ctx context.Context, paging common.Paging) ([]modeluser.User, common.Paging, error) {
-	var data []modeluser.User
+func (s *sqlStore) GetListDump(ctx context.Context, paging common.Paging) ([]modeldump.Dump, common.Paging, error) {
+	var data []modeldump.Dump
 
-	s.db = s.db.Table(modeluser.User{}.TableName())
-
-	if err := s.db.Count(&paging.Total).Error; err != nil {
+	if err := s.db.Table(modeldump.Dump{}.TableName()).Count(&paging.Total).Error; err != nil {
 		return nil, common.Paging{}, common.ErrDB(err)
 	}
 

@@ -1,4 +1,4 @@
-package model
+package modeluser
 
 import (
 	"errors"
@@ -7,7 +7,7 @@ import (
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
 )
 
-type TUser struct {
+type User struct {
 	common.SQLModel
 	FullName    string `json:"full_name" gorm:"column:full_name;size:255;not null"`
 	Username    string `json:"username" gorm:"column:username;size:255;not null;unique;check:char_length(username) >= 6"`
@@ -21,6 +21,11 @@ type TUser struct {
 type TRole struct {
 }
 
+const (
+	ACTIVE  = "Active"
+	DELETED = "Deleted"
+)
+
 var (
 	ErrFullNameIsEmpty = errors.New("Full name cannot be empty")
 	ErrUsernameIsEmpty = errors.New("Username cannot be empty")
@@ -29,11 +34,11 @@ var (
 	ErrUserDeletedNew  = common.NewCustomError(errors.New("User is deleted"), "User is deleted", "ErrUserDeleted")
 )
 
-func (TUser) TableName() string {
+func (User) TableName() string {
 	return "user"
 }
 
-type TUserCreated struct {
+type UserCreated struct {
 	Id          int64      `json:"id" gorm:"column:id"`
 	FullName    string     `json:"full_name" gorm:"column:full_name"`
 	Username    string     `json:"username" gorm:"column:username"`
@@ -43,11 +48,11 @@ type TUserCreated struct {
 	CreatedAt   *time.Time `json:"created_at" gorm:"column:created_at"`
 }
 
-func (TUserCreated) TableName() string {
-	return TUser{}.TableName()
+func (UserCreated) TableName() string {
+	return User{}.TableName()
 }
 
-type TUserUpdated struct {
+type UserUpdated struct {
 	Id          int64      `json:"id" gorm:"column:id"`
 	FullName    string     `json:"full_name" gorm:"column:full_name"`
 	Username    string     `json:"username" gorm:"column:username"`
@@ -56,6 +61,6 @@ type TUserUpdated struct {
 	UpdatedAt   *time.Time `json:"updated_at" gorm:"column:updated_at"`
 }
 
-func (TUserUpdated) TableName() string {
-	return TUser{}.TableName()
+func (UserUpdated) TableName() string {
+	return User{}.TableName()
 }

@@ -1,4 +1,4 @@
-package ginuser
+package gindump
 
 import (
 	"net/http"
@@ -6,15 +6,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeluser "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/user"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/biz"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/storage"
+	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/biz"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/storage"
 	"gorm.io/gorm"
 )
 
-func UpdateUser(db *gorm.DB) func(*gin.Context) {
+func UpdateDump(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data *modeluser.UserUpdated
+		var data *modeldump.DumpUpdated
 
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -30,9 +30,9 @@ func UpdateUser(db *gorm.DB) func(*gin.Context) {
 
 		store := storage.NewSqlStore(db)
 
-		business := biz.NewUpdateUserBiz(store)
+		business := biz.NewUpdateDumpBiz(store)
 
-		if err := business.UpdateUserById(c, id, data); err != nil {
+		if err := business.UpdateDumpById(c, id, data); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 
 			return

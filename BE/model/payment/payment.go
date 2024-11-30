@@ -1,4 +1,4 @@
-package model
+package modelpayment
 
 type TPaymentIntent struct {
 	Amount int64 `json:"amount"`

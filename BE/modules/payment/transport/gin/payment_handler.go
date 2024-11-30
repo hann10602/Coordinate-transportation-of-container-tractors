@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
+	modelpayment "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/payment"
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/checkout/session"
 	"github.com/stripe/stripe-go/v81/paymentintent"
@@ -38,14 +38,14 @@ func CreatePaymentIntent() func(*gin.Context) {
 
 func CreateCheckoutSession(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var paymentCheckout model.TPaymentCheckout
+		var paymentCheckout modelpayment.TPaymentCheckout
 
 		if err := c.ShouldBind(&paymentCheckout); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 
 			return
 		}
-		
+
 		stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
 		params := &stripe.CheckoutSessionParams{
 			Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),

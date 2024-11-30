@@ -29,6 +29,8 @@ export const IEFillInformation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const section = searchParams.get('section');
 
+  console.log(Number('105.76609500340967'));
+
   const handleSubmit = () => {
     const checkError = Object.keys(error).filter((key) => {
       if (!information[key as keyof TTransportInformation]) {

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/db"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/middleware"
+	gindump "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/transport/gin"
 	ginpayment "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/payment/transport/gin"
 	ginuser "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/transport/gin"
 )
@@ -25,6 +26,24 @@ func Init() *gin.Engine {
 			user.PUT("/:id", ginuser.UpdateUser(dbInstance))
 			user.DELETE("/:id", ginuser.DeleteUser(dbInstance))
 		}
+
+		dump := v1.Group("/dump")
+		{
+			dump.GET("", gindump.GetListDump(dbInstance))
+			dump.GET("/:id", gindump.GetDump(dbInstance))
+			dump.POST("", gindump.CreateDump(dbInstance))
+			dump.PUT("/:id", gindump.UpdateDump(dbInstance))
+			dump.DELETE("/:id", gindump.DeleteDump(dbInstance))
+		}
+
+		// containerDump := v1.Group("/container-dump")
+		// {
+		// 	containerDump.GET("", gincontainerdump.GetListUser(dbInstance))
+		// 	containerDump.GET("/:id", gincontainerdump.GetUser(dbInstance))
+		// 	containerDump.POST("", gincontainerdump.CreateUser(dbInstance))
+		// 	containerDump.PUT("/:id", gincontainerdump.UpdateUser(dbInstance))
+		// 	containerDump.DELETE("/:id", gincontainerdump.DeleteUser(dbInstance))
+		// }
 
 		payment := v1.Group("/payment")
 		{
