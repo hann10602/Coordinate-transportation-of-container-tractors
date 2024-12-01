@@ -1,25 +1,25 @@
 import { createContext, useState } from 'react';
-import { IEConfirmInformationMenu, IEFillInformationMenu } from '../../../../../../constants';
+import { OFConfirmInformationMenu, OFFillInformationMenu } from '../../../../../../constants';
 import { Sidebar } from '../../../../../../layout/request-layout/Sidebar';
 import { Completed } from '../../../components/completed/Completed';
 import { ETRANSPORT_INFORMATION_STEPS } from '../../enums';
-import { IEConfirmInformation } from './confirm-information/ConfirmInformation';
-import { IEFillInformation } from './fill-information/FillInformation';
+import { OFConfirmInformation } from './confirm-information/ConfirmInformation';
+import { OFFillInformation } from './fill-information/FillInformation';
 
 type TStepContext = {
   setStep: React.Dispatch<React.SetStateAction<ETRANSPORT_INFORMATION_STEPS>>;
 };
 
-const IE_STEP_INFORMATION = [
+const OF_STEP_INFORMATION = [
   {
     step: ETRANSPORT_INFORMATION_STEPS.FILL_LOCATION,
-    menu: IEFillInformationMenu,
-    component: <IEFillInformation />
+    menu: OFFillInformationMenu,
+    component: <OFFillInformation />
   },
   {
     step: ETRANSPORT_INFORMATION_STEPS.CONFIRM_LOCATION,
-    menu: IEConfirmInformationMenu,
-    component: <IEConfirmInformation />
+    menu: OFConfirmInformationMenu,
+    component: <OFConfirmInformation />
   },
   {
     step: ETRANSPORT_INFORMATION_STEPS.COMPLETED,
@@ -29,11 +29,11 @@ const IE_STEP_INFORMATION = [
 
 export const StepContext = createContext<TStepContext>({ setStep: () => {} });
 
-export const IETransportInformation = () => {
+export const OFTransportInformation = () => {
   const [step, setStep] = useState<ETRANSPORT_INFORMATION_STEPS>(ETRANSPORT_INFORMATION_STEPS.FILL_LOCATION);
   return (
     <StepContext.Provider value={{ setStep }}>
-      {IE_STEP_INFORMATION.map((item) =>
+      {OF_STEP_INFORMATION.map((item) =>
         item.step === step ? (
           <div className="w-full flex flex-1 h-full" key={item.step}>
             {item.menu && <Sidebar menu={item.menu} />}

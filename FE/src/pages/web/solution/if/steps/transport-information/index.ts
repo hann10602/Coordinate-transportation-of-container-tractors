@@ -1,1 +1,1 @@
-export { IETransportInformation } from './IFTransportInformation';
+export { IFTransportInformation } from './IFTransportInformation';
