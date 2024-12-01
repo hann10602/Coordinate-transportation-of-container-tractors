@@ -10,7 +10,7 @@ import (
 )
 
 type CreateDumpStorage interface {
-	CreateDump(ctx context.Context, data *modeldump.DumpCreated) error
+	CreateDump(ctx context.Context, data []*modeldump.DumpCreated) error
 }
 
 type createDumpBiz struct {
@@ -51,22 +51,24 @@ func ValidateDecimal(value decimal.Decimal, precision, scale int) error {
 	return nil
 }
 
-func (biz *createDumpBiz) CreateNewDump(ctx context.Context, data *modeldump.DumpCreated) error {
-	title := strings.TrimSpace(data.Title)
+func (biz *createDumpBiz) CreateNewDump(ctx context.Context, data []*modeldump.DumpCreated) error {
+	for _, dump := range data {
+		title := strings.TrimSpace(dump.Title)
 
-	if title == "" {
-		return common.ErrInvalidRequest(modeldump.ErrTitleIsEmpty)
+		if title == "" {
+			return common.ErrInvalidRequest(modeldump.ErrTitleIsEmpty)
+		}
+
+		err := ValidateDecimal(dump.Latitude, 8, 6)
+		if err != nil {
+			return common.ErrInvalidRequest(err)
+		}
+
+		err = ValidateDecimal(dump.Longitude, 9, 6)
+		if err != nil {
+			return common.ErrInvalidRequest(err)
+		}
 	}
-
-	// err := ValidateDecimal(data.Latitude, 8, 6)
-	// if err != nil {
-	// 	return common.ErrInvalidRequest(err)
-	// }
-
-	// err = ValidateDecimal(data.Longitude, 9, 6)
-	// if err != nil {
-	// 	return common.ErrInvalidRequest(err)
-	// }
 
 	if err := biz.store.CreateDump(ctx, data); err != nil {
 		return err

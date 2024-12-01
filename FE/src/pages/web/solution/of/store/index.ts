@@ -3,7 +3,7 @@ import { ECONTAINER_TYPE } from '../enums';
 import { LatLngExpression } from 'leaflet';
 import { TDump } from '../../../../../types';
 
-export type TIETransportInformationState = {
+export type TOFTransportInformationState = {
   informationStore: TTransportInformation;
   fillInformation: (information: TTransportInformation) => void;
 };
@@ -16,7 +16,7 @@ export type TTransportInformation = {
   note?: string;
 };
 
-export const useIETransportInformationStore = create<TIETransportInformationState>((set) => ({
+export const useOFTransportInformationStore = create<TOFTransportInformationState>((set) => ({
   informationStore: {
     containerType: undefined,
     detailAddress: undefined,

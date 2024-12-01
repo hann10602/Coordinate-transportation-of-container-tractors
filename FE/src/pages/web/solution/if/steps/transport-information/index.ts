@@ -1,1 +1,1 @@
-export { IFStartLocation } from './IFStartLocation';
+export { IETransportInformation } from './IFTransportInformation';

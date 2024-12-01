@@ -29,21 +29,19 @@ const createRoutineMachineLayer = (props) => {
 const RoutingMachine = createControlComponent(createRoutineMachineLayer);
 
 export const RoutineMachineMap = ({
-  startLocation,
-  endLocation,
+  routingList,
   setDistance
 }: {
-  startLocation: LatLngExpression | undefined;
-  endLocation: LatLngExpression | undefined;
+  routingList: LatLngExpression[];
   setDistance: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   return (
-    <MapContainer center={[20.96193312256204000, 105.76609500340967000]} zoom={13} scrollWheelZoom={false}>
+    <MapContainer center={routingList[0] && routingList[0]} zoom={13} scrollWheelZoom={false}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <RoutingMachine waypoints={[startLocation, endLocation, [20.84390000000000000, 106.68810000000000000]]} setDistance={setDistance} />
+      <RoutingMachine waypoints={routingList} setDistance={setDistance} />
     </MapContainer>
   );
 };

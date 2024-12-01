@@ -1,1 +1,1 @@
-export { OFStartLocation } from './OFStartLocation';
+export { IETransportInformation } from './OFTransportInformation';

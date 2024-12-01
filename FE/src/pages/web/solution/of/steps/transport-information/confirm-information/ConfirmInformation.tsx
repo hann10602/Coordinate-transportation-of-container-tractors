@@ -3,12 +3,12 @@ import { useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
-import { EIESteps } from '../../../../../../../enums';
+import { EOFSteps } from '../../../../../../../enums';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
-import { useIETransportInformationStore } from '../../../store';
-import { StepContext } from '../IETransportInformation';
-import { LatLngExpression } from 'leaflet';
+import { useOFTransportInformationStore } from '../../../store';
+import { StepContext } from '../OFTransportInformation';
 import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
+import { LatLngExpression } from 'leaflet';
 
 const containerTypeConvert = {
   [ECONTAINER_TYPE.SMALL]: {
@@ -21,9 +21,9 @@ const containerTypeConvert = {
   }
 };
 
-export const IEConfirmInformation = () => {
+export const OFConfirmInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore } = useIETransportInformationStore();
+  const { informationStore } = useOFTransportInformationStore();
 
   const [distance, setDistance] = useState<number>(0);
 
@@ -38,12 +38,12 @@ export const IEConfirmInformation = () => {
     axiosInstance
       .post('payment/create-checkout-session', {
         price: Number(totalPrice.toString().replace('.', '')),
-        'delivery-type': 'Delivery request IE'
+        'delivery-type': 'Delivery request OF'
       })
       .then((res) => window.open(res.data.data));
   };
 
-  const handleChangeSection = (step: EIESteps) => {
+  const handleChangeSection = (step: EOFSteps) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set('section', step);
 
@@ -68,20 +68,20 @@ export const IEConfirmInformation = () => {
     <>
       <p className="text-3xl font-bold mb-10">Xác nhận thông tin</p>
       <Card
-        id={EIESteps.DISTANCE}
+        id={EOFSteps.DISTANCE}
         title="Quãng đường"
-        isSelected={section === EIESteps.DISTANCE}
-        onClick={() => handleChangeSection(EIESteps.DISTANCE)}
+        isSelected={section === EOFSteps.DISTANCE}
+        onClick={() => handleChangeSection(EOFSteps.DISTANCE)}
       >
         <div className="h-[600px]">
           <RoutineMachineMap routingList={handleSetUpRountingList()} setDistance={setDistance} />
         </div>
       </Card>
       <Card
-        id={EIESteps.RESULT}
+        id={EOFSteps.RESULT}
         title="Chi phí"
-        isSelected={section === EIESteps.RESULT}
-        onClick={() => handleChangeSection(EIESteps.RESULT)}
+        isSelected={section === EOFSteps.RESULT}
+        onClick={() => handleChangeSection(EOFSteps.RESULT)}
       >
         <div className="w-full flex justify-between items-center mb-2">
           <p className="font-semibold">Loại container:</p>

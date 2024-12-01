@@ -1,0 +1,32 @@
+[
+    { "title": "Hai Phong Port - Hai Phong", "latitude": 20.865139, "longitude": 106.686894, "type": "Port", "status": "Working" },
+    { "title": "Cai Lan Port - Quang Ninh", "latitude": 20.970256, "longitude": 107.051098, "type": "Port", "status": "Working" },
+    { "title": "Da Nang Port - Da Nang", "latitude": 16.121439, "longitude": 108.215634, "type": "Port", "status": "Working" },
+    { "title": "Chan May Port - Thua Thien Hue", "latitude": 16.35232, "longitude": 107.921694, "type": "Port", "status": "Working" },
+    { "title": "Qui Nhon Port - Binh Dinh", "latitude": 13.769036, "longitude": 109.22384, "type": "Port", "status": "Working" },
+    { "title": "Dung Quat Port - Quang Ngai", "latitude": 15.357368, "longitude": 108.806372, "type": "Port", "status": "Working" },
+    { "title": "Ho Chi Minh City Port - Cat Lai", "latitude": 10.769213, "longitude": 106.78943, "type": "Port", "status": "Working" },
+    { "title": "Cai Mep Port - Ba Ria Vung Tau", "latitude": 10.51385, "longitude": 107.029263, "type": "Port", "status": "Working" },
+    { "title": "Can Tho Port - Can Tho", "latitude": 10.044503, "longitude": 105.776956, "type": "Port", "status": "Working" },
+    { "title": "Phu My Port - Phu My", "latitude": 10.48963, "longitude": 107.067089, "type": "Port", "status": "Working" },
+    { "title": "Vung Tau Port - Vung Tau", "latitude": 10.345594, "longitude": 107.081758, "type": "Port", "status": "Working" },
+    { "title": "Nghi Son Port - Thanh Hoa", "latitude": 19.345659, "longitude": 105.771331, "type": "Port", "status": "Working" },
+    { "title": "Vinh Port - Nghe An", "latitude": 18.688801, "longitude": 105.673647, "type": "Port", "status": "Working" },
+    { "title": "Cam Ranh Port - Khanh Hoa", "latitude": 11.89856, "longitude": 109.181702, "type": "Port", "status": "Working" }
+  ]
+  [
+    { "title": "Hai Phong Trailer", "latitude": 20.870139, "longitude": 106.690894, "type": "Trailer", "status": "Working" },
+    { "title": "Cai Lan Trailer", "latitude": 20.975256, "longitude": 107.055098, "type": "Trailer", "status": "Working" },
+    { "title": "Da Nang Trailer", "latitude": 16.125439, "longitude": 108.219634, "type": "Trailer", "status": "Working" },
+    { "title": "Chan May Trailer", "latitude": 16.357320, "longitude": 107.926694, "type": "Trailer", "status": "Working" },
+    { "title": "Qui Nhon Trailer", "latitude": 13.774036, "longitude": 109.228840, "type": "Trailer", "status": "Working" },
+    { "title": "Dung Quat Trailer", "latitude": 15.362368, "longitude": 108.811372, "type": "Trailer", "status": "Working" },
+    { "title": "Ho Chi Minh Trailer", "latitude": 10.774213, "longitude": 106.794430, "type": "Trailer", "status": "Working" },
+    { "title": "Cai Mep Trailer", "latitude": 10.518850, "longitude": 107.034263, "type": "Trailer", "status": "Working" },
+    { "title": "Can Tho Trailer", "latitude": 10.049503, "longitude": 105.781956, "type": "Trailer", "status": "Working" },
+    { "title": "Phu My Trailer", "latitude": 10.494630, "longitude": 107.072089, "type": "Trailer", "status": "Working" },
+    { "title": "Vung Tau Trailer", "latitude": 10.350594, "longitude": 107.086758, "type": "Trailer", "status": "Working" },
+    { "title": "Nghi Son Trailer", "latitude": 19.350659, "longitude": 105.776331, "type": "Trailer", "status": "Working" },
+    { "title": "Vinh Trailer", "latitude": 18.693801, "longitude": 105.678647, "type": "Trailer", "status": "Working" },
+    { "title": "Cam Ranh Trailer", "latitude": 11.903560, "longitude": 109.186702, "type": "Trailer", "status": "Working" }
+  ]

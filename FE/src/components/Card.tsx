@@ -1,15 +1,16 @@
 type Props = {
   title: string;
   id: string;
+  className?: string;
   isSelected?: boolean;
   children: React.ReactNode;
   onClick?: () => void;
 };
 
-export const Card = ({ title, id, isSelected, children, onClick }: Props) => {
+export const Card = ({ title, id, isSelected, children, onClick, className }: Props) => {
   return (
     <div
-      className="relative border border-gray-400 rounded-lg overflow-hidden flex h-min w-full"
+      className={`${className} relative border border-gray-400 rounded-lg overflow-hidden flex h-fit w-full`}
       id={id}
       onClick={onClick}
     >

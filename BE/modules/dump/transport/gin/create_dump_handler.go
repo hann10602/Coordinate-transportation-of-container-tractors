@@ -1,7 +1,6 @@
 package gindump
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,7 @@ import (
 
 func CreateDump(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data modeldump.DumpCreated
+		var data []*modeldump.DumpCreated
 
 		if err := c.ShouldBind(&data); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
@@ -22,20 +21,18 @@ func CreateDump(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		data.Status = modeldump.WORKING
+		// data.Status = modeldump.WORKING
 
 		store := storage.NewSqlStore(db)
 
 		business := biz.NewCreateDumpBiz(store)
 
-		fmt.Println(&data)
-
-		if err := business.CreateNewDump(c.Request.Context(), &data); err != nil {
+		if err := business.CreateNewDump(c.Request.Context(), data); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 
 			return
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data.Id))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
 	}
 }

@@ -7,16 +7,15 @@ import (
 	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
 )
 
-func (s *sqlStore) GetListDump(ctx context.Context, paging common.Paging) ([]modeldump.Dump, common.Paging, error) {
-	var data []modeldump.Dump
+func (s *sqlStore) GetListDump(ctx context.Context, filter modeldump.Filter) ([]modeldump.DumpGetList, error) {
+	var data []modeldump.DumpGetList
+	// filters := map[string]interface{}{}
 
-	if err := s.db.Table(modeldump.Dump{}.TableName()).Count(&paging.Total).Error; err != nil {
-		return nil, common.Paging{}, common.ErrDB(err)
+	s.db = s.db.Table(modeldump.Dump{}.TableName())
+
+	if err := s.db.Order("id desc").Where(filter).Find(&data).Error; err != nil {
+		return nil, common.ErrDB(err)
 	}
 
-	if err := s.db.Order("id desc").Offset((paging.Page - 1) * paging.Limit).Limit(paging.Limit).Find(&data).Error; err != nil {
-		return nil, common.Paging{}, common.ErrDB(err)
-	}
-
-	return data, paging, nil
+	return data, nil
 }

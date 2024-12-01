@@ -5,14 +5,14 @@ import Select, { ControlProps, GroupBase, MenuListProps, components } from 'reac
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
-import { EIESteps } from '../../../../../../../enums';
+import { EOESteps } from '../../../../../../../enums';
 import { TDump } from '../../../../../../../types';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
-import { TTransportInformation, useIETransportInformationStore } from '../../../store';
-import { StepContext } from '../IETransportInformation';
+import { TTransportInformation, useOETransportInformationStore } from '../../../store';
+import { StepContext } from '../OETransportInformation';
 import { Map } from '../Map';
 
-type TIEFillInformationErrors = {
+type TOEFillInformationErrors = {
   startPoint: boolean;
   portDump: boolean;
   detailAddress: boolean;
@@ -20,14 +20,14 @@ type TIEFillInformationErrors = {
   containerType: boolean;
 };
 
-export const IEFillInformation = () => {
+export const OEFillInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore, fillInformation } = useIETransportInformationStore();
+  const { informationStore, fillInformation } = useOETransportInformationStore();
 
   const [information, setInformation] = useState<TTransportInformation>(informationStore);
   const [portDump, setPortDump] = useState<TDump | undefined>(undefined);
   const [portDumpList, setPortDumpList] = useState<TDump[]>([]);
-  const [error, setError] = useState<TIEFillInformationErrors>({
+  const [error, setError] = useState<TOEFillInformationErrors>({
     startPoint: false,
     portDump: false,
     detailAddress: false,
@@ -43,7 +43,7 @@ export const IEFillInformation = () => {
       if (!information[key as keyof TTransportInformation]) {
         setError((prev) => ({
           ...prev,
-          [key as keyof TIEFillInformationErrors]: true
+          [key as keyof TOEFillInformationErrors]: true
         }));
 
         return true;
@@ -61,7 +61,7 @@ export const IEFillInformation = () => {
     setStep(ETRANSPORT_INFORMATION_STEPS.CONFIRM_LOCATION);
   };
 
-  const handleChangeSection = (step: EIESteps) => {
+  const handleChangeSection = (step: EOESteps) => {
     const newParams = new URLSearchParams(searchParams);
     newParams.set('section', step);
 
@@ -144,10 +144,10 @@ export const IEFillInformation = () => {
     <>
       <p className="text-3xl font-bold mb-10">Form thông tin</p>
       <Card
-        id={EIESteps.START_LOCATION}
+        id={EOESteps.START_LOCATION}
         title="Kho của bạn"
-        onClick={() => handleChangeSection(EIESteps.START_LOCATION)}
-        isSelected={section === EIESteps.START_LOCATION}
+        onClick={() => handleChangeSection(EOESteps.START_LOCATION)}
+        isSelected={section === EOESteps.START_LOCATION}
       >
         <div className="h-full">
           <Map Location={information.startPoint} setLocation={(e) => handleSetLocation(e)} />
@@ -155,10 +155,10 @@ export const IEFillInformation = () => {
         </div>
       </Card>
       <Card
-        id={EIESteps.DETAIL_INFORMATION}
+        id={EOESteps.DETAIL_INFORMATION}
         title="Thông tin chi tiết"
-        onClick={() => handleChangeSection(EIESteps.DETAIL_INFORMATION)}
-        isSelected={section === EIESteps.DETAIL_INFORMATION}
+        onClick={() => handleChangeSection(EOESteps.DETAIL_INFORMATION)}
+        isSelected={section === EOESteps.DETAIL_INFORMATION}
       >
         <div className="mb-5">
           <p className="mb-4">Loại container:</p>
@@ -214,10 +214,10 @@ export const IEFillInformation = () => {
         </div>
       </Card>
       <Card
-        id={EIESteps.PORT_DUMP}
+        id={EOESteps.PORT_DUMP}
         title="Cảng"
-        onClick={() => handleChangeSection(EIESteps.PORT_DUMP)}
-        isSelected={section === EIESteps.PORT_DUMP}
+        onClick={() => handleChangeSection(EOESteps.PORT_DUMP)}
+        isSelected={section === EOESteps.PORT_DUMP}
         className="!h-80"
       >
         <Select

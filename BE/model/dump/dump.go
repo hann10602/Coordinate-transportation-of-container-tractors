@@ -48,6 +48,18 @@ var (
 	ErrInvalidLongitude      = errors.New("Longitude cannot be empty")
 )
 
+type DumpGetList struct {
+	Id        int64   `json:"id" gorm:"column:id"`
+	Title     string  `json:"title" gorm:"column:title"`
+	Latitude  float64 `json:"latitude" gorm:"column:latitude"`
+	Longitude float64 `json:"longitude" gorm:"column:longitude"`
+}
+
+type Filter struct {
+	Type   string `json:"type" form:"type"`
+	Status string `json:"status" form:"status"`
+}
+
 type DumpCreated struct {
 	Id        int64           `json:"id" gorm:"column:id"`
 	Title     string          `json:"title" gorm:"column:title"`

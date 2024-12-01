@@ -15,7 +15,6 @@ export const App = (props: Props) => {
   const [clientSecret, setClientSecret] = React.useState<StripeElementsOptions | undefined>(undefined);
 
   React.useEffect(() => {
-    // Fetch the clientSecret from your server
     axiosInstance.post('payment/create-payment-intent').then((res) => setClientSecret(res.data.data.client_secret));
   }, []);
 

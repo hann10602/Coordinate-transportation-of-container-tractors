@@ -1,7 +1,6 @@
 package ginuser
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -28,8 +27,6 @@ func GetListUser(db *gorm.DB) func(*gin.Context) {
 		business := biz.NewGetListUserBiz(store)
 
 		data, paging, err := business.FindListUser(c, paging)
-
-		fmt.Println("transport: ", paging)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err)

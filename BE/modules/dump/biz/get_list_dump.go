@@ -3,12 +3,11 @@ package biz
 import (
 	"context"
 
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
 	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
 )
 
 type GetListDumpStorage interface {
-	GetListDump(ctx context.Context, paging common.Paging) ([]modeldump.Dump, common.Paging, error)
+	GetListDump(ctx context.Context, filter modeldump.Filter) ([]modeldump.DumpGetList, error)
 }
 
 type getListDumpBiz struct {
@@ -19,12 +18,12 @@ func NewGetListDumpBiz(store GetListDumpStorage) *getListDumpBiz {
 	return &getListDumpBiz{store: store}
 }
 
-func (biz *getListDumpBiz) FindListDump(ctx context.Context, paging common.Paging) ([]modeldump.Dump, common.Paging, error) {
-	data, paging, err := biz.store.GetListDump(ctx, paging)
+func (biz *getListDumpBiz) FindListDump(ctx context.Context, filter modeldump.Filter) ([]modeldump.DumpGetList, error) {
+	data, err := biz.store.GetListDump(ctx, filter)
 
 	if err != nil {
-		return nil, paging, err
+		return nil, err
 	}
 
-	return data, paging, nil
+	return data, nil
 }

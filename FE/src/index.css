@@ -11,7 +11,12 @@
 .solution-dropdown:hover .solution-menu {
   display: block;
 }
+
 .leaflet-container {
   height: 100%;
   width: 100%;
+}
+
+.leaflet-routing-container-hide {
+  display: none;
 }
