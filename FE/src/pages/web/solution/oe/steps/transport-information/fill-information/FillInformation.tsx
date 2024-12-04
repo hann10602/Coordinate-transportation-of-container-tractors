@@ -10,7 +10,7 @@ import { TDump } from '../../../../../../../types';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { TTransportInformation, useOETransportInformationStore } from '../../../store';
 import { StepContext } from '../OETransportInformation';
-import { Map } from '../Map';
+import { Map } from '../../../../components/map/Map';
 
 type TOEFillInformationErrors = {
   startPoint: boolean;

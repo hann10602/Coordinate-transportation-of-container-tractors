@@ -1,1 +1,1 @@
-export { IETransportInformation } from './OETransportInformation';
+export { OETransportInformation } from './OETransportInformation';

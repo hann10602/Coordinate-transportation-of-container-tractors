@@ -10,7 +10,7 @@ import { TDump } from '../../../../../../../types';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { TTransportInformation, useIFTransportInformationStore } from '../../../store';
 import { StepContext } from '../IFTransportInformation';
-import { Map } from '../Map';
+import { Map } from '../../../../components/map/Map';
 
 type TIFFillInformationErrors = {
   startPoint: boolean;

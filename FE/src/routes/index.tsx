@@ -4,11 +4,18 @@ import { RequestLayout } from '../layout/request-layout';
 import { Login } from '../pages/auth/Login';
 import { Register } from '../pages/auth/Register';
 import { LandingPage } from '../pages/web';
-import { OE, OEStartLocation, OF, OFStartLocation } from '../pages/web/solution';
-import { IE, IETransportInformation } from '../pages/web/solution/ie';
-import { IF, IFStartLocation } from '../pages/web/solution/if';
 import { Completed } from '../pages/web/solution/components/completed/Completed';
 import { Failure } from '../pages/web/solution/components/failure/Failure';
+import {
+  IE,
+  IETransportInformation,
+  IF,
+  IFTransportInformation,
+  OE,
+  OETransportInformation,
+  OF,
+  OFTransportInformation
+} from '../pages/web/solution';
 
 export const router = createBrowserRouter([
   {
@@ -64,7 +71,7 @@ export const router = createBrowserRouter([
                 path: '/if-request/location',
                 element: (
                   <RequestLayout>
-                    <IFStartLocation />
+                    <IFTransportInformation />
                   </RequestLayout>
                 )
               }
@@ -77,7 +84,7 @@ export const router = createBrowserRouter([
                 path: '/oe-request/location',
                 element: (
                   <RequestLayout>
-                    <OEStartLocation />
+                    <OETransportInformation />
                   </RequestLayout>
                 )
               }
@@ -90,7 +97,7 @@ export const router = createBrowserRouter([
                 path: '/of-request/location',
                 element: (
                   <RequestLayout>
-                    <OFStartLocation />
+                    <OFTransportInformation />
                   </RequestLayout>
                 )
               }

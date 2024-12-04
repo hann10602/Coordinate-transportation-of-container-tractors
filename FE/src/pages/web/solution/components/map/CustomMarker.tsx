@@ -1,5 +1,4 @@
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import React from 'react';
 import { Marker } from 'react-leaflet';
 

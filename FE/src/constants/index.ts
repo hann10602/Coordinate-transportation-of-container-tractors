@@ -36,8 +36,7 @@ export const OEConfirmInformationMenu: TRequestSidebarMenu[] = [
 
 export const OFFillInformationMenu: TRequestSidebarMenu[] = [
   { title: 'Vị trí kho', code: EIESteps.START_LOCATION },
-  { title: 'Thông tin chi tiết', code: EIESteps.DETAIL_INFORMATION },
-  { title: 'Cảng', code: EIESteps.PORT_DUMP }
+  { title: 'Thông tin chi tiết', code: EIESteps.DETAIL_INFORMATION }
 ];
 
 export const OFConfirmInformationMenu: TRequestSidebarMenu[] = [

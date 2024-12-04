@@ -1,16 +1,16 @@
 import { LatLngExpression } from 'leaflet';
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Select, { ControlProps, GroupBase, MenuListProps, components } from 'react-select';
+import Select, { MenuListProps, components } from 'react-select';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
 import { EIESteps } from '../../../../../../../enums';
 import { TDump } from '../../../../../../../types';
+import { Map } from '../../../../components/map/Map';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { TTransportInformation, useIETransportInformationStore } from '../../../store';
 import { StepContext } from '../IETransportInformation';
-import { Map } from '../Map';
 
 type TIEFillInformationErrors = {
   startPoint: boolean;
@@ -114,15 +114,6 @@ export const IEFillInformation = () => {
     );
   };
 
-  const Control = ({ children, ...props }: ControlProps<TDump, boolean, GroupBase<TDump>>) => (
-    <components.Control
-      {...props}
-      className={`${error.portDump ? '!border-red-600' : '!border-gray-400'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none !shadow-none`}
-    >
-      {children}
-    </components.Control>
-  );
-
   useEffect(() => {
     const containerField = document.getElementById(section as string);
 
@@ -151,7 +142,6 @@ export const IEFillInformation = () => {
       >
         <div className="h-full">
           <Map Location={information.startPoint} setLocation={(e) => handleSetLocation(e)} />
-          {error.startPoint && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
       </Card>
       <Card
@@ -161,7 +151,7 @@ export const IEFillInformation = () => {
         isSelected={section === EIESteps.DETAIL_INFORMATION}
       >
         <div className="mb-5">
-          <p className="mb-4">Loại container:</p>
+          <p className="mb-4 font-medium">Loại container:</p>
           <div className="ml-4">
             <div className="flex items-center mb-4">
               <input
@@ -195,7 +185,25 @@ export const IEFillInformation = () => {
           {error.containerType && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div className="mb-5">
-          <p className="mb-4">Địa chỉ chi tiết:</p>
+          <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>
+          <Select
+            options={portDumpList}
+            value={portDump}
+            onChange={(e) => handleSetPortDump(e as TDump)}
+            placeholder={'Select port dump'}
+            isSearchable={true}
+            getOptionValue={(option) => String(option.title)}
+            components={{ MenuList }}
+            formatOptionLabel={(dump) => (
+              <div className="flex items-center">
+                <span>{dump.title}</span>
+              </div>
+            )}
+          />
+          {error.portDump && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+        </div>
+        <div className="mb-5">
+          <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>
           <input
             type="text"
             onChange={handleSetDetailAddress}
@@ -204,7 +212,7 @@ export const IEFillInformation = () => {
           {error.detailAddress && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div>
-          <p className="mb-4">Ghi chú:</p>
+          <p className="mb-4 font-medium">Ghi chú:</p>
           <input
             type="text"
             onChange={handleSetNote}
@@ -212,29 +220,6 @@ export const IEFillInformation = () => {
           />
           {error.note && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
-      </Card>
-      <Card
-        id={EIESteps.PORT_DUMP}
-        title="Cảng"
-        onClick={() => handleChangeSection(EIESteps.PORT_DUMP)}
-        isSelected={section === EIESteps.PORT_DUMP}
-        className="!h-80"
-      >
-        <Select
-          options={portDumpList}
-          value={portDump}
-          onChange={(e) => handleSetPortDump(e as TDump)}
-          placeholder={'Select port dump'}
-          isSearchable={true}
-          getOptionValue={(option) => String(option.id)}
-          components={{ MenuList, Control }}
-          formatOptionLabel={(dump) => (
-            <div className="flex items-center">
-              <span>{dump.title}</span>
-            </div>
-          )}
-        />
-        {error.portDump && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
       </Card>
       <div className="flex justify-end z-10">
         <Button className="bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleSubmit}>
