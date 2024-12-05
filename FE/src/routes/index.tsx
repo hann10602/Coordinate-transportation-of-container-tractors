@@ -1,11 +1,17 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { AuthCheck, AuthLayout, MainLayout } from '../layout';
+import { AdminLayout } from '../layout/admin-layout';
 import { RequestLayout } from '../layout/request-layout';
+import { ContainerDumpManagement } from '../pages/admin/container-dump-management/ContainerDumpManagement';
+import { Dashboard } from '../pages/admin/dashboard/Dashboard';
+import { OrderManagement } from '../pages/admin/order-management/OrderManagement';
+import { PortDumpManagement } from '../pages/admin/port-dump-management/PortDumpManagement';
+import { TrailerDumpManagement } from '../pages/admin/trailer-dump-management/TrailerDumpManagement';
+import { TruckManagement } from '../pages/admin/truck-management/TruckManagement';
+import { UserManagement } from '../pages/admin/user-management/UserManagement';
 import { Login } from '../pages/auth/Login';
 import { Register } from '../pages/auth/Register';
 import { LandingPage } from '../pages/web';
-import { Completed } from '../pages/web/solution/components/completed/Completed';
-import { Failure } from '../pages/web/solution/components/failure/Failure';
 import {
   IE,
   IETransportInformation,
@@ -16,6 +22,8 @@ import {
   OF,
   OFTransportInformation
 } from '../pages/web/solution';
+import { Completed } from '../pages/web/solution/components/completed/Completed';
+import { Failure } from '../pages/web/solution/components/failure/Failure';
 
 export const router = createBrowserRouter([
   {
@@ -128,6 +136,40 @@ export const router = createBrowserRouter([
                 )
               }
             ]
+          },
+          {
+            path: '',
+            element: <AdminLayout />,
+            children: [
+              {
+                path: '/admin',
+                element: <Dashboard />
+              },
+              {
+                path: '/admin/user',
+                element: <UserManagement />
+              },
+              {
+                path: '/admin/container',
+                element: <ContainerDumpManagement />
+              },
+              {
+                path: '/admin/port',
+                element: <PortDumpManagement />
+              },
+              {
+                path: '/admin/trailer',
+                element: <TrailerDumpManagement />
+              },
+              {
+                path: '/admin/order',
+                element: <OrderManagement />
+              },
+              {
+                path: '/admin/truck',
+                element: <TruckManagement />
+              }
+            ]
           }
         ]
       },
@@ -142,15 +184,6 @@ export const router = createBrowserRouter([
           {
             path: '/register',
             element: <Register />
-          }
-        ]
-      },
-      {
-        path: '/admin',
-        children: [
-          {
-            path: '',
-            element: <></>
           }
         ]
       }
