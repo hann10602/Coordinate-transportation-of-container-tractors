@@ -8,4 +8,7 @@ export type TDump = {
   title: string;
   latitude: number;
   longitude: number;
-}
+  status: string;
+  createdAt: string;
+  updatedAt?: string;
+};

@@ -1,14 +1,14 @@
-import { useContext, useState } from 'react';
+import { LatLngExpression } from 'leaflet';
+import { useContext, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
 import { EIESteps } from '../../../../../../../enums';
+import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { useIETransportInformationStore } from '../../../store';
 import { StepContext } from '../IETransportInformation';
-import { LatLngExpression } from 'leaflet';
-import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
 
 const containerTypeConvert = {
   [ECONTAINER_TYPE.SMALL]: {
@@ -23,12 +23,24 @@ const containerTypeConvert = {
 
 export const IEConfirmInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore } = useIETransportInformationStore();
+  const { informationStore, nearestTrailer } = useIETransportInformationStore();
 
   const [distance, setDistance] = useState<number>(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const section = searchParams.get('section');
+
+  const routingList: LatLngExpression[] = useMemo(
+    () =>
+      informationStore.startPoint && informationStore.portDump && nearestTrailer
+        ? [
+            nearestTrailer,
+            informationStore.startPoint,
+            [informationStore.portDump.latitude, informationStore.portDump.longitude]
+          ]
+        : [],
+    [informationStore.startPoint, informationStore.portDump, nearestTrailer]
+  );
 
   const totalPrice = informationStore.containerType
     ? (containerTypeConvert[informationStore.containerType].price * distance).toFixed(2)
@@ -50,20 +62,6 @@ export const IEConfirmInformation = () => {
     setSearchParams(newParams);
   };
 
-  const handleSetUpRountingList = () => {
-    const routingList: LatLngExpression[] = [];
-
-    if (informationStore.startPoint) {
-      routingList.push(informationStore.startPoint);
-    }
-
-    if (informationStore.portDump) {
-      routingList.push([informationStore.portDump.latitude, informationStore.portDump.longitude]);
-    }
-
-    return routingList;
-  };
-
   return (
     <>
       <p className="text-3xl font-bold mb-10">Xác nhận thông tin</p>
@@ -74,7 +72,7 @@ export const IEConfirmInformation = () => {
         onClick={() => handleChangeSection(EIESteps.DISTANCE)}
       >
         <div className="h-[600px]">
-          <RoutineMachineMap routingList={handleSetUpRountingList()} setDistance={setDistance} />
+          <RoutineMachineMap routingList={routingList} setDistance={setDistance} />
         </div>
       </Card>
       <Card

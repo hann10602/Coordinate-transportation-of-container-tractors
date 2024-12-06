@@ -1,81 +1,71 @@
-import React from 'react';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import type { TableColumnsType } from 'antd';
 import { Table } from 'antd';
-import type { TableColumnsType, TableProps } from 'antd';
+import { useEffect, useState } from 'react';
+import { axiosInstance } from '../../../api/axios';
+import { TDump } from '../../../types';
 
-interface DataType {
-  key: React.Key;
-  name: string;
-  chinese: number;
-  math: number;
-  english: number;
-}
-
-const columns: TableColumnsType<DataType> = [
+const columns: TableColumnsType<TDump> = [
   {
-    title: 'Name',
-    dataIndex: 'name'
-  },
-  {
-    title: 'Chinese Score',
-    dataIndex: 'chinese',
+    title: 'ID',
+    dataIndex: 'id',
     sorter: {
-      compare: (a, b) => a.chinese - b.chinese,
+      compare: (a, b) => a.id - b.id,
       multiple: 3
     }
   },
   {
-    title: 'Math Score',
-    dataIndex: 'math',
+    title: 'Title',
+    dataIndex: 'title',
     sorter: {
-      compare: (a, b) => a.math - b.math,
+      compare: (a, b) => a.title.localeCompare(b.title),
       multiple: 2
     }
   },
   {
-    title: 'English Score',
-    dataIndex: 'english',
+    title: 'Latitude',
+    dataIndex: 'latitude'
+  },
+  {
+    title: 'Longitude',
+    dataIndex: 'longitude'
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
     sorter: {
-      compare: (a, b) => a.english - b.english,
-      multiple: 1
+      compare: (a, b) => a.status.localeCompare(b.status),
+      multiple: 2
     }
+  },
+  {
+    title: 'Action',
+    key: 'action',
+    render: (_, record) => (
+      <div className="flex items-center gap-x-2">
+        <div className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer">
+          <Icon icon="ic:round-edit-note" width="24" height="24" />
+        </div>
+        <div className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer">
+          <Icon icon="mdi:garbage-can-outline" width="24" height="24" />
+        </div>
+      </div>
+    )
   }
 ];
-
-const data: DataType[] = [
-  {
-    key: '1',
-    name: 'John Brown',
-    chinese: 98,
-    math: 60,
-    english: 70
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    chinese: 98,
-    math: 66,
-    english: 89
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    chinese: 98,
-    math: 90,
-    english: 70
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    chinese: 88,
-    math: 99,
-    english: 89
-  }
-];
-
-const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
 
 export const ContainerDumpManagement = () => {
-  return <Table<DataType> columns={columns} dataSource={data} onChange={onChange} />;
+  const [dumpList, setDumpList] = useState<TDump[]>([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get('dump', {
+        params: {
+          type: 'Container'
+        }
+      })
+      .then((res) => setDumpList(res.data.data));
+  }, []);
+
+  return <Table<TDump> columns={columns} dataSource={dumpList} />;
 };

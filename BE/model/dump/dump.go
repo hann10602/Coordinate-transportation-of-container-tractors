@@ -48,11 +48,17 @@ var (
 	ErrInvalidLongitude      = errors.New("Longitude cannot be empty")
 )
 
+type DumpGetNearestTrailer struct {
+	Latitude  float64 `json:"latitude" form:"latitude"`
+	Longitude float64 `json:"longitude" form:"longitude"`
+}
+
 type DumpGetList struct {
 	Id        int64   `json:"id" gorm:"column:id"`
 	Title     string  `json:"title" gorm:"column:title"`
 	Latitude  float64 `json:"latitude" gorm:"column:latitude"`
 	Longitude float64 `json:"longitude" gorm:"column:longitude"`
+	Status string `json:"status" gorm:"column:status"`
 }
 
 type Filter struct {

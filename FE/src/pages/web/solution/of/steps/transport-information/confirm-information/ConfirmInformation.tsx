@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
@@ -23,7 +23,7 @@ const containerTypeConvert = {
 
 export const OFConfirmInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore } = useOFTransportInformationStore();
+  const { informationStore, nearestTrailer } = useOFTransportInformationStore();
 
   const [distance, setDistance] = useState<number>(0);
 
@@ -33,6 +33,18 @@ export const OFConfirmInformation = () => {
   const totalPrice = informationStore.containerType
     ? (containerTypeConvert[informationStore.containerType].price * distance).toFixed(2)
     : 0;
+
+  const routingList: LatLngExpression[] = useMemo(
+    () =>
+      informationStore.startPoint && informationStore.portDump && nearestTrailer
+        ? [
+            nearestTrailer,
+            informationStore.startPoint,
+            [informationStore.portDump.latitude, informationStore.portDump.longitude]
+          ]
+        : [],
+    [informationStore.startPoint, informationStore.portDump, nearestTrailer]
+  );
 
   const handleCheckout = async () => {
     axiosInstance
@@ -50,20 +62,6 @@ export const OFConfirmInformation = () => {
     setSearchParams(newParams);
   };
 
-  const handleSetUpRountingList = () => {
-    const routingList: LatLngExpression[] = [];
-
-    if (informationStore.startPoint) {
-      routingList.push(informationStore.startPoint);
-    }
-
-    if (informationStore.portDump) {
-      routingList.push([informationStore.portDump.latitude, informationStore.portDump.longitude]);
-    }
-
-    return routingList;
-  };
-
   return (
     <>
       <p className="text-3xl font-bold mb-10">Xác nhận thông tin</p>
@@ -74,7 +72,7 @@ export const OFConfirmInformation = () => {
         onClick={() => handleChangeSection(EOFSteps.DISTANCE)}
       >
         <div className="h-[600px]">
-          <RoutineMachineMap routingList={handleSetUpRountingList()} setDistance={setDistance} />
+          <RoutineMachineMap routingList={routingList} setDistance={setDistance} />
         </div>
       </Card>
       <Card

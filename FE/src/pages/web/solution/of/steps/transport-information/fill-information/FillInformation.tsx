@@ -22,7 +22,7 @@ type TOFFillInformationErrors = {
 
 export const OFFillInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore, fillInformation } = useOFTransportInformationStore();
+  const { informationStore, fillInformation, getNearestTrailer } = useOFTransportInformationStore();
 
   const [information, setInformation] = useState<TTransportInformation>(informationStore);
   const [portDump, setPortDump] = useState<TDump | undefined>(undefined);
@@ -38,7 +38,7 @@ export const OFFillInformation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const section = searchParams.get('section');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const checkError = Object.keys(error).filter((key) => {
       if (!information[key as keyof TTransportInformation]) {
         setError((prev) => ({
@@ -53,6 +53,18 @@ export const OFFillInformation = () => {
     });
 
     if (checkError.length !== 0) return;
+
+    if (information.startPoint) {
+      await axiosInstance
+        .get('dump/nearest-trailer', {
+          params: {
+            latitude: (information.startPoint as any).lat,
+            longitude: (information.startPoint as any).lng
+          }
+        })
+        .then((res) => res.data.data)
+        .then((data) => getNearestTrailer([data.latitude, data.longitude]));
+    }
 
     fillInformation({
       ...information

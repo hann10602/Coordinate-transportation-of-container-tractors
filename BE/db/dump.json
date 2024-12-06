@@ -30,3 +30,19 @@
     { "title": "Vinh Trailer", "latitude": 18.693801, "longitude": 105.678647, "type": "Trailer", "status": "Working" },
     { "title": "Cam Ranh Trailer", "latitude": 11.903560, "longitude": 109.186702, "type": "Trailer", "status": "Working" }
   ]
+  [
+    { "title": "Hai Phong Container", "latitude": 20.870239, "longitude": 106.690994, "type": "Container", "status": "Working" },
+    { "title": "Cai Lan Container", "latitude": 20.975356, "longitude": 107.055198, "type": "Container", "status": "Working" },
+    { "title": "Da Nang Container", "latitude": 16.125539, "longitude": 108.219734, "type": "Container", "status": "Working" },
+    { "title": "Chan May Container", "latitude": 16.357420, "longitude": 107.926794, "type": "Container", "status": "Working" },
+    { "title": "Qui Nhon Container", "latitude": 13.774136, "longitude": 109.228940, "type": "Container", "status": "Working" },
+    { "title": "Dung Quat Container", "latitude": 15.362468, "longitude": 108.811472, "type": "Container", "status": "Working" },
+    { "title": "Ho Chi Minh Container", "latitude": 10.774313, "longitude": 106.794530, "type": "Container", "status": "Working" },
+    { "title": "Cai Mep Container", "latitude": 10.518950, "longitude": 107.034363, "type": "Container", "status": "Working" },
+    { "title": "Can Tho Container", "latitude": 10.049603, "longitude": 105.782056, "type": "Container", "status": "Working" },
+    { "title": "Phu My Container", "latitude": 10.494730, "longitude": 107.072189, "type": "Container", "status": "Working" },
+    { "title": "Vung Tau Container", "latitude": 10.350694, "longitude": 107.086858, "type": "Container", "status": "Working" },
+    { "title": "Nghi Son Container", "latitude": 19.350759, "longitude": 105.776431, "type": "Container", "status": "Working" },
+    { "title": "Vinh Container", "latitude": 18.693901, "longitude": 105.678747, "type": "Container", "status": "Working" },
+    { "title": "Cam Ranh Container", "latitude": 11.903660, "longitude": 109.186802, "type": "Container", "status": "Working" }
+  ]

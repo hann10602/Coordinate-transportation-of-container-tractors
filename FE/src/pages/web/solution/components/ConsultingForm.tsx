@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { Button } from '../../../../components';
-import { emailValidation } from '../../../../utils/validate';
+import { emailValidation } from '../../../../utils';
 import { TConsultingField } from './types';
 
 export const ConsultingForm = () => {
@@ -15,11 +15,11 @@ export const ConsultingForm = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full text-white">
       <p className="mb-10 text-4xl font-bold">Tư vấn giải pháp quản lý vận tải</p>
       <p className="mb-10 text-xl font-semibold">
-        Điền thông tin vào đăng ký dưới đây, Transportation sẽ liên lạc để hẹn một buổi demo giải pháp quản lý vận tải sớm
-        nhất.
+        Điền thông tin vào đăng ký dưới đây, Transportation sẽ liên lạc để hẹn một buổi demo giải pháp quản lý vận tải
+        sớm nhất.
       </p>
       <form action="" className="flex flex-col w-full">
         <div className="relative space-y-2 w-8/12">
@@ -77,7 +77,7 @@ export const ConsultingForm = () => {
           />
         </div>
         <Button
-          className="border border-white bg-transparent text-2xl mt-12 hover:bg-cyan-700 hover:bg-opacity-65 transition ease-in-out"
+          className="border border-white bg-transparent text-sm font-semibold mt-12 hover:bg-cyan-700 hover:bg-opacity-65 transition ease-in-out"
           onClick={handleSubmit(handleSubmitConsultingForm)}
         >
           Nhận tư vấn ngay!

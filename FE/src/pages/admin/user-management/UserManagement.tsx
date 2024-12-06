@@ -84,12 +84,8 @@ const data: DataType[] = [
   }
 ];
 
-const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-  console.log('params', pagination, filters, sorter, extra);
-};
-
 type Props = {};
 
 export const UserManagement = (props: Props) => {
-  return <Table<DataType> columns={columns} dataSource={data} onChange={onChange} />;
+  return <Table<DataType> columns={columns} dataSource={data} />;
 };

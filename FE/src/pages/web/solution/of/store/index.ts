@@ -4,8 +4,10 @@ import { LatLngExpression } from 'leaflet';
 import { TDump } from '../../../../../types';
 
 export type TOFTransportInformationState = {
+  nearestTrailer?: LatLngExpression;
   informationStore: TTransportInformation;
   fillInformation: (information: TTransportInformation) => void;
+  getNearestTrailer: (trailer: LatLngExpression) => void;
 };
 
 export type TTransportInformation = {
@@ -17,6 +19,7 @@ export type TTransportInformation = {
 };
 
 export const useOFTransportInformationStore = create<TOFTransportInformationState>((set) => ({
+  nearestTrailer: undefined,
   informationStore: {
     containerType: undefined,
     detailAddress: undefined,
@@ -24,5 +27,6 @@ export const useOFTransportInformationStore = create<TOFTransportInformationStat
     startPoint: undefined,
     portDump: undefined
   },
-  fillInformation: (information: TTransportInformation) => set(() => ({ informationStore: information }))
+  fillInformation: (information: TTransportInformation) => set(() => ({ informationStore: information })),
+  getNearestTrailer: (trailer: LatLngExpression) => set(() => ({ nearestTrailer: trailer }))
 }));

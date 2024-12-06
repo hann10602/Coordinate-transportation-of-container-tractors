@@ -30,6 +30,7 @@ func Init() *gin.Engine {
 		dump := v1.Group("/dump")
 		{
 			dump.GET("", gindump.GetListDump(dbInstance))
+			dump.GET("/nearest-trailer", gindump.GetNearestTrailerDump(dbInstance))
 			dump.GET("/:id", gindump.GetDump(dbInstance))
 			dump.POST("", gindump.CreateDump(dbInstance))
 			dump.PUT("/:id", gindump.UpdateDump(dbInstance))
