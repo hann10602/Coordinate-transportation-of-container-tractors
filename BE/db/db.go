@@ -2,6 +2,7 @@ package db
 
 import (
 	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
 	modeluser "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/user"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -21,7 +22,7 @@ func DbConnection() {
 }
 
 func DbMigrate() {
-	db.AutoMigrate(&modeluser.User{}, &modeldump.Dump{})
+	db.AutoMigrate(&modeluser.User{}, &modeldump.Dump{}, &modelorder.Order{})
 }
 
 func DbManager() *gorm.DB {

@@ -9,10 +9,10 @@ import (
 
 type User struct {
 	common.SQLModel
-	FullName    string `json:"full_name" gorm:"column:full_name;size:255;not null"`
+	FullName    string `json:"fullName" gorm:"column:full_name;size:255;not null"`
 	Username    string `json:"username" gorm:"column:username;size:255;not null;unique;check:char_length(username) >= 6"`
 	Password    string `json:"password" gorm:"column:password;size:255;not null;check:char_length(password) >= 6"`
-	PhoneNumber string `json:"phone_number" gorm:"column:phone_number;size:50;not null;unique"`
+	PhoneNumber string `json:"phoneNumber" gorm:"column:phone_number;size:50;not null;unique"`
 	Status      string `json:"status" gorm:"column:status;size:10;not null"`
 	// RoleId int `json:"role" gorm:"column:role"`
 	// Role TRole
@@ -40,12 +40,12 @@ func (User) TableName() string {
 
 type UserCreated struct {
 	Id          int64      `json:"id" gorm:"column:id"`
-	FullName    string     `json:"full_name" gorm:"column:full_name"`
+	FullName    string     `json:"fullName" gorm:"column:full_name"`
 	Username    string     `json:"username" gorm:"column:username"`
 	Password    string     `json:"password" gorm:"column:password"`
-	PhoneNumber string     `json:"phone_number" gorm:"column:phone_number"`
+	PhoneNumber string     `json:"phoneNumber" gorm:"column:phone_number"`
 	Status      string     `json:"status" gorm:"column:status"`
-	CreatedAt   *time.Time `json:"created_at" gorm:"column:created_at"`
+	CreatedAt   *time.Time `json:"createdAt" gorm:"column:created_at"`
 }
 
 func (UserCreated) TableName() string {
@@ -54,11 +54,11 @@ func (UserCreated) TableName() string {
 
 type UserUpdated struct {
 	Id          int64      `json:"id" gorm:"column:id"`
-	FullName    string     `json:"full_name" gorm:"column:full_name"`
+	FullName    string     `json:"fullName" gorm:"column:full_name"`
 	Username    string     `json:"username" gorm:"column:username"`
 	Password    string     `json:"password" gorm:"column:password"`
-	PhoneNumber string     `json:"phone_number" gorm:"column:phone_number"`
-	UpdatedAt   *time.Time `json:"updated_at" gorm:"column:updated_at"`
+	PhoneNumber string     `json:"phoneNumber" gorm:"column:phone_number"`
+	UpdatedAt   *time.Time `json:"updatedAt" gorm:"column:updated_at"`
 }
 
 func (UserUpdated) TableName() string {

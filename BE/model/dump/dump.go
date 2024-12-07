@@ -5,25 +5,22 @@ import (
 	"time"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
+	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
 	"github.com/shopspring/decimal"
 )
 
 type Dump struct {
 	common.SQLModel
-	Title     string          `json:"title" gorm:"column:title;size:255;not null"`
-	Latitude  decimal.Decimal `json:"latitude" gorm:"column:latitude;type:DECIMAL(19,17);not null"`
-	Longitude decimal.Decimal `json:"longitude" gorm:"column:longitude;type:DECIMAL(20,17);not null"`
-	Status    string          `json:"status" gorm:"column:status"`
-	Type      string          `json:"type" gorm:"column:type"`
-	// DumpTypeID int64           `json:"dump_type_id" gorm:"column:dump_type_id"`
+	Title            string             `json:"title" gorm:"column:title;size:255;not null"`
+	Latitude         decimal.Decimal    `json:"latitude" gorm:"column:latitude;type:DECIMAL(19,17);not null"`
+	Longitude        decimal.Decimal    `json:"longitude" gorm:"column:longitude;type:DECIMAL(20,17);not null"`
+	Status           string             `json:"status" gorm:"column:status"`
+	Type             string             `json:"type" gorm:"column:type"`
+	PortDump         []modelorder.Order `gorm:"foreignKey:PortId"`
+	StartTrailerDump []modelorder.Order `gorm:"foreignKey:StartTrailerId"`
+	EndTrailerDump   []modelorder.Order `gorm:"foreignKey:EndTrailerId"`
+	ContainerDump    []modelorder.Order `gorm:"foreignKey:ContainerId"`
 }
-
-// type DumpType struct {
-// 	common.SQLModel
-// 	Name  string `json:"name" gorm:"column:name;size:255;not null"`
-// 	Code  string `json:"code" gorm:"column:code;size:255;not null"`
-// 	Dumps []Dump
-// }
 
 func (Dump) TableName() string {
 	return "dump"
@@ -58,7 +55,7 @@ type DumpGetList struct {
 	Title     string  `json:"title" gorm:"column:title"`
 	Latitude  float64 `json:"latitude" gorm:"column:latitude"`
 	Longitude float64 `json:"longitude" gorm:"column:longitude"`
-	Status string `json:"status" gorm:"column:status"`
+	Status    string  `json:"status" gorm:"column:status"`
 }
 
 type Filter struct {
@@ -71,7 +68,7 @@ type DumpCreated struct {
 	Title     string          `json:"title" gorm:"column:title"`
 	Latitude  decimal.Decimal `json:"latitude" gorm:"column:latitude"`
 	Longitude decimal.Decimal `json:"longitude" gorm:"column:longitude"`
-	CreatedAt *time.Time      `json:"created_at" gorm:"column:created_at"`
+	CreatedAt *time.Time      `json:"createdAt" gorm:"column:created_at"`
 	Status    string          `json:"status" gorm:"column:status"`
 	Type      string          `json:"type" gorm:"column:type"`
 }
@@ -85,7 +82,7 @@ type DumpUpdated struct {
 	Title     string          `json:"title" gorm:"column:title"`
 	Latitude  decimal.Decimal `json:"latitude" gorm:"column:latitude"`
 	Longitude decimal.Decimal `json:"longitude" gorm:"column:longitude"`
-	UpdatedAt *time.Time      `json:"updated_at" gorm:"column:updated_at"`
+	UpdatedAt *time.Time      `json:"updatedAt" gorm:"column:updated_at"`
 }
 
 func (DumpUpdated) TableName() string {

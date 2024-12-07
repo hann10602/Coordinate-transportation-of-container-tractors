@@ -11,11 +11,14 @@ import { Map } from '../../../../components/map/Map';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { TTransportInformation, useOFTransportInformationStore } from '../../../store';
 import { StepContext } from '../OFTransportInformation';
+import { DatePicker, DatePickerProps } from 'antd';
+import dayjs from 'dayjs';
 
 type TOFFillInformationErrors = {
   startPoint: boolean;
   portDump: boolean;
   detailAddress: boolean;
+  deliveryTime: boolean
   note: boolean;
   containerType: boolean;
 };
@@ -30,6 +33,7 @@ export const OFFillInformation = () => {
   const [error, setError] = useState<TOFFillInformationErrors>({
     startPoint: false,
     portDump: false,
+    deliveryTime: false,
     detailAddress: false,
     note: false,
     containerType: false
@@ -143,6 +147,10 @@ export const OFFillInformation = () => {
       .then((dumpList: TDump[]) => setPortDumpList(dumpList.map((dump) => ({ ...dump, value: dump.id }))));
   }, []);
 
+  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+    console.log(date, dateString);
+  };
+
   return (
     <>
       <p className="text-3xl font-bold mb-10">Form thông tin</p>
@@ -213,6 +221,11 @@ export const OFFillInformation = () => {
             )}
           />
           {error.portDump && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+        </div>
+        <div className="mb-5">
+          <p className="mb-4 font-medium">Thời gian nhận đơn:</p>
+    <DatePicker onChange={onChange} defaultValue={dayjs("2024-12-13")} />
+          {error.deliveryTime && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div className="mb-5">
           <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>

@@ -9,7 +9,7 @@ import (
 func main() {
 	env.InitializeENV()
 	db.DbConnection()
-	// db.DbMigrate()
+	db.DbMigrate()
 	r := routes.Init()
 
 	r.Run()

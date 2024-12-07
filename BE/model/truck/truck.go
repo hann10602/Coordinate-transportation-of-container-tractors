@@ -11,7 +11,7 @@ import (
 type Truck struct {
 	common.SQLModel
 	Title       string `json:"title" gorm:"column:title;size:255;not null"`
-	NumberPlate string `json:"number_plate" gorm:"column:number_plate;size:255;not null"`
+	NumberPlate string `json:"numberPlate" gorm:"column:number_plate;size:255;not null"`
 	Status      string `json:"status" gorm:"column:status"`
 	Orders      []modelorder.Order
 }
@@ -41,7 +41,7 @@ type Filter struct {
 type TruckCreated struct {
 	Id        int64      `json:"id" gorm:"column:id"`
 	Title     string     `json:"title" gorm:"column:title"`
-	CreatedAt *time.Time `json:"created_at" gorm:"column:created_at"`
+	CreatedAt *time.Time `json:"createdAt" gorm:"column:created_at"`
 	Status    string     `json:"status" gorm:"column:status"`
 }
 
@@ -52,7 +52,7 @@ func (TruckCreated) TableName() string {
 type TruckUpdated struct {
 	Id        int64      `json:"id" gorm:"column:id"`
 	Title     string     `json:"title" gorm:"column:title"`
-	UpdatedAt *time.Time `json:"updated_at" gorm:"column:updated_at"`
+	UpdatedAt *time.Time `json:"updatedAt" gorm:"column:updated_at"`
 }
 
 func (TruckUpdated) TableName() string {
