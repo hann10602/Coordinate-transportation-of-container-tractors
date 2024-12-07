@@ -10,24 +10,26 @@ import (
 
 type Order struct {
 	common.SQLModel
-	Title          string     `json:"title" gorm:"column:title;size:255;not null"`
-	TotalPrice     int32      `json:"totalPrice" gorm:"column:total_price;size:10;not null"`
-	DeliveryDate   *time.Time `json:"deliveryDate" gorm:"column:delivery_date"`
-	Latitude       float64    `json:"latitude" gorm:"column:latitude"`
-	Longitude      float64    `json:"longitude" gorm:"column:longitude"`
-	Status         string     `json:"status" gorm:"column:status;size:10;not null"`
-	Type           string     `json:"type" gorm:"column:type;size:10;not null"`
-	TruckID        int64      `json:"truckId" gorm:"column:truck_id"`
-	PortId         int64      `json:"portId" gorm:"column:port_id"`
-	StartTrailerId int64      `json:"startTrailerId" gorm:"column:start_trailer_id"`
-	EndTrailerId   int64      `json:"endTrailerId" gorm:"column:end_trailer_id"`
-	ContainerId    int64      `json:"containerId" gorm:"column:container_id"`
+	Title           string     `json:"title" gorm:"column:title;size:255;not null"`
+	TotalPrice      int32      `json:"totalPrice" gorm:"column:total_price;size:10;not null"`
+	DeliveryDate    *time.Time `json:"deliveryDate" gorm:"column:delivery_date"`
+	Latitude        float64    `json:"latitude" gorm:"column:latitude"`
+	Longitude       float64    `json:"longitude" gorm:"column:longitude"`
+	CurrentPosition string     `json:"currentPosition" gorm:"column:current_position;size:10"`
+	Status          string     `json:"status" gorm:"column:status;size:10;not null"`
+	Type            string     `json:"type" gorm:"column:type;size:10;not null"`
+	TruckID         int64      `json:"truckId" gorm:"column:truck_id"`
+	PortId          int64      `json:"portId" gorm:"column:port_id"`
+	StartTrailerId  int64      `json:"startTrailerId" gorm:"column:start_trailer_id"`
+	EndTrailerId    int64      `json:"endTrailerId" gorm:"column:end_trailer_id"`
+	ContainerId     int64      `json:"containerId" gorm:"column:container_id"`
 }
 
 func (Order) TableName() string {
 	return "order"
 }
 
+// status
 const (
 	DONE    = "Done"
 	DELETED = "Deleted"
@@ -36,11 +38,21 @@ const (
 	WAIT    = "Wait"
 )
 
+// type
 const (
-	IE = "Ie"
-	IF = "If"
-	OE = "Oe"
-	OF = "Of"
+	IE = "IE"
+	IF = "IF"
+	OE = "OE"
+	OF = "OF"
+)
+
+// current position
+const (
+	CUSTOMER      = "Customer"
+	START_TRAILER = "Start-trailer"
+	END_TRAILER   = "End-trailer"
+	PORT          = "Port"
+	CONTAINER     = "Container"
 )
 
 var (
@@ -48,20 +60,20 @@ var (
 )
 
 type OrderGetList struct {
-	Id             int64      `json:"id" gorm:"column:id"`
-	Title          string     `json:"title" gorm:"column:title"`
-	TotalPrice     int32      `json:"totalPrice" gorm:"column:total_price"`
-	DeliveryDate   *time.Time `json:"deliveryDate" gorm:"column:delivery_date"`
-	Latitude       float64    `json:"latitude" gorm:"column:latitude"`
-	Longitude      float64    `json:"longitude" gorm:"column:longitude"`
-	Status         string     `json:"status" gorm:"column:status"`
-	Type           string     `json:"type" gorm:"column:type"`
-	TruckID        int64      `json:"truckId" gorm:"column:truck_id"`
-	PortId         int64      `json:"portId" gorm:"column:port_id"`
-	StartTrailerId int64      `json:"startTrailerId" gorm:"column:start_trailer_id"`
-	EndTrailerId   int64      `json:"endTrailerId" gorm:"column:end_trailer_id"`
-	ContainerId    int64      `json:"containerId" gorm:"column:container_id"`
-	CreatedAt      *time.Time `json:"createdAt" gorm:"column:created_at"`
+	common.SQLModel
+	Title           string     `json:"title" gorm:"column:title"`
+	TotalPrice      int32      `json:"totalPrice" gorm:"column:total_price"`
+	DeliveryDate    *time.Time `json:"deliveryDate" gorm:"column:delivery_date"`
+	Latitude        float64    `json:"latitude" gorm:"column:latitude"`
+	Longitude       float64    `json:"longitude" gorm:"column:longitude"`
+	CurrentPosition string     `json:"currentPosition" gorm:"column:current_position"`
+	Status          string     `json:"status" gorm:"column:status"`
+	Type            string     `json:"type" gorm:"column:type"`
+	TruckID         int64      `json:"truckId" gorm:"column:truck_id"`
+	PortId          int64      `json:"portId" gorm:"column:port_id"`
+	StartTrailerId  int64      `json:"startTrailerId" gorm:"column:start_trailer_id"`
+	EndTrailerId    int64      `json:"endTrailerId" gorm:"column:end_trailer_id"`
+	ContainerId     int64      `json:"containerId" gorm:"column:container_id"`
 }
 
 type Filter struct {
