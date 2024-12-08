@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
@@ -23,7 +23,8 @@ const containerTypeConvert = {
 
 export const OEConfirmInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore } = useOETransportInformationStore();
+  const { informationStore, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint } =
+    useOETransportInformationStore();
 
   const [distance, setDistance] = useState<number>(0);
 
@@ -33,6 +34,27 @@ export const OEConfirmInformation = () => {
   const totalPrice = informationStore.containerType
     ? (containerTypeConvert[informationStore.containerType].price * distance).toFixed(2)
     : 0;
+
+  const routingList: LatLngExpression[] = useMemo(
+    () =>
+      informationStore.startPoint &&
+      informationStore.containerDump &&
+      nearestTrailerFromStartPoint &&
+      nearestTrailerFromEndPoint
+        ? [
+            nearestTrailerFromStartPoint,
+            [informationStore.containerDump.latitude, informationStore.containerDump.longitude],
+            informationStore.startPoint,
+            nearestTrailerFromEndPoint
+          ]
+        : [],
+    [
+      informationStore.startPoint,
+      informationStore.containerDump,
+      nearestTrailerFromStartPoint,
+      nearestTrailerFromEndPoint
+    ]
+  );
 
   const handleCheckout = async () => {
     axiosInstance
@@ -50,20 +72,6 @@ export const OEConfirmInformation = () => {
     setSearchParams(newParams);
   };
 
-  const handleSetUpRountingList = () => {
-    const routingList: LatLngExpression[] = [];
-
-    if (informationStore.startPoint) {
-      routingList.push(informationStore.startPoint);
-    }
-
-    if (informationStore.portDump) {
-      routingList.push([informationStore.portDump.latitude, informationStore.portDump.longitude]);
-    }
-
-    return routingList;
-  };
-
   return (
     <>
       <p className="text-3xl font-bold mb-10">Xác nhận thông tin</p>
@@ -74,7 +82,7 @@ export const OEConfirmInformation = () => {
         onClick={() => handleChangeSection(EOESteps.DISTANCE)}
       >
         <div className="h-[600px]">
-          <RoutineMachineMap routingList={handleSetUpRountingList()} setDistance={setDistance} />
+          <RoutineMachineMap routingList={routingList} setDistance={setDistance} />
         </div>
       </Card>
       <Card
@@ -97,11 +105,7 @@ export const OEConfirmInformation = () => {
           <p>{totalPrice}$</p>
         </div>
         <div className="flex justify-end mt-10">
-          <Button
-            className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white"
-            // onClick={() => setStep(ETRANSPORT_INFORMATION_STEPS.COMPLETED)}
-            onClick={handleCheckout}
-          >
+          <Button className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleCheckout}>
             Xác nhận thanh toán
           </Button>
         </div>

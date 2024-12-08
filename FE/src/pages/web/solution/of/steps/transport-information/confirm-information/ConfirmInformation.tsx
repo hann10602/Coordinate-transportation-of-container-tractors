@@ -23,7 +23,8 @@ const containerTypeConvert = {
 
 export const OFConfirmInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore, nearestTrailer } = useOFTransportInformationStore();
+  const { informationStore, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint } =
+    useOFTransportInformationStore();
 
   const [distance, setDistance] = useState<number>(0);
 
@@ -36,14 +37,18 @@ export const OFConfirmInformation = () => {
 
   const routingList: LatLngExpression[] = useMemo(
     () =>
-      informationStore.startPoint && informationStore.portDump && nearestTrailer
+      informationStore.startPoint &&
+      informationStore.portDump &&
+      nearestTrailerFromStartPoint &&
+      nearestTrailerFromEndPoint
         ? [
-            nearestTrailer,
+            nearestTrailerFromStartPoint,
             informationStore.startPoint,
-            [informationStore.portDump.latitude, informationStore.portDump.longitude]
+            [informationStore.portDump.latitude, informationStore.portDump.longitude],
+            nearestTrailerFromEndPoint
           ]
         : [],
-    [informationStore.startPoint, informationStore.portDump, nearestTrailer]
+    [informationStore.startPoint, informationStore.portDump, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint]
   );
 
   const handleCheckout = async () => {
@@ -95,11 +100,7 @@ export const OFConfirmInformation = () => {
           <p>{totalPrice}$</p>
         </div>
         <div className="flex justify-end mt-10">
-          <Button
-            className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white"
-            // onClick={() => setStep(ETRANSPORT_INFORMATION_STEPS.COMPLETED)}
-            onClick={handleCheckout}
-          >
+          <Button className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleCheckout}>
             Xác nhận thanh toán
           </Button>
         </div>

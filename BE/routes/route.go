@@ -7,6 +7,7 @@ import (
 	gindump "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/transport/gin"
 	ginorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/transport/gin"
 	ginpayment "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/payment/transport/gin"
+	gintruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/transport/gin"
 	ginuser "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/transport/gin"
 )
 
@@ -47,14 +48,14 @@ func Init() *gin.Engine {
 			order.DELETE("/:id", ginorder.DeleteOrder(dbInstance))
 		}
 
-		// containerDump := v1.Group("/container-dump")
-		// {
-		// 	containerDump.GET("", gincontainerdump.GetListUser(dbInstance))
-		// 	containerDump.GET("/:id", gincontainerdump.GetUser(dbInstance))
-		// 	containerDump.POST("", gincontainerdump.CreateUser(dbInstance))
-		// 	containerDump.PUT("/:id", gincontainerdump.UpdateUser(dbInstance))
-		// 	containerDump.DELETE("/:id", gincontainerdump.DeleteUser(dbInstance))
-		// }
+		truck := v1.Group("/truck")
+		{
+			truck.GET("", gintruck.GetListTruck(dbInstance))
+			truck.GET("/:id", gintruck.GetTruck(dbInstance))
+			truck.POST("", gintruck.CreateTruck(dbInstance))
+			truck.PUT("/:id", gintruck.UpdateTruck(dbInstance))
+			truck.DELETE("/:id", gintruck.DeleteTruck(dbInstance))
+		}
 
 		payment := v1.Group("/payment")
 		{

@@ -1,3 +1,6 @@
+import { DatePicker, DatePickerProps } from 'antd';
+import { RangePickerProps } from 'antd/es/date-picker';
+import dayjs from 'dayjs';
 import { LatLngExpression } from 'leaflet';
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -14,22 +17,25 @@ import { StepContext } from '../IETransportInformation';
 
 type TIEFillInformationErrors = {
   startPoint: boolean;
-  portDump: boolean;
+  containerDump: boolean;
   detailAddress: boolean;
+  deliveryDate: boolean;
   note: boolean;
   containerType: boolean;
 };
 
 export const IEFillInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore, fillInformation, getNearestTrailer } = useIETransportInformationStore();
+  const { informationStore, fillInformation, getNearestTrailerFromStartPoint, getNearestTrailerFromEndPoint } =
+    useIETransportInformationStore();
 
   const [information, setInformation] = useState<TTransportInformation>(informationStore);
-  const [portDump, setPortDump] = useState<TDump | undefined>(undefined);
-  const [portDumpList, setPortDumpList] = useState<TDump[]>([]);
+  const [containerDump, setContainerDump] = useState<TDump | undefined>(undefined);
+  const [containerDumpList, setContainerDumpList] = useState<TDump[]>([]);
   const [error, setError] = useState<TIEFillInformationErrors>({
     startPoint: false,
-    portDump: false,
+    containerDump: false,
+    deliveryDate: false,
     detailAddress: false,
     note: false,
     containerType: false
@@ -63,7 +69,19 @@ export const IEFillInformation = () => {
           }
         })
         .then((res) => res.data.data)
-        .then((data) => getNearestTrailer([data.latitude, data.longitude]));
+        .then((data) => getNearestTrailerFromStartPoint([data.latitude, data.longitude]));
+    }
+
+    if (information.containerDump) {
+      await axiosInstance
+        .get('dump/nearest-trailer', {
+          params: {
+            latitude: information.containerDump.latitude,
+            longitude: information.containerDump.longitude
+          }
+        })
+        .then((res) => res.data.data)
+        .then((data) => getNearestTrailerFromEndPoint([data.latitude, data.longitude]));
     }
 
     fillInformation({
@@ -88,12 +106,12 @@ export const IEFillInformation = () => {
     }));
   };
 
-  const handleSetPortDump = (dump: TDump) => {
-    setError((prev) => ({ ...prev, portDump: false }));
-    setPortDump(dump as TDump);
+  const handleSetContainerDump = (dump: TDump) => {
+    setError((prev) => ({ ...prev, containerDump: false }));
+    setContainerDump(dump as TDump);
     setInformation((prev) => ({
       ...prev,
-      portDump: dump
+      containerDump: dump
     }));
   };
 
@@ -126,6 +144,24 @@ export const IEFillInformation = () => {
     );
   };
 
+  const range = (start: number, end: number) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  const disabledDateTime = () => ({
+    disabledHours: () => range(0, 24).splice(4, 20),
+    disabledMinutes: () => range(30, 60),
+    disabledSeconds: () => [55, 56]
+  });
+
+  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+    return current && current < dayjs().endOf('day');
+  };
+
   useEffect(() => {
     const containerField = document.getElementById(section as string);
 
@@ -136,12 +172,20 @@ export const IEFillInformation = () => {
     axiosInstance
       .get('dump', {
         params: {
-          type: 'Port'
+          type: 'Container'
         }
       })
       .then((res) => res.data.data)
-      .then((dumpList: TDump[]) => setPortDumpList(dumpList.map((dump) => ({ ...dump, value: dump.id }))));
+      .then((dumpList: TDump[]) => setContainerDumpList(dumpList.map((dump) => ({ ...dump, value: dump.id }))));
   }, []);
+
+  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+    setError((prev) => ({ ...prev, deliveryDate: false }));
+    setInformation((prev) => ({
+      ...prev,
+      deliveryDate: dateString as string
+    }));
+  };
 
   return (
     <>
@@ -154,6 +198,7 @@ export const IEFillInformation = () => {
       >
         <div className="h-full">
           <Map Location={information.startPoint} setLocation={(e) => handleSetLocation(e)} />
+          {error.startPoint && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
       </Card>
       <Card
@@ -197,12 +242,12 @@ export const IEFillInformation = () => {
           {error.containerType && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div className="mb-5">
-          <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>
+          <p className="mb-4 font-medium">Bãi Container:</p>
           <Select
-            options={portDumpList}
-            value={portDump}
-            onChange={(e) => handleSetPortDump(e as TDump)}
-            placeholder={'Select port dump'}
+            options={containerDumpList}
+            value={containerDump}
+            onChange={(e) => handleSetContainerDump(e as TDump)}
+            placeholder={'Chọn bãi container'}
             isSearchable={true}
             getOptionValue={(option) => String(option.title)}
             components={{ MenuList }}
@@ -212,14 +257,19 @@ export const IEFillInformation = () => {
               </div>
             )}
           />
-          {error.portDump && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+          {error.containerDump && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+        </div>
+        <div className="mb-5">
+          <p className="mb-4 font-medium">Thời gian nhận đơn:</p>
+          <DatePicker onChange={onChange} disabledDate={disabledDate} disabledTime={disabledDateTime} />
+          {error.deliveryDate && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div className="mb-5">
           <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>
           <input
             type="text"
             onChange={handleSetDetailAddress}
-            className={`${error.detailAddress ? '!border-red-600' : '!border-gray-400'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
+            className={`block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
           />
           {error.detailAddress && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
@@ -228,7 +278,7 @@ export const IEFillInformation = () => {
           <input
             type="text"
             onChange={handleSetNote}
-            className={`${error.note ? '!border-red-600' : '!border-gray-400'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
+            className={`block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
           />
           {error.note && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>

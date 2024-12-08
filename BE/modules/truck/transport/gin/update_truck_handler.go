@@ -1,4 +1,4 @@
-package ginorder
+package gintruck
 
 import (
 	"net/http"
@@ -6,15 +6,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/biz"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/storage"
+	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/biz"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/storage"
 	"gorm.io/gorm"
 )
 
-func UpdateOrder(db *gorm.DB) func(*gin.Context) {
+func UpdateTruck(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data *modelorder.OrderUpdated
+		var data *modeltruck.TruckUpdated
 
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -30,9 +30,9 @@ func UpdateOrder(db *gorm.DB) func(*gin.Context) {
 
 		store := storage.NewSqlStore(db)
 
-		business := biz.NewUpdateOrderBiz(store)
+		business := biz.NewUpdateTruckBiz(store)
 
-		if err := business.UpdateOrderById(c, id, data); err != nil {
+		if err := business.UpdateTruckById(c, id, data); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 
 			return

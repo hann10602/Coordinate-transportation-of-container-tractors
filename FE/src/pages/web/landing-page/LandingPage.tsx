@@ -33,25 +33,39 @@ export const LandingPage = () => {
           Quản lý vận hành trên hệ sinh thái số: vận chuyển, kho bãi, container, phân phối,… thông minh – hiệu quả!
         </p>
         <div className="flex gap-x-10 items-center justify-between">
-          <Link to="/ie" className="bg-white bg-opacity-30 py-4 px-10 rounded-md">
-            <img className="w-80 h-40" src="/public/images/visualize-ie.png" alt="time-schedule" />
+          <Link
+            to="/ie"
+            className="flex-1 hover:bg-white bg-slate-300 hover:bg-opacity-30 bg-opacity-30 py-4 px-10 rounded-md"
+          >
+            <img className="w-full  h-36 object-cover" src="/public/images/visualize-ie.png" alt="time-schedule" />
             <p className="mt-10 mb-2 text-xl font-bold">IE</p>
-            <p className="font-medium">Vận chuyển container rỗng từ kho khách đem về bãi container</p>
+            <p className="font-medium line-clamp-3">Vận chuyển container rỗng từ kho khách đem về bãi container</p>
           </Link>
-          <Link to="/if" className="bg-white bg-opacity-30 py-4 px-10 rounded-md">
-            <img className="w-80 h-40" src="/public/images/visualize-if.png" alt="time-schedule" />
+          <Link
+            to="/if"
+            className="flex-1 hover:bg-white bg-slate-300 hover:bg-opacity-30 bg-opacity-30 py-4 px-10 rounded-md"
+          >
+            <img className="w-full  h-36 object-cover" src="/public/images/visualize-if.png" alt="time-schedule" />
             <p className="mt-10 mb-2 text-xl font-bold">IF</p>
-            <p className="font-medium">Vận chuyển container đầy từ cảng về kho của khách hàng</p>
+            <p className="font-medium line-clamp-3">Vận chuyển container đầy từ cảng về kho của khách hàng</p>
           </Link>
-          <Link to="/oe" className="bg-white bg-opacity-30 py-4 px-10 rounded-md">
-            <img className="w-80 h-40" src="/public/images/visualize-oe.png" alt="time-schedule" />
+          <Link
+            to="/oe"
+            className="flex-1 hover:bg-white bg-slate-300 hover:bg-opacity-30 bg-opacity-30 py-4 px-10 rounded-md"
+          >
+            <img className="w-full  h-36 object-cover" src="/public/images/visualize-oe.png" alt="time-schedule" />
             <p className="mt-10 mb-2 text-xl font-bold">OE</p>
-            <p className="font-medium">Vận chuyển container rỗng từ bãi container tới kho khách để thêm hàng</p>
+            <p className="font-medium line-clamp-3">
+              Vận chuyển container rỗng từ bãi container tới kho khách để thêm hàng
+            </p>
           </Link>
-          <Link to="/of" className="bg-white bg-opacity-30 py-4 px-10 rounded-md">
-            <img className="w-80 h-40" src="/public/images/visualize-of.png" alt="time-schedule" />
+          <Link
+            to="/of"
+            className="flex-1 hover:bg-white bg-slate-300 hover:bg-opacity-30 bg-opacity-30 py-4 px-10 rounded-md"
+          >
+            <img className="w-full  h-36 object-cover" src="/public/images/visualize-of.png" alt="time-schedule" />
             <p className="mt-10 mb-2 text-xl font-bold">OF</p>
-            <p className="font-medium">Vận chuyển container đầy từ kho khách hàng ra cảng</p>
+            <p className="font-medium line-clamp-3">Vận chuyển container đầy từ kho khách hàng ra cảng</p>
           </Link>
         </div>
       </div>

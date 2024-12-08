@@ -22,6 +22,7 @@ func CreateUser(db *gorm.DB) func(*gin.Context) {
 		}
 
 		data.Status = modeluser.ACTIVE
+		data.Role = modeluser.USER
 
 		store := storage.NewSqlStore(db)
 

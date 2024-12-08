@@ -1,4 +1,4 @@
-package ginorder
+package gintruck
 
 import (
 	"net/http"
@@ -6,12 +6,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/biz"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/storage"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/biz"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/storage"
 	"gorm.io/gorm"
 )
 
-func GetOrder(db *gorm.DB) func(*gin.Context) {
+func DeleteTruck(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -23,9 +23,9 @@ func GetOrder(db *gorm.DB) func(*gin.Context) {
 
 		store := storage.NewSqlStore(db)
 
-		business := biz.NewGetOrderBiz(store)
+		business := biz.NewDeleteTruckBiz(store)
 
-		data, err := business.GetOrderById(c, id)
+		err = business.DeleteTruckById(c, id)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err)
@@ -33,6 +33,6 @@ func GetOrder(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse("Successfully"))
 	}
 }

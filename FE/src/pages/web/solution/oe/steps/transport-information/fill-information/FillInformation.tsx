@@ -1,35 +1,41 @@
+import { DatePicker, DatePickerProps } from 'antd';
+import { RangePickerProps } from 'antd/es/date-picker';
+import dayjs from 'dayjs';
 import { LatLngExpression } from 'leaflet';
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Select, { ControlProps, GroupBase, MenuListProps, components } from 'react-select';
+import Select, { MenuListProps, components } from 'react-select';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
 import { EOESteps } from '../../../../../../../enums';
 import { TDump } from '../../../../../../../types';
+import { Map } from '../../../../components/map/Map';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { TTransportInformation, useOETransportInformationStore } from '../../../store';
 import { StepContext } from '../OETransportInformation';
-import { Map } from '../../../../components/map/Map';
 
 type TOEFillInformationErrors = {
   startPoint: boolean;
-  portDump: boolean;
+  containerDump: boolean;
   detailAddress: boolean;
+  deliveryDate: boolean;
   note: boolean;
   containerType: boolean;
 };
 
 export const OEFillInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore, fillInformation } = useOETransportInformationStore();
+  const { informationStore, fillInformation, getNearestTrailerFromStartPoint, getNearestTrailerFromEndPoint } =
+    useOETransportInformationStore();
 
   const [information, setInformation] = useState<TTransportInformation>(informationStore);
-  const [portDump, setPortDump] = useState<TDump | undefined>(undefined);
-  const [portDumpList, setPortDumpList] = useState<TDump[]>([]);
+  const [containerDump, setContainerDump] = useState<TDump | undefined>(undefined);
+  const [containerDumpList, setContainerDumpList] = useState<TDump[]>([]);
   const [error, setError] = useState<TOEFillInformationErrors>({
     startPoint: false,
-    portDump: false,
+    containerDump: false,
+    deliveryDate: false,
     detailAddress: false,
     note: false,
     containerType: false
@@ -38,7 +44,7 @@ export const OEFillInformation = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const section = searchParams.get('section');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const checkError = Object.keys(error).filter((key) => {
       if (!information[key as keyof TTransportInformation]) {
         setError((prev) => ({
@@ -53,6 +59,30 @@ export const OEFillInformation = () => {
     });
 
     if (checkError.length !== 0) return;
+
+    if (information.startPoint) {
+      await axiosInstance
+        .get('dump/nearest-trailer', {
+          params: {
+            latitude: (information.startPoint as any).lat,
+            longitude: (information.startPoint as any).lng
+          }
+        })
+        .then((res) => res.data.data)
+        .then((data) => getNearestTrailerFromEndPoint([data.latitude, data.longitude]));
+    }
+
+    if (information.containerDump) {
+      await axiosInstance
+        .get('dump/nearest-trailer', {
+          params: {
+            latitude: information.containerDump.latitude,
+            longitude: information.containerDump.longitude
+          }
+        })
+        .then((res) => res.data.data)
+        .then((data) => getNearestTrailerFromStartPoint([data.latitude, data.longitude]));
+    }
 
     fillInformation({
       ...information
@@ -76,12 +106,12 @@ export const OEFillInformation = () => {
     }));
   };
 
-  const handleSetPortDump = (dump: TDump) => {
-    setError((prev) => ({ ...prev, portDump: false }));
-    setPortDump(dump as TDump);
+  const handleSetContainerDump = (dump: TDump) => {
+    setError((prev) => ({ ...prev, containerDump: false }));
+    setContainerDump(dump as TDump);
     setInformation((prev) => ({
       ...prev,
-      portDump: dump
+      containerDump: dump
     }));
   };
 
@@ -114,14 +144,23 @@ export const OEFillInformation = () => {
     );
   };
 
-  const Control = ({ children, ...props }: ControlProps<TDump, boolean, GroupBase<TDump>>) => (
-    <components.Control
-      {...props}
-      className={`${error.portDump ? '!border-red-600' : '!border-gray-400'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none !shadow-none`}
-    >
-      {children}
-    </components.Control>
-  );
+  const range = (start: number, end: number) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  const disabledDateTime = () => ({
+    disabledHours: () => range(0, 24).splice(4, 20),
+    disabledMinutes: () => range(30, 60),
+    disabledSeconds: () => [55, 56]
+  });
+
+  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+    return current && current < dayjs().endOf('day');
+  };
 
   useEffect(() => {
     const containerField = document.getElementById(section as string);
@@ -133,12 +172,20 @@ export const OEFillInformation = () => {
     axiosInstance
       .get('dump', {
         params: {
-          type: 'Port'
+          type: 'Container'
         }
       })
       .then((res) => res.data.data)
-      .then((dumpList: TDump[]) => setPortDumpList(dumpList.map((dump) => ({ ...dump, value: dump.id }))));
+      .then((dumpList: TDump[]) => setContainerDumpList(dumpList.map((dump) => ({ ...dump, value: dump.id }))));
   }, []);
+
+  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+    setError((prev) => ({ ...prev, deliveryDate: false }));
+    setInformation((prev) => ({
+      ...prev,
+      deliveryDate: dateString as string
+    }));
+  };
 
   return (
     <>
@@ -161,7 +208,7 @@ export const OEFillInformation = () => {
         isSelected={section === EOESteps.DETAIL_INFORMATION}
       >
         <div className="mb-5">
-          <p className="mb-4">Loại container:</p>
+          <p className="mb-4 font-medium">Loại container:</p>
           <div className="ml-4">
             <div className="flex items-center mb-4">
               <input
@@ -195,46 +242,46 @@ export const OEFillInformation = () => {
           {error.containerType && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div className="mb-5">
-          <p className="mb-4">Địa chỉ chi tiết:</p>
+          <p className="mb-4 font-medium">Bãi Container:</p>
+          <Select
+            options={containerDumpList}
+            value={containerDump}
+            onChange={(e) => handleSetContainerDump(e as TDump)}
+            placeholder={'Chọn bãi container'}
+            isSearchable={true}
+            getOptionValue={(option) => String(option.title)}
+            components={{ MenuList }}
+            formatOptionLabel={(dump) => (
+              <div className="flex items-center">
+                <span>{dump.title}</span>
+              </div>
+            )}
+          />
+          {error.containerDump && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+        </div>
+        <div className="mb-5">
+          <p className="mb-4 font-medium">Thời gian nhận đơn:</p>
+          <DatePicker onChange={onChange} disabledDate={disabledDate} disabledTime={disabledDateTime} />
+          {error.deliveryDate && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+        </div>
+        <div className="mb-5">
+          <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>
           <input
             type="text"
             onChange={handleSetDetailAddress}
-            className={`${error.detailAddress ? '!border-red-600' : '!border-gray-400'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
+            className={`block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
           />
           {error.detailAddress && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div>
-          <p className="mb-4">Ghi chú:</p>
+          <p className="mb-4 font-medium">Ghi chú:</p>
           <input
             type="text"
             onChange={handleSetNote}
-            className={`${error.note ? '!border-red-600' : '!border-gray-400'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
+            className={`block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
           />
           {error.note && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
-      </Card>
-      <Card
-        id={EOESteps.PORT_DUMP}
-        title="Cảng"
-        onClick={() => handleChangeSection(EOESteps.PORT_DUMP)}
-        isSelected={section === EOESteps.PORT_DUMP}
-        className="!h-80"
-      >
-        <Select
-          options={portDumpList}
-          value={portDump}
-          onChange={(e) => handleSetPortDump(e as TDump)}
-          placeholder={'Select port dump'}
-          isSearchable={true}
-          getOptionValue={(option) => String(option.id)}
-          components={{ MenuList, Control }}
-          formatOptionLabel={(dump) => (
-            <div className="flex items-center">
-              <span>{dump.title}</span>
-            </div>
-          )}
-        />
-        {error.portDump && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
       </Card>
       <div className="flex justify-end z-10">
         <Button className="bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleSubmit}>

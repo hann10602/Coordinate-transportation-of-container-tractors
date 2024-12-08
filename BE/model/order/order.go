@@ -18,7 +18,7 @@ type Order struct {
 	CurrentPosition string     `json:"currentPosition" gorm:"column:current_position;size:10"`
 	Status          string     `json:"status" gorm:"column:status;size:10;not null"`
 	Type            string     `json:"type" gorm:"column:type;size:10;not null"`
-	TruckID         int64      `json:"truckId" gorm:"column:truck_id"`
+	TruckId         int64      `json:"truckId" gorm:"column:truck_id"`
 	PortId          int64      `json:"portId" gorm:"column:port_id"`
 	StartTrailerId  int64      `json:"startTrailerId" gorm:"column:start_trailer_id"`
 	EndTrailerId    int64      `json:"endTrailerId" gorm:"column:end_trailer_id"`

@@ -13,26 +13,28 @@ import (
 
 func CreateDump(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data []*modeldump.DumpCreated
+		var dumps []*modeldump.DumpCreated
 
-		if err := c.ShouldBind(&data); err != nil {
+		if err := c.ShouldBind(&dumps); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 
 			return
 		}
 
-		// data.Status = modeldump.WORKING
+		for _, dump := range dumps {
+			dump.Status = modeldump.WORKING
+		}
 
 		store := storage.NewSqlStore(db)
 
 		business := biz.NewCreateDumpBiz(store)
 
-		if err := business.CreateNewDump(c.Request.Context(), data); err != nil {
+		if err := business.CreateNewDump(c.Request.Context(), dumps); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 
 			return
 		}
 
-		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(dumps))
 	}
 }

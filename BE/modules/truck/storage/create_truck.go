@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
+	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
 )
 
-func (s *sqlStore) CreateOrder(ctx context.Context, data []*modelorder.OrderCreated) error {
+func (s *sqlStore) CreateTruck(ctx context.Context, data []*modeltruck.TruckCreated) error {
 	if err := s.db.Create(&data).Error; err != nil {
 		return common.ErrDB(err)
 	}

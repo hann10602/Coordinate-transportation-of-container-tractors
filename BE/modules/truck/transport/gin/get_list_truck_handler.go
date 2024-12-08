@@ -1,19 +1,19 @@
-package ginorder
+package gintruck
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/biz"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/storage"
+	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/biz"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/storage"
 	"gorm.io/gorm"
 )
 
-func GetListOrder(db *gorm.DB) func(*gin.Context) {
+func GetListTruck(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var filter modelorder.Filter
+		var filter modeltruck.Filter
 
 		if err := c.ShouldBind(&filter); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
@@ -23,9 +23,9 @@ func GetListOrder(db *gorm.DB) func(*gin.Context) {
 
 		store := storage.NewSqlStore(db)
 
-		business := biz.NewGetListOrderBiz(store)
+		business := biz.NewGetListTruckBiz(store)
 
-		data, err := business.FindListOrder(c, filter)
+		data, err := business.FindListTruck(c, filter)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err)

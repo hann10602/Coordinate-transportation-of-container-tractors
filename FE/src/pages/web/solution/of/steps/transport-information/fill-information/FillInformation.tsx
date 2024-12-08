@@ -1,3 +1,6 @@
+import { DatePicker, DatePickerProps } from 'antd';
+import { RangePickerProps } from 'antd/es/date-picker';
+import dayjs from 'dayjs';
 import { LatLngExpression } from 'leaflet';
 import { useContext, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -11,21 +14,20 @@ import { Map } from '../../../../components/map/Map';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { TTransportInformation, useOFTransportInformationStore } from '../../../store';
 import { StepContext } from '../OFTransportInformation';
-import { DatePicker, DatePickerProps } from 'antd';
-import dayjs from 'dayjs';
 
 type TOFFillInformationErrors = {
   startPoint: boolean;
   portDump: boolean;
   detailAddress: boolean;
-  deliveryTime: boolean
+  deliveryDate: boolean;
   note: boolean;
   containerType: boolean;
 };
 
 export const OFFillInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore, fillInformation, getNearestTrailer } = useOFTransportInformationStore();
+  const { informationStore, fillInformation, getNearestTrailerFromStartPoint, getNearestTrailerFromEndPoint } =
+    useOFTransportInformationStore();
 
   const [information, setInformation] = useState<TTransportInformation>(informationStore);
   const [portDump, setPortDump] = useState<TDump | undefined>(undefined);
@@ -33,7 +35,7 @@ export const OFFillInformation = () => {
   const [error, setError] = useState<TOFFillInformationErrors>({
     startPoint: false,
     portDump: false,
-    deliveryTime: false,
+    deliveryDate: false,
     detailAddress: false,
     note: false,
     containerType: false
@@ -67,7 +69,19 @@ export const OFFillInformation = () => {
           }
         })
         .then((res) => res.data.data)
-        .then((data) => getNearestTrailer([data.latitude, data.longitude]));
+        .then((data) => getNearestTrailerFromStartPoint([data.latitude, data.longitude]));
+    }
+
+    if (information.portDump) {
+      await axiosInstance
+        .get('dump/nearest-trailer', {
+          params: {
+            latitude: information.portDump.latitude,
+            longitude: information.portDump.longitude
+          }
+        })
+        .then((res) => res.data.data)
+        .then((data) => getNearestTrailerFromEndPoint([data.latitude, data.longitude]));
     }
 
     fillInformation({
@@ -130,6 +144,24 @@ export const OFFillInformation = () => {
     );
   };
 
+  const range = (start: number, end: number) => {
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push(i);
+    }
+    return result;
+  };
+
+  const disabledDateTime = () => ({
+    disabledHours: () => range(0, 24).splice(4, 20),
+    disabledMinutes: () => range(30, 60),
+    disabledSeconds: () => [55, 56]
+  });
+
+  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+    return current && current < dayjs().endOf('day');
+  };
+
   useEffect(() => {
     const containerField = document.getElementById(section as string);
 
@@ -148,7 +180,11 @@ export const OFFillInformation = () => {
   }, []);
 
   const onChange: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString);
+    setError((prev) => ({ ...prev, deliveryDate: false }));
+    setInformation((prev) => ({
+      ...prev,
+      deliveryDate: dateString as string
+    }));
   };
 
   return (
@@ -162,6 +198,7 @@ export const OFFillInformation = () => {
       >
         <div className="h-full">
           <Map Location={information.startPoint} setLocation={(e) => handleSetLocation(e)} />
+          {error.startPoint && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
       </Card>
       <Card
@@ -210,7 +247,7 @@ export const OFFillInformation = () => {
             options={portDumpList}
             value={portDump}
             onChange={(e) => handleSetPortDump(e as TDump)}
-            placeholder={'Select port dump'}
+            placeholder={'Chọn bãi cảng'}
             isSearchable={true}
             getOptionValue={(option) => String(option.title)}
             components={{ MenuList }}
@@ -224,8 +261,8 @@ export const OFFillInformation = () => {
         </div>
         <div className="mb-5">
           <p className="mb-4 font-medium">Thời gian nhận đơn:</p>
-    <DatePicker onChange={onChange} defaultValue={dayjs("2024-12-13")} />
-          {error.deliveryTime && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+          <DatePicker onChange={onChange} disabledDate={disabledDate} disabledTime={disabledDateTime} />
+          {error.deliveryDate && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
         </div>
         <div className="mb-5">
           <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>

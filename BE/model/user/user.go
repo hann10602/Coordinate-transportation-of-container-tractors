@@ -14,8 +14,7 @@ type User struct {
 	Password    string `json:"password" gorm:"column:password;size:255;not null;check:char_length(password) >= 6"`
 	PhoneNumber string `json:"phoneNumber" gorm:"column:phone_number;size:50;not null;unique"`
 	Status      string `json:"status" gorm:"column:status;size:10;not null"`
-	// RoleId int `json:"role" gorm:"column:role"`
-	// Role TRole
+	Role        string `json:"role" gorm:"column:role;size:10;not null"`
 }
 
 type TRole struct {
@@ -24,6 +23,11 @@ type TRole struct {
 const (
 	ACTIVE  = "Active"
 	DELETED = "Deleted"
+)
+
+const (
+	USER  = "User"
+	ADMIN = "Admin"
 )
 
 var (
@@ -43,6 +47,7 @@ type UserCreated struct {
 	FullName    string     `json:"fullName" gorm:"column:full_name"`
 	Username    string     `json:"username" gorm:"column:username"`
 	Password    string     `json:"password" gorm:"column:password"`
+	Role        string     `json:"role" gorm:"column:role"`
 	PhoneNumber string     `json:"phoneNumber" gorm:"column:phone_number"`
 	Status      string     `json:"status" gorm:"column:status"`
 	CreatedAt   *time.Time `json:"createdAt" gorm:"column:created_at"`

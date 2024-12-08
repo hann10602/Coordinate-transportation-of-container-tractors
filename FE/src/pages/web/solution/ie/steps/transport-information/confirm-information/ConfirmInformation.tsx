@@ -1,14 +1,14 @@
-import { LatLngExpression } from 'leaflet';
 import { useContext, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
 import { EIESteps } from '../../../../../../../enums';
-import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { useIETransportInformationStore } from '../../../store';
 import { StepContext } from '../IETransportInformation';
+import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
+import { LatLngExpression } from 'leaflet';
 
 const containerTypeConvert = {
   [ECONTAINER_TYPE.SMALL]: {
@@ -23,28 +23,38 @@ const containerTypeConvert = {
 
 export const IEConfirmInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore, nearestTrailer } = useIETransportInformationStore();
+  const { informationStore, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint } =
+    useIETransportInformationStore();
 
   const [distance, setDistance] = useState<number>(0);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const section = searchParams.get('section');
 
-  const routingList: LatLngExpression[] = useMemo(
-    () =>
-      informationStore.startPoint && informationStore.portDump && nearestTrailer
-        ? [
-            nearestTrailer,
-            informationStore.startPoint,
-            [informationStore.portDump.latitude, informationStore.portDump.longitude]
-          ]
-        : [],
-    [informationStore.startPoint, informationStore.portDump, nearestTrailer]
-  );
-
   const totalPrice = informationStore.containerType
     ? (containerTypeConvert[informationStore.containerType].price * distance).toFixed(2)
     : 0;
+
+  const routingList: LatLngExpression[] = useMemo(
+    () =>
+      informationStore.startPoint &&
+      informationStore.containerDump &&
+      nearestTrailerFromStartPoint &&
+      nearestTrailerFromEndPoint
+        ? [
+            nearestTrailerFromStartPoint,
+            informationStore.startPoint,
+            [informationStore.containerDump.latitude, informationStore.containerDump.longitude],
+            nearestTrailerFromEndPoint
+          ]
+        : [],
+    [
+      informationStore.startPoint,
+      informationStore.containerDump,
+      nearestTrailerFromStartPoint,
+      nearestTrailerFromEndPoint
+    ]
+  );
 
   const handleCheckout = async () => {
     axiosInstance
@@ -95,11 +105,7 @@ export const IEConfirmInformation = () => {
           <p>{totalPrice}$</p>
         </div>
         <div className="flex justify-end mt-10">
-          <Button
-            className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white"
-            // onClick={() => setStep(ETRANSPORT_INFORMATION_STEPS.COMPLETED)}
-            onClick={handleCheckout}
-          >
+          <Button className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleCheckout}>
             Xác nhận thanh toán
           </Button>
         </div>

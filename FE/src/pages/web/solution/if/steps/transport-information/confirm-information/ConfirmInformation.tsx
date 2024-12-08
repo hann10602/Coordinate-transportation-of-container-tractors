@@ -1,14 +1,14 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
 import { EIFSteps } from '../../../../../../../enums';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
+import { useIFTransportInformationStore } from '../../../store';
 import { StepContext } from '../IFTransportInformation';
 import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
 import { LatLngExpression } from 'leaflet';
-import { useIFTransportInformationStore } from '../../../store';
 
 const containerTypeConvert = {
   [ECONTAINER_TYPE.SMALL]: {
@@ -23,7 +23,8 @@ const containerTypeConvert = {
 
 export const IFConfirmInformation = () => {
   const { setStep } = useContext(StepContext);
-  const { informationStore } = useIFTransportInformationStore();
+  const { informationStore, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint } =
+    useIFTransportInformationStore();
 
   const [distance, setDistance] = useState<number>(0);
 
@@ -33,6 +34,22 @@ export const IFConfirmInformation = () => {
   const totalPrice = informationStore.containerType
     ? (containerTypeConvert[informationStore.containerType].price * distance).toFixed(2)
     : 0;
+
+  const routingList: LatLngExpression[] = useMemo(
+    () =>
+      informationStore.startPoint &&
+      informationStore.portDump &&
+      nearestTrailerFromStartPoint &&
+      nearestTrailerFromEndPoint
+        ? [
+            nearestTrailerFromStartPoint,
+            [informationStore.portDump.latitude, informationStore.portDump.longitude],
+            informationStore.startPoint,
+            nearestTrailerFromEndPoint
+          ]
+        : [],
+    [informationStore.startPoint, informationStore.portDump, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint]
+  );
 
   const handleCheckout = async () => {
     axiosInstance
@@ -50,20 +67,6 @@ export const IFConfirmInformation = () => {
     setSearchParams(newParams);
   };
 
-  const handleSetUpRountingList = () => {
-    const routingList: LatLngExpression[] = [];
-
-    if (informationStore.startPoint) {
-      routingList.push(informationStore.startPoint);
-    }
-
-    if (informationStore.portDump) {
-      routingList.push([informationStore.portDump.latitude, informationStore.portDump.longitude]);
-    }
-
-    return routingList;
-  };
-
   return (
     <>
       <p className="text-3xl font-bold mb-10">Xác nhận thông tin</p>
@@ -74,7 +77,7 @@ export const IFConfirmInformation = () => {
         onClick={() => handleChangeSection(EIFSteps.DISTANCE)}
       >
         <div className="h-[600px]">
-          <RoutineMachineMap routingList={handleSetUpRountingList()} setDistance={setDistance} />
+          <RoutineMachineMap routingList={routingList} setDistance={setDistance} />
         </div>
       </Card>
       <Card
@@ -97,11 +100,7 @@ export const IFConfirmInformation = () => {
           <p>{totalPrice}$</p>
         </div>
         <div className="flex justify-end mt-10">
-          <Button
-            className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white"
-            // onClick={() => setStep(ETRANSPORT_INFORMATION_STEPS.COMPLETED)}
-            onClick={handleCheckout}
-          >
+          <Button className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleCheckout}>
             Xác nhận thanh toán
           </Button>
         </div>

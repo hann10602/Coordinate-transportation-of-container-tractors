@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
+	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
 	"gorm.io/gorm"
 )
 
-func (s *sqlStore) GetOrder(ctx context.Context, cond map[string]interface{}) (*modelorder.Order, error) {
-	var data modelorder.Order
+func (s *sqlStore) GetTruck(ctx context.Context, cond map[string]interface{}) (*modeltruck.Truck, error) {
+	var data modeltruck.Truck
 
 	if err := s.db.Where(cond).First(&data).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {

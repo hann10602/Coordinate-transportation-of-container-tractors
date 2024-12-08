@@ -1,4 +1,4 @@
-package modeldump
+package modeltruck
 
 import (
 	"errors"
@@ -10,10 +10,10 @@ import (
 
 type Truck struct {
 	common.SQLModel
-	Title       string `json:"title" gorm:"column:title;size:255;not null"`
-	NumberPlate string `json:"numberPlate" gorm:"column:number_plate;size:255;not null"`
-	Status      string `json:"status" gorm:"column:status"`
-	Orders      []modelorder.Order
+	Title       string             `json:"title" gorm:"column:title;size:255;not null;unique"`
+	NumberPlate string             `json:"numberPlate" gorm:"column:number_plate;size:255;not null;unique"`
+	Status      string             `json:"status" gorm:"column:status"`
+	PortDump    []modelorder.Order `gorm:"foreignKey:TruckId"`
 }
 
 func (Truck) TableName() string {
@@ -23,6 +23,7 @@ func (Truck) TableName() string {
 const (
 	ACTIVE      = "Active"
 	MAINTENANCE = "Maintenance"
+	DELETED     = "Deleted"
 )
 
 var (
@@ -39,10 +40,11 @@ type Filter struct {
 }
 
 type TruckCreated struct {
-	Id        int64      `json:"id" gorm:"column:id"`
-	Title     string     `json:"title" gorm:"column:title"`
-	CreatedAt *time.Time `json:"createdAt" gorm:"column:created_at"`
-	Status    string     `json:"status" gorm:"column:status"`
+	Id          int64      `json:"id" gorm:"column:id"`
+	Title       string     `json:"title" gorm:"column:title"`
+	NumberPlate string     `json:"numberPlate" gorm:"column:number_plate"`
+	Status      string     `json:"status" gorm:"column:status"`
+	CreatedAt   *time.Time `json:"createdAt" gorm:"column:created_at"`
 }
 
 func (TruckCreated) TableName() string {
@@ -50,9 +52,11 @@ func (TruckCreated) TableName() string {
 }
 
 type TruckUpdated struct {
-	Id        int64      `json:"id" gorm:"column:id"`
-	Title     string     `json:"title" gorm:"column:title"`
-	UpdatedAt *time.Time `json:"updatedAt" gorm:"column:updated_at"`
+	Id          int64      `json:"id" gorm:"column:id"`
+	Title       string     `json:"title" gorm:"column:title"`
+	NumberPlate string     `json:"numberPlate" gorm:"column:number_plate"`
+	Status      string     `json:"status" gorm:"column:status"`
+	UpdatedAt   *time.Time `json:"updatedAt" gorm:"column:updated_at"`
 }
 
 func (TruckUpdated) TableName() string {
