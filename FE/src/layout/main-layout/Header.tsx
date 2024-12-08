@@ -1,4 +1,5 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const SOLUTION_LIST = [
@@ -23,17 +24,52 @@ const SOLUTION_LIST = [
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth' // Adds a smooth scroll effect
+    behavior: 'smooth'
   });
 };
 
 export const Header = () => {
+  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   return (
     <div className="fixed top-0 h-20 z-20 w-full px-10 flex justify-between items-center bg-blue-500">
       <Link to="/trang-chu">
         <img src="/public/images/logo.jpg" className="w-12 h-12 object-cover rounded-full" alt="Logo" />
       </Link>
-      <div className="flex items-center gap-x-10">
+      <div className="flex items-center gap-x-10 md:hidden">
+        <div className="text-white border border-white rounded-md px-2 py-1">
+          <Icon icon="material-symbols-light:menu-rounded" width="24" height="24" onClick={() => setIsOpenMenu(true)} />
+        </div>
+        {isOpenMenu && (
+          <div className="absolute w-full h-screen top-0 left-0 bg-black bg-opacity-70">
+            <div className="bg-black">
+              <div className="py-6 px-4 flex justify-between items-center">
+                <Link to="/trang-chu">
+                  <img src="/public/images/logo.jpg" className="w-12 h-12 object-cover rounded-full" alt="Logo" />
+                </Link>
+                <div className="text-white border border-white rounded-md px-2 py-1">
+                  <Icon
+                    icon="material-symbols-light:menu-rounded"
+                    width="24"
+                    height="24"
+                    onClick={() => setIsOpenMenu(false)}
+                  />
+                </div>
+              </div>
+              {SOLUTION_LIST.map((solution) => (
+                <Link
+                  key={solution.path}
+                  to={solution.path}
+                  className="w-full font-semibold px-4 py-8 flex items-center text-white gap-x-4 border-t border-slate-700"
+                  onClick={scrollToTop}
+                >
+                  <p>{solution.title}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="md:flex items-center gap-x-10 hidden">
         <div className="solution-dropdown cursor-pointer relative text-gray-100 hover:text-white text-md font-semibold flex items-center gap-x-2 h-10">
           <p className="text-lg">Giải pháp</p> <Icon icon="material-symbols:keyboard-arrow-down-rounded" />
           <div className="solution-menu hidden absolute top-10 right-0 w-80 bg-white rounded-md overflow-hidden">
