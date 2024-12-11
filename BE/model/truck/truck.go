@@ -31,8 +31,10 @@ var (
 )
 
 type TruckGetList struct {
-	Id    int64  `json:"id" gorm:"column:id"`
-	Title string `json:"title" gorm:"column:title"`
+	common.SQLModel
+	Title       string `json:"title" gorm:"column:title"`
+	NumberPlate string `json:"numberPlate" gorm:"column:number_plate"`
+	Status      string `json:"status" gorm:"column:status"`
 }
 
 type Filter struct {

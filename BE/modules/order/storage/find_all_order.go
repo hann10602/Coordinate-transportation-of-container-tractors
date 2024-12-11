@@ -13,7 +13,7 @@ func (s *sqlStore) GetListOrder(ctx context.Context, filter modelorder.Filter) (
 
 	s.db = s.db.Table(modelorder.Order{}.TableName())
 
-	if err := s.db.Order("id desc").Where(filter).Find(&data).Error; err != nil {
+	if err := s.db.Where(filter).Find(&data).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 

@@ -13,7 +13,7 @@ func (s *sqlStore) GetListDump(ctx context.Context, filter modeldump.Filter) ([]
 
 	s.db = s.db.Table(modeldump.Dump{}.TableName())
 
-	if err := s.db.Order("id desc").Where(filter).Find(&data).Error; err != nil {
+	if err := s.db.Where(filter).Find(&data).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 

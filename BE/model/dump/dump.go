@@ -51,7 +51,7 @@ type DumpGetNearestTrailer struct {
 }
 
 type DumpGetList struct {
-	Id        int64   `json:"id" gorm:"column:id"`
+	common.SQLModel
 	Title     string  `json:"title" gorm:"column:title"`
 	Latitude  float64 `json:"latitude" gorm:"column:latitude"`
 	Longitude float64 `json:"longitude" gorm:"column:longitude"`

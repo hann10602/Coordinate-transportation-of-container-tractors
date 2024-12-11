@@ -6,9 +6,20 @@ export type TRequestSidebarMenu = {
 export type TDump = {
   id: number;
   title: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
   status: string;
   createdAt: string;
   updatedAt?: string;
 };
+
+export type TTruck = {
+  id: number;
+  title: string;
+  numberPlate: string;
+  status: string;
+  createdAt: string;
+  updatedAt?: string;
+};
+
+export type NotificationType = 'success' | 'info' | 'warning' | 'error';

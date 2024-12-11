@@ -13,7 +13,7 @@ func (s *sqlStore) GetListTruck(ctx context.Context, filter modeltruck.Filter) (
 
 	s.db = s.db.Table(modeltruck.Truck{}.TableName())
 
-	if err := s.db.Order("id desc").Where(filter).Find(&data).Error; err != nil {
+	if err := s.db.Where(filter).Find(&data).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 

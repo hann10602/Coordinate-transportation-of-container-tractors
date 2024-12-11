@@ -59,12 +59,12 @@ func (biz *createDumpBiz) CreateNewDump(ctx context.Context, data []*modeldump.D
 			return common.ErrInvalidRequest(modeldump.ErrTitleIsEmpty)
 		}
 
-		err := ValidateDecimal(dump.Latitude, 8, 6)
+		err := ValidateDecimal(dump.Latitude, 19, 17)
 		if err != nil {
 			return common.ErrInvalidRequest(err)
 		}
 
-		err = ValidateDecimal(dump.Longitude, 9, 6)
+		err = ValidateDecimal(dump.Longitude, 20, 17)
 		if err != nil {
 			return common.ErrInvalidRequest(err)
 		}

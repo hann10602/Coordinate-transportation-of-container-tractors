@@ -16,7 +16,7 @@ func (s *sqlStore) GetListUser(ctx context.Context, paging common.Paging) ([]mod
 		return nil, common.Paging{}, common.ErrDB(err)
 	}
 
-	if err := s.db.Order("id desc").Offset((paging.Page - 1) * paging.Limit).Limit(paging.Limit).Find(&data).Error; err != nil {
+	if err := s.db.Offset((paging.Page - 1) * paging.Limit).Limit(paging.Limit).Find(&data).Error; err != nil {
 		return nil, common.Paging{}, common.ErrDB(err)
 	}
 
