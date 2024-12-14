@@ -5,16 +5,18 @@ import (
 	"time"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
+	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
 )
 
 type User struct {
 	common.SQLModel
-	FullName    string `json:"fullName" gorm:"column:full_name;size:255;not null"`
-	Username    string `json:"username" gorm:"column:username;size:255;not null;unique;check:char_length(username) >= 6"`
-	Password    string `json:"password" gorm:"column:password;size:255;not null;check:char_length(password) >= 6"`
-	PhoneNumber string `json:"phoneNumber" gorm:"column:phone_number;size:50;not null;unique"`
-	Status      string `json:"status" gorm:"column:status;size:10;not null"`
-	Role        string `json:"role" gorm:"column:role;size:10;not null"`
+	FullName    string             `json:"fullName" gorm:"column:full_name;size:255;not null"`
+	Username    string             `json:"username" gorm:"column:username;size:255;not null;unique;check:char_length(username) >= 6"`
+	Password    string             `json:"password" gorm:"column:password;size:255;not null;check:char_length(password) >= 6"`
+	PhoneNumber string             `json:"phoneNumber" gorm:"column:phone_number;size:50;not null;unique"`
+	Status      string             `json:"status" gorm:"column:status;size:10;not null"`
+	Role        string             `json:"role" gorm:"column:role;size:10;not null"`
+	Orders      []modelorder.Order `gorm:"foreignKey:UserId"`
 }
 
 type TRole struct {

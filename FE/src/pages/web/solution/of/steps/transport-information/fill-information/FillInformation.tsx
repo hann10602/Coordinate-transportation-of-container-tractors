@@ -179,7 +179,7 @@ export const OFFillInformation = () => {
       .then((dumpList: TDump[]) => setPortDumpList(dumpList.map((dump) => ({ ...dump, value: dump.id }))));
   }, []);
 
-  const onChange: DatePickerProps['onChange'] = (date, dateString) => {
+  const onChange: DatePickerProps['onChange'] = (_, dateString) => {
     setError((prev) => ({ ...prev, deliveryDate: false }));
     setInformation((prev) => ({
       ...prev,

@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Dropdown, MenuProps } from 'antd';
 import { useState } from 'react';
-import { Link, Outlet, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const items: MenuProps['items'] = [
   {

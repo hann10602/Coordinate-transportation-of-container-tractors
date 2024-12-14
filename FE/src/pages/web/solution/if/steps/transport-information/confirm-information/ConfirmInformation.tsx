@@ -43,7 +43,7 @@ export const IFConfirmInformation = () => {
       nearestTrailerFromEndPoint
         ? [
             nearestTrailerFromStartPoint,
-            [informationStore.portDump.latitude, informationStore.portDump.longitude],
+            [Number(informationStore.portDump.latitude), Number(informationStore.portDump.longitude)],
             informationStore.startPoint,
             nearestTrailerFromEndPoint
           ]

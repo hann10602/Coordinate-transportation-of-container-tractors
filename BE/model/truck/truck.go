@@ -12,7 +12,7 @@ type Truck struct {
 	common.SQLModel
 	Title       string             `json:"title" gorm:"column:title;size:255;not null;unique"`
 	NumberPlate string             `json:"numberPlate" gorm:"column:number_plate;size:255;not null;unique"`
-	Status      string             `json:"status" gorm:"column:status"`
+	Status      string             `json:"status" gorm:"column:status;size:10;not null"`
 	PortDump    []modelorder.Order `gorm:"foreignKey:TruckId"`
 }
 

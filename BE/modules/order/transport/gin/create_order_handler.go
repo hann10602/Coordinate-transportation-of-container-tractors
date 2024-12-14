@@ -18,7 +18,6 @@ func ConvertOrderCreatedFromInput(ordersInput []*modelorder.OrderCreatedInput) [
 		deliveryDatePointer := &order.DeliveryDate.Time
 
 		orders[i] = &modelorder.OrderCreated{
-			Title:          order.Title,
 			TotalPrice:     order.TotalPrice,
 			DeliveryDate:   deliveryDatePointer,
 			Latitude:       order.Latitude,

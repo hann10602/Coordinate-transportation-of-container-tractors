@@ -15,7 +15,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="bg-white rounded-md p-4 w-full flex flex-col items-center text-black">
+    <div className="bg-white rounded-md p-4 w-full max-w-md mx-auto flex flex-col items-center text-black">
       <p className="my-10 font-bold text-4xl">Đăng nhập</p>
       <div className="relative w-full space-y-2">
         <label className="mb-2 font-semibold" htmlFor="phoneNumber">
@@ -49,12 +49,7 @@ export const Login = () => {
       </Button>
       <div className="mt-2">
         Bạn chưa có tài khoản?{' '}
-        <Link
-          rel="stylesheet"
-          to="/register"
-          className="
-        text-cyan-700 underline"
-        >
+        <Link rel="stylesheet" to="/register" className="text-cyan-700 underline">
           Đăng ký ngay!
         </Link>
       </div>

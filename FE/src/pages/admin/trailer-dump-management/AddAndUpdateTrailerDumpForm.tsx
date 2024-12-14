@@ -77,7 +77,7 @@ export const AddAndUpdateTrailerDumpForm = ({
     <Modal
       open={isOpenAddAndUpdateForm}
       footer={null}
-      title={'Add trailer dump'}
+      title={`${currentInstance ? 'Update' : 'Add'} trailer dump`}
       onCancel={() => {
         reset();
         setCurrentInstance(undefined);
@@ -87,7 +87,7 @@ export const AddAndUpdateTrailerDumpForm = ({
       <div className="overflow-y-auto">
         {contextHolder}
         <div className="relative w-full space-y-2">
-          <label className="mb-2 font-semibold" htmlFor="phoneNumber">
+          <label className="mb-2 font-semibold" htmlFor="title">
             Title
           </label>
           <input
@@ -99,9 +99,7 @@ export const AddAndUpdateTrailerDumpForm = ({
           {errors.title && <p className="text-red-400 absolute -bottom-7 mt-2">{errors.title.message}</p>}
         </div>
         <div className="relative w-full space-y-2 mt-8">
-          <label className="mb-2 font-semibold" htmlFor="phoneNumber">
-            Position
-          </label>
+          <label className="mb-2 font-semibold">Position</label>
           <Map
             Location={latitudeWatch && longitudeWatch ? [Number(latitudeWatch), Number(longitudeWatch)] : undefined}
             setLocation={handleSetLocation}
@@ -121,7 +119,7 @@ export const AddAndUpdateTrailerDumpForm = ({
             className="text font-semibold mt-12 hover:bg-cyan-700 border-cyan-700 transition ease-in-out"
             onClick={handleSubmit(handleSubmitAddForm)}
           >
-            Add
+            {currentInstance ? 'Update' : 'Add'}
           </Button>
         </div>
       </div>

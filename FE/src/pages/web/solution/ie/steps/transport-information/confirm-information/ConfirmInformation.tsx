@@ -44,7 +44,7 @@ export const IEConfirmInformation = () => {
         ? [
             nearestTrailerFromStartPoint,
             informationStore.startPoint,
-            [informationStore.containerDump.latitude, informationStore.containerDump.longitude],
+            [Number(informationStore.containerDump.latitude), Number(informationStore.containerDump.longitude)],
             nearestTrailerFromEndPoint
           ]
         : [],

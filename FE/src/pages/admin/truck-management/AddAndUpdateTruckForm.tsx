@@ -1,5 +1,4 @@
 import { Button, Modal, notification } from 'antd';
-import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -66,7 +65,7 @@ export const AddAndUpdateTruckForm = ({
     <Modal
       open={isOpenAddAndUpdateForm}
       footer={null}
-      title={'Add truck'}
+      title={`${currentInstance ? 'Update' : 'Add'} truck`}
       onCancel={() => {
         reset();
         setCurrentInstance(undefined);
@@ -104,7 +103,7 @@ export const AddAndUpdateTruckForm = ({
             className="text font-semibold mt-12 hover:bg-cyan-700 border-cyan-700 transition ease-in-out"
             onClick={handleSubmit(handleSubmitAddForm)}
           >
-            Add
+            {currentInstance ? 'Update' : 'Add'}
           </Button>
         </div>
       </div>

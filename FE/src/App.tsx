@@ -7,11 +7,9 @@ import { router } from './routes';
 import { axiosInstance } from './api/axios';
 import { stripePublicKey } from './lib/variables';
 
-type Props = {};
-
 const stripePromise = loadStripe(stripePublicKey);
 
-export const App = (props: Props) => {
+export const App = () => {
   const [clientSecret, setClientSecret] = React.useState<StripeElementsOptions | undefined>(undefined);
 
   React.useEffect(() => {

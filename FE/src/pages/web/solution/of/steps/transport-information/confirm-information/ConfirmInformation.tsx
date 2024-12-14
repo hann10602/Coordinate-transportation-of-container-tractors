@@ -44,7 +44,7 @@ export const OFConfirmInformation = () => {
         ? [
             nearestTrailerFromStartPoint,
             informationStore.startPoint,
-            [informationStore.portDump.latitude, informationStore.portDump.longitude],
+            [Number(informationStore.portDump.latitude), Number(informationStore.portDump.longitude)],
             nearestTrailerFromEndPoint
           ]
         : [],

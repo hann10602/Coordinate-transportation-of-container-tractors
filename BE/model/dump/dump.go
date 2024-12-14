@@ -14,8 +14,8 @@ type Dump struct {
 	Title            string             `json:"title" gorm:"column:title;size:255;not null"`
 	Latitude         decimal.Decimal    `json:"latitude" gorm:"column:latitude;type:DECIMAL(19,17);not null"`
 	Longitude        decimal.Decimal    `json:"longitude" gorm:"column:longitude;type:DECIMAL(20,17);not null"`
-	Status           string             `json:"status" gorm:"column:status"`
-	Type             string             `json:"type" gorm:"column:type"`
+	Status           string             `json:"status" gorm:"column:status;size:10;not null"`
+	Type             string             `json:"type" gorm:"column:type;size:10;not null"`
 	PortDump         []modelorder.Order `gorm:"foreignKey:PortId"`
 	StartTrailerDump []modelorder.Order `gorm:"foreignKey:StartTrailerId"`
 	EndTrailerDump   []modelorder.Order `gorm:"foreignKey:EndTrailerId"`

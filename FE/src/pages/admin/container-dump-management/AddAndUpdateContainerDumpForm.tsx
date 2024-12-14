@@ -77,7 +77,7 @@ export const AddAndUpdateContainerDumpForm = ({
     <Modal
       open={isOpenAddAndUpdateForm}
       footer={null}
-      title={'Add container dump'}
+      title={`${currentInstance ? 'Update' : 'Add'} container dump`}
       onCancel={() => {
         reset();
         setCurrentInstance(undefined);
@@ -121,7 +121,7 @@ export const AddAndUpdateContainerDumpForm = ({
             className="text font-semibold mt-12 hover:bg-cyan-700 border-cyan-700 transition ease-in-out"
             onClick={handleSubmit(handleSubmitAddForm)}
           >
-            Add
+            {currentInstance ? 'Update' : 'Add'}
           </Button>
         </div>
       </div>

@@ -76,3 +76,46 @@ func CreateCheckoutSession(db *gorm.DB) func(*gin.Context) {
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse(s.URL))
 	}
 }
+
+// func HandleStripeWebhook(db *gorm.DB) func(*gin.Context) {
+//     return func(c *gin.Context) {
+//         const MaxBodyBytes = int64(65536)
+//         c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, MaxBodyBytes)
+//         payload, err := ioutil.ReadAll(c.Request.Body)
+//         if err != nil {
+//             c.JSON(http.StatusServiceUnavailable, gin.H{"error": err.Error()})
+//             return
+//         }
+
+//         endpointSecret := os.Getenv("STRIPE_ENDPOINT_SECRET")
+//         event, err := webhook.ConstructEvent(payload, c.Request.Header.Get("Stripe-Signature"), endpointSecret)
+//         if err != nil {
+//             c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//             return
+//         }
+
+//         if event.Type == "checkout.session.completed" {
+//             var session stripe.CheckoutSession
+//             err := json.Unmarshal(event.Data.Raw, &session)
+//             if err != nil {
+//                 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//                 return
+//             }
+
+//             order := &modelorder.OrderCreated{
+//                 Title:      "New Order",
+//                 TotalPrice: int32(session.AmountTotal),
+//             }
+
+//             store := storage.NewSqlStore(db)
+//             business := biz.NewCreateOrderBiz(store)
+
+//             if err := business.CreateNewOrder(c.Request.Context(), []*modelorder.OrderCreated{order}); err != nil {
+//                 c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//                 return
+//             }
+//         }
+
+//         c.JSON(http.StatusOK, gin.H{"status": "success"})
+//     }
+// }

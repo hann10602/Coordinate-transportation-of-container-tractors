@@ -22,10 +22,15 @@ func NewCreateOrderBiz(store CreateOrderStorage) *createOrderBiz {
 
 func (biz *createOrderBiz) CreateNewOrder(ctx context.Context, data []*modelorder.OrderCreated) error {
 	for _, order := range data {
-		title := strings.TrimSpace(order.Title)
+		detailAddress := strings.TrimSpace(order.DetailAddress)
+		note := strings.TrimSpace(order.Note)
 
-		if title == "" {
-			return common.ErrInvalidRequest(modelorder.ErrTitleIsEmpty)
+		if detailAddress == "" {
+			return common.ErrInvalidRequest(modelorder.ErrDetailAddressIsEmpty)
+		}
+
+		if note == "" {
+			return common.ErrInvalidRequest(modelorder.ErrNoteIsEmpty)
 		}
 	}
 

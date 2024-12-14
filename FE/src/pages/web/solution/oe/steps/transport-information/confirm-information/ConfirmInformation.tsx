@@ -43,7 +43,7 @@ export const OEConfirmInformation = () => {
       nearestTrailerFromEndPoint
         ? [
             nearestTrailerFromStartPoint,
-            [informationStore.containerDump.latitude, informationStore.containerDump.longitude],
+            [Number(informationStore.containerDump.latitude), Number(informationStore.containerDump.longitude)],
             informationStore.startPoint,
             nearestTrailerFromEndPoint
           ]

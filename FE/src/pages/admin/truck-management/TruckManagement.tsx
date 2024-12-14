@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import type { TableColumnsType } from 'antd';
-import { Button, notification, Table } from 'antd';
+import { Button, Modal, notification, Table } from 'antd';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../../api/axios';
 import { openNotification } from '../../../utils';
@@ -10,6 +10,7 @@ import { TTruck } from '../../../types';
 export const TruckManagement = () => {
   const [currentInstance, setCurrentInstance] = useState<TTruck | undefined>(undefined);
   const [isOpenAddAndUpdateForm, setIsOpenAddAndUpdateForm] = useState<boolean>(false);
+  const [isOpenDeleteConfirmModal, setIsOpenDeleteConfirmModal] = useState<boolean>(false);
   const [truckList, setTruckList] = useState<TTruck[]>([]);
 
   const [api, contextHolder] = notification.useNotification();
@@ -64,7 +65,10 @@ export const TruckManagement = () => {
           </div>
           <div
             className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer"
-            onClick={() => handleDelete(record.id)}
+            onClick={() => {
+              setCurrentInstance(record);
+              setIsOpenDeleteConfirmModal(true);
+            }}
           >
             <Icon icon="mdi:garbage-can-outline" width="24" height="24" />
           </div>
@@ -83,6 +87,7 @@ export const TruckManagement = () => {
       .then(() => {
         openNotification(api, 'success');
         handleGetList();
+        setIsOpenDeleteConfirmModal(false);
       })
       .catch((err) => openNotification(api, 'error', err.response.data.log));
   };
@@ -108,6 +113,26 @@ export const TruckManagement = () => {
           handleCloseModal={() => setIsOpenAddAndUpdateForm(false)}
         />
       </div>
+      {isOpenDeleteConfirmModal && currentInstance && (
+        <Modal
+          open={isOpenDeleteConfirmModal}
+          footer={null}
+          title={`Confirm to delete ${currentInstance.title}`}
+          onCancel={() => {
+            setCurrentInstance(undefined);
+            setIsOpenDeleteConfirmModal(false);
+          }}
+        >
+          <div className="flex justify-end">
+            <Button
+              className="text font-semibold mt-4 hover:!border-red-500 hover:!text-red-500 border-red-300 text-red-300 transition ease-in-out"
+              onClick={() => handleDelete(currentInstance.id)}
+            >
+              Delete
+            </Button>
+          </div>
+        </Modal>
+      )}
       <div className="flex-1">
         <Table<TTruck> rowKey="id" columns={columns} pagination={{ pageSize: 8 }} dataSource={truckList} />
       </div>
