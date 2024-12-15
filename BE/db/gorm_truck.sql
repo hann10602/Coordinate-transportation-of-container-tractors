@@ -28,7 +28,7 @@ CREATE TABLE `truck` (
   `updated_at` datetime(3) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
   `number_plate` varchar(255) NOT NULL,
-  `status` longtext,
+  `status` varchar(10) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uni_truck_title` (`title`),
   UNIQUE KEY `uni_truck_number_plate` (`number_plate`)
@@ -41,7 +41,7 @@ CREATE TABLE `truck` (
 
 LOCK TABLES `truck` WRITE;
 /*!40000 ALTER TABLE `truck` DISABLE KEYS */;
-INSERT INTO `truck` VALUES (1,'2024-12-08 06:32:03.738',NULL,'Xe 1','30F-56789','Active'),(2,'2024-12-08 06:32:03.738',NULL,'Xe 2','30F-66666','Active'),(3,'2024-12-08 06:32:03.738',NULL,'Xe 3','30F-88888','Active'),(4,'2024-12-08 06:32:03.738',NULL,'Xe 4','30F-68686','Active'),(5,'2024-12-08 06:32:03.738',NULL,'Xe 5','30F-86868','Active');
+INSERT INTO `truck` VALUES (1,'2024-12-15 05:12:49.610',NULL,'Xe 1','30F-56789','Active'),(2,'2024-12-15 05:12:49.610',NULL,'Xe 2','30F-66666','Active'),(3,'2024-12-15 05:12:49.610',NULL,'Xe 3','30F-88888','Active'),(4,'2024-12-15 05:12:49.610',NULL,'Xe 4','30F-68686','Active'),(5,'2024-12-15 05:12:49.610',NULL,'Xe 5','30F-86868','Active');
 /*!40000 ALTER TABLE `truck` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -54,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-08 13:39:05
+-- Dump completed on 2024-12-15 12:15:41

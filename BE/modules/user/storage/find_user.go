@@ -11,7 +11,7 @@ import (
 func (s *sqlStore) GetUser(ctx context.Context, cond map[string]interface{}) (*modeluser.User, error) {
 	var data modeluser.User
 
-	if err := s.db.Where(cond).First(&data).Error; err != nil {
+	if err := s.db.Where(cond).Preload("Orders").First(&data).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, common.ErrRecordNotFound(err)
 		}
