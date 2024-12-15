@@ -16,7 +16,7 @@ type User struct {
 	PhoneNumber string             `json:"phoneNumber" gorm:"column:phone_number;size:50;not null;unique"`
 	Status      string             `json:"status" gorm:"column:status;size:10;not null"`
 	Role        string             `json:"role" gorm:"column:role;size:10;not null"`
-	Orders      []modelorder.Order `json:"orders" gorm:"foreignKey:UserId"`
+	Orders      []modelorder.Order `gorm:"foreignKey:UserId"`
 }
 
 type TRole struct {

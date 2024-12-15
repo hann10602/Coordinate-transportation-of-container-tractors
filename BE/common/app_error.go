@@ -148,10 +148,18 @@ func ErrNoPermission(err error) *AppError {
 	)
 }
 
+func ErrUserExist(err error) *AppError {
+	return NewCustomError(
+		err,
+		fmt.Sprintf("User already exists"),
+		fmt.Sprintf("ErrDuplicatedKey"),
+	)
+}
+
 func ErrRecordNotFound(err error) *AppError {
 	return NewCustomError(
 		err,
-		fmt.Sprintf("Record not foundn"),
+		fmt.Sprintf("Record not found"),
 		fmt.Sprintf("ErrRecordNotFound"),
 	)
 }
