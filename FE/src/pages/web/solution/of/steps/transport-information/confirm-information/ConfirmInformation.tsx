@@ -37,18 +37,23 @@ export const OFConfirmInformation = () => {
 
   const routingList: LatLngExpression[] = useMemo(
     () =>
-      informationStore.startPoint &&
+      informationStore.customerWarehouse &&
       informationStore.portDump &&
       nearestTrailerFromStartPoint &&
       nearestTrailerFromEndPoint
         ? [
             nearestTrailerFromStartPoint,
-            informationStore.startPoint,
+            [Number(informationStore.customerWarehouse.latitude), Number(informationStore.customerWarehouse.longitude)],
             [Number(informationStore.portDump.latitude), Number(informationStore.portDump.longitude)],
             nearestTrailerFromEndPoint
           ]
         : [],
-    [informationStore.startPoint, informationStore.portDump, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint]
+    [
+      informationStore.customerWarehouse,
+      informationStore.portDump,
+      nearestTrailerFromStartPoint,
+      nearestTrailerFromEndPoint
+    ]
   );
 
   const handleCheckout = async () => {

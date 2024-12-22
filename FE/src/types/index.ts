@@ -33,4 +33,25 @@ export type TTruck = {
   updatedAt?: string;
 };
 
+export type TJWTToken = {
+  userId: number;
+  name: string;
+  role: string;
+  ttl: number;
+};
+
+export type TUserDetails = {
+  fullName: string;
+  phoneNumber: string;
+  orders: TOrdersForUserDetails[];
+};
+
+export type TOrdersForUserDetails = {
+  id: number;
+  deliveryDate: string;
+  status: string;
+  totalPrice: number;
+  type: string;
+};
+
 export type NotificationType = 'success' | 'info' | 'warning' | 'error';

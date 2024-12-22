@@ -1,9 +1,16 @@
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../components';
 import { TLoginField } from './types';
+import { axiosInstance } from '../../api/axios';
+import { openNotification } from '../../utils';
+import { notification } from 'antd';
 
 export const Login = () => {
+  const navigate = useNavigate();
+
+  const [api, contextHolder] = notification.useNotification();
+
   const {
     handleSubmit,
     register,
@@ -11,11 +18,18 @@ export const Login = () => {
   } = useForm<TLoginField>();
 
   const handleSubmitLoginForm = (e: TLoginField) => {
-    console.log(e);
+    axiosInstance
+      .get(`auth/login?username=${e.username}&password=${e.password}`)
+      .then((res) => {
+        localStorage.setItem('token', res.data.data);
+        navigate('/trang-chu');
+      })
+      .catch((err) => openNotification(api, 'error', err.response.data.log));
   };
 
   return (
     <div className="bg-white rounded-md p-4 w-full max-w-md mx-auto flex flex-col items-center text-black">
+      {contextHolder}
       <p className="my-10 font-bold text-4xl">Đăng nhập</p>
       <div className="relative w-full space-y-2">
         <label className="mb-2 font-semibold" htmlFor="phoneNumber">

@@ -18,21 +18,20 @@ func ConvertOrderCreatedFromInput(ordersInput []*modelorder.OrderCreatedInput) [
 		deliveryDatePointer := &order.DeliveryDate.Time
 
 		orders[i] = &modelorder.OrderCreated{
-			TotalPrice:      order.TotalPrice,
-			DeliveryDate:    deliveryDatePointer,
-			Latitude:        order.Latitude,
-			Longitude:       order.Longitude,
-			Status:          modelorder.WAIT,
-			DetailAddress:   order.DetailAddress,
-			Note:            order.Note,
-			Type:            order.Type,
-			CurrentPosition: order.CurrentPosition,
-			UserId:          order.UserId,
-			TruckId:         order.TruckId,
-			PortId:          order.PortId,
-			StartTrailerId:  order.StartTrailerId,
-			EndTrailerId:    order.EndTrailerId,
-			ContainerId:     order.ContainerId,
+			TotalPrice:          order.TotalPrice,
+			DeliveryDate:        deliveryDatePointer,
+			Status:              modelorder.WAIT,
+			DetailAddress:       order.DetailAddress,
+			Note:                order.Note,
+			Type:                order.Type,
+			CurrentPosition:     order.CurrentPosition,
+			UserId:              order.UserId,
+			TruckId:             order.TruckId,
+			PortId:              order.PortId,
+			CustomerWarehouseId: order.CustomerWarehouseId,
+			StartTrailerId:      order.StartTrailerId,
+			EndTrailerId:        order.EndTrailerId,
+			ContainerId:         order.ContainerId,
 		}
 	}
 

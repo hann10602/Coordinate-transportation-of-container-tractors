@@ -1,22 +1,24 @@
-import { DatePicker, DatePickerProps } from 'antd';
+import { Icon } from '@iconify/react/dist/iconify.js';
+import { DatePicker, DatePickerProps, Modal, notification } from 'antd';
 import { RangePickerProps } from 'antd/es/date-picker';
 import dayjs from 'dayjs';
-import { LatLngExpression } from 'leaflet';
+import { jwtDecode } from 'jwt-decode';
 import { useContext, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import Select, { MenuListProps, components } from 'react-select';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import Select, { MenuListProps, OptionProps, components } from 'react-select';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
 import { EIFSteps } from '../../../../../../../enums';
-import { TDump } from '../../../../../../../types';
-import { Map } from '../../../../components/map/Map';
+import { TDump, TJWTToken } from '../../../../../../../types';
+import { openNotification } from '../../../../../../../utils';
+import { AddCustomerWarehouseForm } from '../../../../components/AddCustomerWarehouseForm';
 import { ECONTAINER_TYPE, ETRANSPORT_INFORMATION_STEPS } from '../../../enums';
 import { TTransportInformation, useIFTransportInformationStore } from '../../../store';
 import { StepContext } from '../IFTransportInformation';
 
 type TIFFillInformationErrors = {
-  startPoint: boolean;
+  customerWarehouse: boolean;
   portDump: boolean;
   detailAddress: boolean;
   deliveryDate: boolean;
@@ -25,15 +27,21 @@ type TIFFillInformationErrors = {
 };
 
 export const IFFillInformation = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
   const { setStep } = useContext(StepContext);
   const { informationStore, fillInformation, getNearestTrailerFromStartPoint, getNearestTrailerFromEndPoint } =
     useIFTransportInformationStore();
 
+  const [isOpenAddForm, setIsOpenAddForm] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number | undefined>(undefined);
   const [information, setInformation] = useState<TTransportInformation>(informationStore);
   const [portDump, setPortDump] = useState<TDump | undefined>(undefined);
   const [portDumpList, setPortDumpList] = useState<TDump[]>([]);
+  const [customerWarehouseList, setCustomerWarehouseList] = useState<TDump[]>([]);
+  const [customerWarehouse, setCustomerWarehouse] = useState<TDump | undefined>(undefined);
   const [error, setError] = useState<TIFFillInformationErrors>({
-    startPoint: false,
+    customerWarehouse: false,
     portDump: false,
     deliveryDate: false,
     detailAddress: false,
@@ -43,6 +51,8 @@ export const IFFillInformation = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const section = searchParams.get('section');
+
+  const [api, contextHolder] = notification.useNotification();
 
   const handleSubmit = async () => {
     const checkError = Object.keys(error).filter((key) => {
@@ -60,12 +70,12 @@ export const IFFillInformation = () => {
 
     if (checkError.length !== 0) return;
 
-    if (information.startPoint) {
+    if (information.customerWarehouse) {
       await axiosInstance
         .get('dump/nearest-trailer', {
           params: {
-            latitude: (information.startPoint as any).lat,
-            longitude: (information.startPoint as any).lng
+            latitude: information.customerWarehouse.latitude,
+            longitude: information.customerWarehouse.longitude
           }
         })
         .then((res) => res.data.data)
@@ -98,20 +108,21 @@ export const IFFillInformation = () => {
     setSearchParams(newParams);
   };
 
-  const handleSetLocation = (exp: LatLngExpression) => {
-    setError((prev) => ({ ...prev, startPoint: false }));
-    setInformation((prev) => ({
-      ...prev,
-      startPoint: exp
-    }));
-  };
-
   const handleSetPortDump = (dump: TDump) => {
     setError((prev) => ({ ...prev, portDump: false }));
     setPortDump(dump as TDump);
     setInformation((prev) => ({
       ...prev,
       portDump: dump
+    }));
+  };
+
+  const handleSetCustomerWarehouse = (dump: TDump) => {
+    setCustomerWarehouse(dump as TDump);
+    setError((prev) => ({ ...prev, customerWarehouse: false }));
+    setInformation((prev) => ({
+      ...prev,
+      customerWarehouse: dump
     }));
   };
 
@@ -131,6 +142,15 @@ export const IFFillInformation = () => {
     }));
   };
 
+  const handleRemoveWarehouse = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, id: number) => {
+    e.stopPropagation();
+
+    axiosInstance
+      .delete(`dump/${id}`)
+      .then(() => userId && handleGetCustomerWarehouseList(userId))
+      .catch((err) => openNotification(api, 'error', err.response.data.log));
+  };
+
   const handleCheckContainerType = (type: ECONTAINER_TYPE) => {
     setInformation((prev) => ({ ...prev, containerType: type }));
     setError((prev) => ({ ...prev, containerType: false }));
@@ -141,6 +161,32 @@ export const IFFillInformation = () => {
       <components.MenuList {...props} className="overflow-y-auto h-40">
         {props.children}
       </components.MenuList>
+    );
+  };
+
+  const Option = (props: OptionProps<TDump>) => {
+    return (
+      <components.Option {...props}>
+        <div className="flex items-center">
+          <div onClick={() => props.selectOption} className="flex-1">
+            {props.children}
+          </div>
+          <div
+            className="hover:bg-gray-100 p-1 rounded-full cursor-pointer z-10"
+            onClick={(e) => handleRemoveWarehouse(e, props.data.id)}
+          >
+            <Icon icon="mdi:bin-outline" width="24" height="24" className="text-red-400" />
+          </div>
+        </div>
+      </components.Option>
+    );
+  };
+
+  const NoOptionsMessage = (props: any) => {
+    return (
+      <components.NoOptionsMessage {...props}>
+        <span className="custom-css-class">Vui lòng thêm địa chỉ kho</span>
+      </components.NoOptionsMessage>
     );
   };
 
@@ -162,6 +208,26 @@ export const IFFillInformation = () => {
     return current && current < dayjs().endOf('day');
   };
 
+  const handleGetCustomerWarehouseList = (userId: number) => {
+    axiosInstance
+      .get('dump', {
+        params: {
+          type: 'Customer',
+          id: userId
+        }
+      })
+      .then((res) => res.data.data)
+      .then((dumpList: TDump[]) => {
+        setCustomerWarehouse('' as any);
+        setInformation((prev) => ({
+          ...prev,
+          customerWarehouse: undefined
+        }));
+        setCustomerWarehouseList(dumpList.map((dump) => ({ ...dump, value: dump.id })));
+      })
+      .catch((err) => openNotification(api, 'error', err.response.data.log));
+  };
+
   useEffect(() => {
     const containerField = document.getElementById(section as string);
 
@@ -169,6 +235,20 @@ export const IFFillInformation = () => {
   }, [section]);
 
   useEffect(() => {
+    if (token) {
+      const decodedToken: TJWTToken = jwtDecode(token);
+
+      if (!decodedToken.userId) {
+        navigate('/login');
+      }
+
+      setUserId(decodedToken.userId);
+
+      handleGetCustomerWarehouseList(decodedToken.userId);
+    } else {
+      navigate('/login');
+    }
+
     axiosInstance
       .get('dump', {
         params: {
@@ -190,15 +270,56 @@ export const IFFillInformation = () => {
   return (
     <>
       <p className="text-3xl font-bold mb-10">Form thông tin</p>
+      {contextHolder}
       <Card
         id={EIFSteps.START_LOCATION}
         title="Kho của bạn"
         onClick={() => handleChangeSection(EIFSteps.START_LOCATION)}
         isSelected={section === EIFSteps.START_LOCATION}
+        className="h-[472px]"
       >
-        <div className="h-full">
-          <Map Location={information.startPoint} setLocation={(e) => handleSetLocation(e)} />
-          {error.startPoint && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
+        <Modal
+          title="Thêm địa chỉ kho của bạn"
+          open={isOpenAddForm}
+          footer={null}
+          onCancel={() => setIsOpenAddForm(false)}
+        >
+          <AddCustomerWarehouseForm
+            userId={userId}
+            setIsOpenAddForm={setIsOpenAddForm}
+            setCustomerWarehouseList={setCustomerWarehouseList}
+          />
+        </Modal>
+        <div
+          onClick={() => setIsOpenAddForm(true)}
+          className="mb-5 border-2 border-green-300 p-2 w-fit rounded-md cursor-pointer hover:bg-green-50"
+        >
+          <Icon icon="mdi:plus" width="24" height="24" />
+        </div>
+        <div>
+          <p className="mb-4 font-medium">Chọn kho của bạn:</p>
+          <Select
+            menuIsOpen={true}
+            options={customerWarehouseList}
+            value={customerWarehouse}
+            onChange={(e) => handleSetCustomerWarehouse(e as TDump)}
+            placeholder={'Chọn kho của bạn'}
+            isSearchable={true}
+            getOptionValue={(option) => String(option.title)}
+            components={{
+              NoOptionsMessage,
+              MenuList,
+              Option,
+              DropdownIndicator: () => null,
+              IndicatorSeparator: () => null
+            }}
+            formatOptionLabel={(dump) => (
+              <div className="flex items-center">
+                <span>{dump.title}</span>
+              </div>
+            )}
+          />
+          {error.customerWarehouse && <p className="text-red-400 mt-44 text-sm">Thông tin này được yêu cầu</p>}
         </div>
       </Card>
       <Card

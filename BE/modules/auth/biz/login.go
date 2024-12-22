@@ -32,8 +32,11 @@ func (biz *getUserBiz) GetUserByUsernameAndPassword(ctx context.Context, loginPa
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": data.Id,
+		"name": data.FullName,
+		"role": data.Role,
 		"ttl":    time.Now().Add(time.Hour * 24 * 100).Unix(),
 	})
+
 	hmacSampleSecret := []byte("STRIPE_HMAC_SECRET")
 
 	tokenString, err := token.SignedString(hmacSampleSecret)

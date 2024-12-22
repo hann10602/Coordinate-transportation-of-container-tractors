@@ -38,6 +38,7 @@ CREATE TABLE `order` (
   `truck_id` bigint DEFAULT NULL,
   `user_id` bigint DEFAULT NULL,
   `port_id` bigint DEFAULT NULL,
+  `customer_warehouse_id` bigint DEFAULT NULL,
   `start_trailer_id` bigint DEFAULT NULL,
   `end_trailer_id` bigint DEFAULT NULL,
   `container_id` bigint DEFAULT NULL,
@@ -47,8 +48,10 @@ CREATE TABLE `order` (
   KEY `fk_dump_start_trailer_dump` (`start_trailer_id`),
   KEY `fk_dump_end_trailer_dump` (`end_trailer_id`),
   KEY `fk_dump_container_dump` (`container_id`),
+  KEY `fk_dump_customer_warehouse` (`customer_warehouse_id`),
   KEY `fk_truck_port_dump` (`truck_id`),
   CONSTRAINT `fk_dump_container_dump` FOREIGN KEY (`container_id`) REFERENCES `dump` (`id`),
+  CONSTRAINT `fk_dump_customer_warehouse` FOREIGN KEY (`customer_warehouse_id`) REFERENCES `dump` (`id`),
   CONSTRAINT `fk_dump_end_trailer_dump` FOREIGN KEY (`end_trailer_id`) REFERENCES `dump` (`id`),
   CONSTRAINT `fk_dump_port_dump` FOREIGN KEY (`port_id`) REFERENCES `dump` (`id`),
   CONSTRAINT `fk_dump_start_trailer_dump` FOREIGN KEY (`start_trailer_id`) REFERENCES `dump` (`id`),
@@ -75,4 +78,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-15 12:15:41
+-- Dump completed on 2024-12-22 15:37:19

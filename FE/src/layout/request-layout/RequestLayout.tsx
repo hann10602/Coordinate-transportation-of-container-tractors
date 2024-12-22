@@ -12,7 +12,6 @@ export const RequestLayout = ({ children }: Props) => {
           <Link to="/trang-chu">
             <img src="/public/images/logo.jpg" className="w-12 h-12 object-cover rounded-full" alt="Logo" />
           </Link>
-          <div>asd</div>
         </div>
         <div className="flex-1">{children}</div>
       </div>

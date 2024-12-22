@@ -1,7 +1,9 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { Dropdown, MenuProps } from 'antd';
-import { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { useEffect, useState } from 'react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { TJWTToken } from '../../types';
 
 const items: MenuProps['items'] = [
   {
@@ -16,8 +18,22 @@ const items: MenuProps['items'] = [
 ];
 
 export const AdminLayout = () => {
+  const navigate = useNavigate();
   const [isOpenSidebar, setIsOpenSidebar] = useState<boolean>(false);
   const location = useLocation().pathname;
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken: TJWTToken = jwtDecode(token);
+
+      if (decodedToken.role !== 'Admin') {
+        navigate('/trang-chu');
+      }
+    } else {
+      navigate('/trang-chu');
+    }
+  }, []);
 
   return (
     <div className="flex h-screen">

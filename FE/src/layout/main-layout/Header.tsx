@@ -1,6 +1,8 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { TJWTToken } from '../../types';
 
 const SOLUTION_LIST = [
   {
@@ -29,7 +31,24 @@ const scrollToTop = () => {
 };
 
 export const Header = () => {
+  const navigate = useNavigate();
+
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const [username, setUsername] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken: TJWTToken = jwtDecode(token);
+
+      if (decodedToken.name) {
+        setUsername(decodedToken.name);
+      }
+    } else {
+      navigate('/trang-chu');
+    }
+  }, []);
+
   return (
     <div className="fixed top-0 h-20 z-20 w-full px-10 flex justify-between items-center bg-blue-500">
       <Link to="/trang-chu">
@@ -86,13 +105,21 @@ export const Header = () => {
           </div>
         </div>
         <div className="cursor-pointer text-gray-100 text-md whitespace-pre font-semibold h-10 flex items-center">
-          <Link className="hover:text-white hover:underline text-lg" to="/login">
-            Đăng nhập
-          </Link>{' '}
-          /{' '}
-          <Link className="hover:text-white hover:underline text-lg" to="/register">
-            Đăng ký
-          </Link>
+          {username ? (
+            <Link className="hover:text-white hover:underline text-lg" to="/personal-info">
+              {username}
+            </Link>
+          ) : (
+            <>
+              <Link className="hover:text-white hover:underline text-lg" to="/login">
+                Đăng nhập
+              </Link>{' '}
+              /{' '}
+              <Link className="hover:text-white hover:underline text-lg" to="/register">
+                Đăng ký
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

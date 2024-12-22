@@ -13,7 +13,7 @@ export type TIFTransportInformationState = {
 };
 
 export type TTransportInformation = {
-  startPoint?: LatLngExpression;
+  customerWarehouse?: TDump;
   portDump?: TDump;
   containerType?: ECONTAINER_TYPE;
   detailAddress?: string;
@@ -29,7 +29,7 @@ export const useIFTransportInformationStore = create<TIFTransportInformationStat
     detailAddress: undefined,
     note: undefined,
     deliveryDate: undefined,
-    startPoint: undefined,
+    customerWarehouse: undefined,
     portDump: undefined
   },
   fillInformation: (information: TTransportInformation) => set(() => ({ informationStore: information })),

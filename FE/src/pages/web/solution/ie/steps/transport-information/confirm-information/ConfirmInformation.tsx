@@ -37,19 +37,19 @@ export const IEConfirmInformation = () => {
 
   const routingList: LatLngExpression[] = useMemo(
     () =>
-      informationStore.startPoint &&
+      informationStore.customerWarehouse &&
       informationStore.containerDump &&
       nearestTrailerFromStartPoint &&
       nearestTrailerFromEndPoint
         ? [
             nearestTrailerFromStartPoint,
-            informationStore.startPoint,
+            [Number(informationStore.customerWarehouse.latitude), Number(informationStore.customerWarehouse.longitude)],
             [Number(informationStore.containerDump.latitude), Number(informationStore.containerDump.longitude)],
             nearestTrailerFromEndPoint
           ]
         : [],
     [
-      informationStore.startPoint,
+      informationStore.customerWarehouse,
       informationStore.containerDump,
       nearestTrailerFromStartPoint,
       nearestTrailerFromEndPoint

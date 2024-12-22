@@ -43,6 +43,7 @@ func Init() *gin.Engine {
 			dump.GET("/nearest-trailer", gindump.GetNearestTrailerDump(dbInstance))
 			dump.GET("/:id", gindump.GetDump(dbInstance))
 			dump.POST("", gindump.CreateDump(dbInstance))
+			dump.POST("/customer-warehouse", gindump.CreateCustomerWarehouse(dbInstance))
 			dump.PUT("/:id", gindump.UpdateDump(dbInstance))
 			dump.DELETE("/:id", gindump.DeleteDump(dbInstance))
 		}
@@ -69,6 +70,7 @@ func Init() *gin.Engine {
 		{
 			payment.POST("create-payment-intent", ginpayment.CreatePaymentIntent())
 			payment.POST("create-checkout-session", ginpayment.CreateCheckoutSession(dbInstance), middleware.JWTAuthMiddleware())
+			payment.POST("webhook", ginpayment.HandleStripeWebhook(dbInstance), middleware.JWTAuthMiddleware())
 		}
 	}
 

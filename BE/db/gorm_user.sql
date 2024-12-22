@@ -37,7 +37,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `uni_user_phone_number` (`phone_number`),
   CONSTRAINT `chk_user_password` CHECK ((char_length(`password`) >= 6)),
   CONSTRAINT `chk_user_username` CHECK ((char_length(`username`) >= 6))
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'2024-12-08 06:36:35.322',NULL,'Admin','admin1','admin1','0988464108','Active','Admin'),(2,'2024-12-08 06:37:26.915',NULL,'Nguyen Ngoc Ha','username1','password1','0988464107','Active','User'),(3,'2024-12-08 06:37:44.585',NULL,'Nguyen Ngoc Ha','username2','password2','0988464106','Active','User');
+INSERT INTO `user` VALUES (3,'2024-12-22 08:33:48.577',NULL,'Nguyen Ngoc Ha','admin1','admin1','0988464106','Active','Admin'),(5,'2024-12-22 08:34:07.092',NULL,'Nguyen Ngoc Ha','username1','password1','0988464107','Active','User'),(6,'2024-12-22 08:34:13.846',NULL,'Nguyen Ngoc Ha','username2','password2','0988464108','Active','User');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -59,4 +59,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-15 12:15:41
+-- Dump completed on 2024-12-22 15:37:19

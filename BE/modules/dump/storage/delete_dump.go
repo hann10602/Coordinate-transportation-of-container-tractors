@@ -9,9 +9,7 @@ import (
 )
 
 func (s *sqlStore) DeleteDump(ctx context.Context, cond map[string]interface{}) error {
-	if err := s.db.Table(modeldump.Dump{}.TableName()).Where(cond).Updates(map[string]interface{}{
-		"status": modeldump.CLOSED,
-	}).Error; err != nil {
+	if err := s.db.Table(modeldump.Dump{}.TableName()).Delete(&modeldump.Dump{}, cond).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return common.ErrRecordNotFound(err)
 		}

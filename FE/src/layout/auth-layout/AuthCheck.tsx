@@ -14,8 +14,8 @@ export const AuthCheck = () => {
 
     try {
       const decodedToken: any = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp < currentTime) {
+      const currentTime = Date.now() / 1100;
+      if (decodedToken.ttl < currentTime) {
         localStorage.removeItem('token');
         navigate('/login');
       }

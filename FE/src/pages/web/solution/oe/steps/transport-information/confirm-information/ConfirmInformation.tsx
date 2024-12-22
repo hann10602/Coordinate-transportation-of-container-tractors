@@ -37,19 +37,19 @@ export const OEConfirmInformation = () => {
 
   const routingList: LatLngExpression[] = useMemo(
     () =>
-      informationStore.startPoint &&
+      informationStore.customerWarehouse &&
       informationStore.containerDump &&
       nearestTrailerFromStartPoint &&
       nearestTrailerFromEndPoint
         ? [
             nearestTrailerFromStartPoint,
             [Number(informationStore.containerDump.latitude), Number(informationStore.containerDump.longitude)],
-            informationStore.startPoint,
+            [Number(informationStore.customerWarehouse.latitude), Number(informationStore.customerWarehouse.longitude)],
             nearestTrailerFromEndPoint
           ]
         : [],
     [
-      informationStore.startPoint,
+      informationStore.customerWarehouse,
       informationStore.containerDump,
       nearestTrailerFromStartPoint,
       nearestTrailerFromEndPoint

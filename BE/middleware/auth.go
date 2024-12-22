@@ -28,13 +28,13 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		if tokenArray[2] == "" {
+		if tokenArray[1] == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Bearer token is required"})
 			c.Abort()
 			return
 		}
 
-		token, err := jwt.Parse(tokenArray[2], func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.Parse(tokenArray[1], func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}

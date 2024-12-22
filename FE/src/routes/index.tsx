@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import {  AuthCheck, AuthLayout, MainLayout } from '../layout';
+import { AuthCheck, AuthLayout, MainLayout } from '../layout';
 import { AdminLayout } from '../layout/admin-layout';
 import { RequestLayout } from '../layout/request-layout';
 import { Dashboard, TruckManagement, UserManagement } from '../pages/admin';
@@ -22,6 +22,7 @@ import {
 } from '../pages/web/solution';
 import { Completed } from '../pages/web/solution/components/completed/Completed';
 import { Failure } from '../pages/web/solution/components/failure/Failure';
+import { PersonalInfo } from '../pages/web/personal-info';
 
 export const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ export const router = createBrowserRouter([
           {
             path: '/of',
             element: <OF />
+          },
+          {
+            path: '/personal-info',
+            element: <PersonalInfo />
           }
         ]
       },

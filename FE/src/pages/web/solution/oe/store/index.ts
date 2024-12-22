@@ -13,7 +13,7 @@ export type TOETransportInformationState = {
 };
 
 export type TTransportInformation = {
-  startPoint?: LatLngExpression;
+  customerWarehouse?: TDump;
   containerDump?: TDump;
   containerType?: ECONTAINER_TYPE;
   detailAddress?: string;
@@ -29,7 +29,7 @@ export const useOETransportInformationStore = create<TOETransportInformationStat
     detailAddress: undefined,
     note: undefined,
     deliveryDate: undefined,
-    startPoint: undefined,
+    customerWarehouse: undefined,
     containerDump: undefined
   },
   fillInformation: (information: TTransportInformation) => set(() => ({ informationStore: information })),
