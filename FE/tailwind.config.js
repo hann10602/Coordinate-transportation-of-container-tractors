@@ -14,7 +14,8 @@ export default {
         sm: '100px'
       },
       height: {
-        800: '800px'
+        800: '800px',
+        472: '472px'
       },
       colors: {
         custom: '#51cf92'

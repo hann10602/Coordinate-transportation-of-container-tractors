@@ -20,3 +20,8 @@
 .leaflet-routing-container-hide {
   display: none;
 }
+
+.ant-modal {
+  min-width: 520px;
+  width: fit-content !important;
+}

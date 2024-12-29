@@ -31,3 +31,38 @@ export const openNotification = (api: NotificationInstance, type: NotificationTy
     description: log
   });
 };
+
+export const convertStatus = (status: string) => {
+  switch (status) {
+    case 'Done':
+      return {
+        title: 'Hoàn thành',
+        class: 'bg-green-500'
+      };
+    case 'Deleted':
+      return {
+        title: 'Đã xóa',
+        class: 'bg-red-500'
+      };
+    case 'Ongoing':
+      return {
+        title: 'Đang vận chuyển',
+        class: 'bg-blue-500'
+      };
+    case 'Wait':
+      return {
+        title: 'Chờ Vận chuyển',
+        class: 'bg-yellow-500'
+      };
+    case 'Pending':
+      return {
+        title: 'Chờ duyệt',
+        class: 'bg-gray-500'
+      };
+    default:
+      return {
+        title: 'Chờ duyệt',
+        class: 'bg-gray-500'
+      };
+  }
+};

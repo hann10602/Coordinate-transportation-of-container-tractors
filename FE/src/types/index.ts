@@ -43,15 +43,29 @@ export type TJWTToken = {
 export type TUserDetails = {
   fullName: string;
   phoneNumber: string;
-  orders: TOrdersForUserDetails[];
+  orders: TOrder[];
 };
 
-export type TOrdersForUserDetails = {
+export type TLatLng = {
+  latitude: string;
+  longitude: string;
+};
+
+export type TOrder = {
   id: number;
   deliveryDate: string;
+  currentPosition: number;
+  truckId: number;
   status: string;
   totalPrice: number;
-  type: string;
+  note: string;
+  detailAddress: string;
+  type: 'IE' | 'IF' | 'OE' | 'OF';
+  port: TLatLng;
+  customerWarehouse: TLatLng;
+  startTrailer: TLatLng;
+  endTrailer: TLatLng;
+  container: TLatLng;
 };
 
 export type NotificationType = 'success' | 'info' | 'warning' | 'error';

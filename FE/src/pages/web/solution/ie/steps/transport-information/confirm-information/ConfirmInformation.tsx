@@ -1,5 +1,5 @@
 import { useContext, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
@@ -9,6 +9,8 @@ import { useIETransportInformationStore } from '../../../store';
 import { StepContext } from '../IETransportInformation';
 import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
 import { LatLngExpression } from 'leaflet';
+import { TJWTToken } from '../../../../../../../types';
+import { jwtDecode } from 'jwt-decode';
 
 const containerTypeConvert = {
   [ECONTAINER_TYPE.SMALL]: {
@@ -22,6 +24,8 @@ const containerTypeConvert = {
 };
 
 export const IEConfirmInformation = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
   const { setStep } = useContext(StepContext);
   const { informationStore, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint } =
     useIETransportInformationStore();
@@ -42,10 +46,10 @@ export const IEConfirmInformation = () => {
       nearestTrailerFromStartPoint &&
       nearestTrailerFromEndPoint
         ? [
-            nearestTrailerFromStartPoint,
+            [Number(nearestTrailerFromStartPoint.latitude), Number(nearestTrailerFromStartPoint.longitude)],
             [Number(informationStore.customerWarehouse.latitude), Number(informationStore.customerWarehouse.longitude)],
             [Number(informationStore.containerDump.latitude), Number(informationStore.containerDump.longitude)],
-            nearestTrailerFromEndPoint
+            [Number(nearestTrailerFromEndPoint.latitude), Number(nearestTrailerFromEndPoint.longitude)]
           ]
         : [],
     [
@@ -56,11 +60,35 @@ export const IEConfirmInformation = () => {
     ]
   );
 
+  console.log(nearestTrailerFromEndPoint);
+
   const handleCheckout = async () => {
+    let userId;
+
+    if (token) {
+      const decodedToken: TJWTToken = jwtDecode(token);
+
+      if (!decodedToken.userId) {
+        navigate('/login');
+      }
+
+      userId = decodedToken.userId;
+    } else {
+      navigate('/login');
+    }
+
     axiosInstance
       .post('payment/create-checkout-session', {
-        price: Number(totalPrice.toString().replace('.', '')),
-        'delivery-type': 'Delivery request IE'
+        totalPrice: totalPrice.toString().replace('.', ''),
+        type: 'IE',
+        deliveryDate: informationStore.deliveryDate,
+        detailAddress: informationStore.detailAddress,
+        note: informationStore.note,
+        userId: String(userId),
+        customerWarehouseId: String(informationStore.customerWarehouse?.id),
+        startTrailerId: String(nearestTrailerFromStartPoint?.id),
+        endTrailerId: String(nearestTrailerFromEndPoint?.id),
+        containerId: String(informationStore.containerDump?.id)
       })
       .then((res) => window.open(res.data.data));
   };

@@ -79,7 +79,7 @@ export const IEFillInformation = () => {
           }
         })
         .then((res) => res.data.data)
-        .then((data) => getNearestTrailerFromStartPoint([data.latitude, data.longitude]));
+        .then((data) => getNearestTrailerFromStartPoint(data.id, [data.latitude, data.longitude]));
     }
 
     if (information.containerDump) {
@@ -91,7 +91,7 @@ export const IEFillInformation = () => {
           }
         })
         .then((res) => res.data.data)
-        .then((data) => getNearestTrailerFromEndPoint([data.latitude, data.longitude]));
+        .then((data) => getNearestTrailerFromEndPoint(data.id, [data.latitude, data.longitude]));
     }
 
     fillInformation({
@@ -276,7 +276,7 @@ export const IEFillInformation = () => {
         title="Kho của bạn"
         onClick={() => handleChangeSection(EIESteps.START_LOCATION)}
         isSelected={section === EIESteps.START_LOCATION}
-        className="h-[472px]"
+        className="h-472"
       >
         <Modal
           title="Thêm địa chỉ kho của bạn"

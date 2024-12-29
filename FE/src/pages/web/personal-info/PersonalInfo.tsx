@@ -4,43 +4,9 @@ import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../../api/axios';
-import { TJWTToken, TOrdersForUserDetails, TUserDetails } from '../../../types';
+import { TJWTToken, TOrder, TUserDetails } from '../../../types';
 import { Icon } from '@iconify/react/dist/iconify.js';
-
-const convertStatus = (status: string) => {
-  switch (status) {
-    case 'Done':
-      return {
-        title: 'Hoàn thành',
-        class: 'bg-green-500'
-      };
-    case 'Deleted':
-      return {
-        title: 'Đã xóa',
-        class: 'bg-red-500'
-      };
-    case 'Ongoing':
-      return {
-        title: 'Đang vận chuyển',
-        class: 'bg-blue-500'
-      };
-    case 'Pending':
-      return {
-        title: 'Chờ Vận chuyển',
-        class: 'bg-yellow-500'
-      };
-    case 'Wait':
-      return {
-        title: 'Chờ duyệt',
-        class: 'bg-gray-500'
-      };
-    default:
-      return {
-        title: 'Chờ duyệt',
-        class: 'bg-gray-500'
-      };
-  }
-};
+import { convertStatus } from '../../../utils';
 
 export const PersonalInfo: React.FC = () => {
   const navigate = useNavigate();
@@ -77,7 +43,7 @@ export const PersonalInfo: React.FC = () => {
     );
   }
 
-  const columns: TableColumnsType<TOrdersForUserDetails> = [
+  const columns: TableColumnsType<TOrder> = [
     {
       key: 'id',
       title: 'Mã đơn',
