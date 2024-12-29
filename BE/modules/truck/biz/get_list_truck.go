@@ -3,11 +3,11 @@ package biz
 import (
 	"context"
 
-	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
 type GetListTruckStorage interface {
-	GetListTruck(ctx context.Context, filter modeltruck.Filter) ([]modeltruck.TruckGetList, error)
+	GetListTruck(ctx context.Context, filter entitymodel.Filter) ([]entitymodel.TruckGetList, error)
 }
 
 type getListTruckBiz struct {
@@ -18,7 +18,7 @@ func NewGetListTruckBiz(store GetListTruckStorage) *getListTruckBiz {
 	return &getListTruckBiz{store: store}
 }
 
-func (biz *getListTruckBiz) FindListTruck(ctx context.Context, filter modeltruck.Filter) ([]modeltruck.TruckGetList, error) {
+func (biz *getListTruckBiz) FindListTruck(ctx context.Context, filter entitymodel.Filter) ([]entitymodel.TruckGetList, error) {
 	data, err := biz.store.GetListTruck(ctx, filter)
 
 	if err != nil {

@@ -8,8 +8,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func (s *sqlStore) DeleteDump(ctx context.Context, cond map[string]interface{}) error {
-	if err := s.db.Table(entitymodel.Dump{}.TableName()).Delete(&entitymodel.Dump{}, cond).Error; err != nil {
+func (s *sqlStore) UpdateNextStepOrder(ctx context.Context, cond map[string]interface{}, dataUpdated *entitymodel.OrderUpdated) error {
+	if err := s.db.Where(cond).Updates(&dataUpdated).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return common.ErrRecordNotFound(err)
 		}

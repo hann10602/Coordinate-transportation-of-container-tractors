@@ -4,14 +4,14 @@ import (
 	"context"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
-func (s *sqlStore) GetListDump(ctx context.Context, filter modeldump.Filter) ([]modeldump.DumpGetList, error) {
-	var data []modeldump.DumpGetList
+func (s *sqlStore) GetListDump(ctx context.Context, filter entitymodel.Filter) ([]entitymodel.DumpGetList, error) {
+	var data []entitymodel.DumpGetList
 	// filters := map[string]interface{}{}
 
-	s.db = s.db.Table(modeldump.Dump{}.TableName())
+	s.db = s.db.Table(entitymodel.Dump{}.TableName())
 
 	if err := s.db.Where(filter).Find(&data).Error; err != nil {
 		return nil, common.ErrDB(err)

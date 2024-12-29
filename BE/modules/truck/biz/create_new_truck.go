@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
 type CreateTruckStorage interface {
-	CreateTruck(ctx context.Context, data []*modeltruck.TruckCreated) error
+	CreateTruck(ctx context.Context, data []*entitymodel.TruckCreated) error
 }
 
 type createTruckBiz struct {
@@ -20,12 +20,12 @@ func NewCreateTruckBiz(store CreateTruckStorage) *createTruckBiz {
 	return &createTruckBiz{store: store}
 }
 
-func (biz *createTruckBiz) CreateNewTruck(ctx context.Context, data []*modeltruck.TruckCreated) error {
+func (biz *createTruckBiz) CreateNewTruck(ctx context.Context, data []*entitymodel.TruckCreated) error {
 	for _, truck := range data {
 		title := strings.TrimSpace(truck.Title)
 
 		if title == "" {
-			return common.ErrInvalidRequest(modeltruck.ErrTitleIsEmpty)
+			return common.ErrInvalidRequest(entitymodel.ErrTitleIsEmpty)
 		}
 	}
 

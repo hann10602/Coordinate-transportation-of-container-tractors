@@ -4,14 +4,14 @@ import (
 	"context"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
-func (s *sqlStore) GetListOrder(ctx context.Context, filter modelorder.Filter) ([]modelorder.OrderGetList, error) {
-	var data []modelorder.OrderGetList
+func (s *sqlStore) GetListOrder(ctx context.Context, filter entitymodel.Filter) ([]entitymodel.OrderGetList, error) {
+	var data []entitymodel.OrderGetList
 	// filters := map[string]interface{}{}
 
-	s.db = s.db.Table(modelorder.Order{}.TableName())
+	s.db = s.db.Table(entitymodel.Order{}.TableName())
 
 	if err := s.db.Where(filter).Find(&data).Error; err != nil {
 		return nil, common.ErrDB(err)

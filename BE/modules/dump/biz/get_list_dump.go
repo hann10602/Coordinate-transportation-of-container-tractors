@@ -3,11 +3,11 @@ package biz
 import (
 	"context"
 
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
 type GetListDumpStorage interface {
-	GetListDump(ctx context.Context, filter modeldump.Filter) ([]modeldump.DumpGetList, error)
+	GetListDump(ctx context.Context, filter entitymodel.Filter) ([]entitymodel.DumpGetList, error)
 }
 
 type getListDumpBiz struct {
@@ -18,7 +18,7 @@ func NewGetListDumpBiz(store GetListDumpStorage) *getListDumpBiz {
 	return &getListDumpBiz{store: store}
 }
 
-func (biz *getListDumpBiz) FindListDump(ctx context.Context, filter modeldump.Filter) ([]modeldump.DumpGetList, error) {
+func (biz *getListDumpBiz) FindListDump(ctx context.Context, filter entitymodel.Filter) ([]entitymodel.DumpGetList, error) {
 	data, err := biz.store.GetListDump(ctx, filter)
 
 	if err != nil {

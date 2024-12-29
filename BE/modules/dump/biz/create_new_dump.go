@@ -5,12 +5,12 @@ import (
 	"strings"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"github.com/shopspring/decimal"
 )
 
 type CreateDumpStorage interface {
-	CreateDump(ctx context.Context, data []*modeldump.DumpCreated) error
+	CreateDump(ctx context.Context, data []*entitymodel.DumpCreated) error
 }
 
 type createDumpBiz struct {
@@ -41,22 +41,22 @@ func ValidateDecimal(value decimal.Decimal, precision, scale int) error {
 
 	totalDigits := len(integerPart) + len(fractionalPart)
 	if totalDigits > precision {
-		return modeldump.ErrValueExceedsPrecision
+		return entitymodel.ErrValueExceedsPrecision
 	}
 
 	if len(fractionalPart) > scale {
-		return modeldump.ErrValueExceedsScale
+		return entitymodel.ErrValueExceedsScale
 	}
 
 	return nil
 }
 
-func (biz *createDumpBiz) CreateNewDump(ctx context.Context, data []*modeldump.DumpCreated) error {
+func (biz *createDumpBiz) CreateNewDump(ctx context.Context, data []*entitymodel.DumpCreated) error {
 	for _, dump := range data {
 		title := strings.TrimSpace(dump.Title)
 
 		if title == "" {
-			return common.ErrInvalidRequest(modeldump.ErrTitleIsEmpty)
+			return common.ErrInvalidRequest(entitymodel.ErrTitleIsEmpty)
 		}
 
 		err := ValidateDecimal(dump.Latitude, 19, 17)

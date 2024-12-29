@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelauth "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/auth"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/auth/biz"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/auth/storage"
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ import (
 
 func Login(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var loginParams modelauth.Login
+		var loginParams entitymodel.Login
 
 		if err := c.ShouldBind(&loginParams); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))

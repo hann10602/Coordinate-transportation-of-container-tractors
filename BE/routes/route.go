@@ -54,6 +54,7 @@ func Init() *gin.Engine {
 			order.GET("/:id", ginorder.GetOrder(dbInstance))
 			order.POST("", ginorder.CreateOrder(dbInstance))
 			order.PUT("/:id", ginorder.UpdateOrder(dbInstance))
+			order.PUT("/next-step/:id", ginorder.UpdateNextStepOrder(dbInstance))
 			order.DELETE("/:id", ginorder.DeleteOrder(dbInstance))
 		}
 

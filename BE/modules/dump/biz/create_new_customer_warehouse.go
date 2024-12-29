@@ -5,11 +5,11 @@ import (
 	"strings"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
 type CreateCustomerWarehouseStorage interface {
-	CreateCustomerWarehouse(ctx context.Context, data []*modeldump.CustomerWarehouseCreated) error
+	CreateCustomerWarehouse(ctx context.Context, data []*entitymodel.CustomerWarehouseCreated) error
 }
 
 type createCustomerWarehouseBiz struct {
@@ -20,12 +20,12 @@ func NewCreateCustomerWarehouseBiz(store CreateCustomerWarehouseStorage) *create
 	return &createCustomerWarehouseBiz{store: store}
 }
 
-func (biz *createCustomerWarehouseBiz) CreateNewCustomerWarehouse(ctx context.Context, data []*modeldump.CustomerWarehouseCreated) error {
+func (biz *createCustomerWarehouseBiz) CreateNewCustomerWarehouse(ctx context.Context, data []*entitymodel.CustomerWarehouseCreated) error {
 	for _, dump := range data {
 		title := strings.TrimSpace(dump.Title)
 
 		if title == "" {
-			return common.ErrInvalidRequest(modeldump.ErrTitleIsEmpty)
+			return common.ErrInvalidRequest(entitymodel.ErrTitleIsEmpty)
 		}
 
 		err := ValidateDecimal(dump.Latitude, 19, 17)

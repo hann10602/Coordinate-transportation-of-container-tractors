@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/biz"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/storage"
 	"gorm.io/gorm"
@@ -14,7 +14,7 @@ import (
 
 func UpdateDump(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data *modeldump.DumpUpdated
+		var data *entitymodel.DumpUpdated
 
 		id, err := strconv.Atoi(c.Param("id"))
 

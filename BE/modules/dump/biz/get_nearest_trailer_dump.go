@@ -4,11 +4,11 @@ import (
 	"context"
 	"math"
 
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
 type GetNearestTrailerDumpStorage interface {
-	GetListDump(ctx context.Context, filter modeldump.Filter) ([]modeldump.DumpGetList, error)
+	GetListDump(ctx context.Context, filter entitymodel.Filter) ([]entitymodel.DumpGetList, error)
 }
 
 type getNearestTrailerDumpBiz struct {
@@ -19,8 +19,8 @@ func NewGetNearestTrailerDumpBiz(store GetNearestTrailerDumpStorage) *getNearest
 	return &getNearestTrailerDumpBiz{store: store}
 }
 
-func (biz *getNearestTrailerDumpBiz) FindNearestTrailerDump(ctx context.Context, latLong modeldump.DumpGetNearestTrailer) (*modeldump.DumpGetList, error) {
-	var filter modeldump.Filter
+func (biz *getNearestTrailerDumpBiz) FindNearestTrailerDump(ctx context.Context, latLong entitymodel.DumpGetNearestTrailer) (*entitymodel.DumpGetList, error) {
+	var filter entitymodel.Filter
 
 	filter.Type = "Trailer"
 
@@ -35,7 +35,7 @@ func (biz *getNearestTrailerDumpBiz) FindNearestTrailerDump(ctx context.Context,
 	return nearestTrailer, nil
 }
 
-func haversineDistance(p1 modeldump.DumpGetNearestTrailer, p2 *modeldump.DumpGetList) float64 {
+func haversineDistance(p1 entitymodel.DumpGetNearestTrailer, p2 *entitymodel.DumpGetList) float64 {
 	const earthRadius = 6371 // Earth's radius in kilometers
 	lat1, lon1 := DegreesToRadians(p1.Latitude), DegreesToRadians(p1.Longitude)
 	lat2, lon2 := DegreesToRadians(p2.Latitude), DegreesToRadians(p2.Longitude)
@@ -56,7 +56,7 @@ func DegreesToRadians(degrees float64) float64 {
 }
 
 // findNearestPoint finds the nearest point to a given target point from a list of points
-func FindNearestPoint(target modeldump.DumpGetNearestTrailer, trailers []modeldump.DumpGetList) *modeldump.DumpGetList {
+func FindNearestPoint(target entitymodel.DumpGetNearestTrailer, trailers []entitymodel.DumpGetList) *entitymodel.DumpGetList {
 	if len(trailers) == 0 {
 		panic("Trailer list cannot be empty")
 	}

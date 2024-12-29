@@ -1,27 +1,26 @@
-package modeldump
+package entitymodel
 
 import (
 	"errors"
 	"time"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
 	"github.com/shopspring/decimal"
 )
 
 type Dump struct {
 	common.SQLModel
-	Title             string             `json:"title" gorm:"column:title;size:255;not null"`
-	Latitude          decimal.Decimal    `json:"latitude" gorm:"column:latitude;type:DECIMAL(19,17);not null"`
-	Longitude         decimal.Decimal    `json:"longitude" gorm:"column:longitude;type:DECIMAL(20,17);not null"`
-	Status            string             `json:"status" gorm:"column:status;size:10;not null"`
-	Type              string             `json:"type" gorm:"column:type;size:10;not null"`
-	UserId            int64              `json:"userId" gorm:"column:user_id"`
-	PortDump          []modelorder.Order `gorm:"foreignKey:PortId"`
-	StartTrailerDump  []modelorder.Order `gorm:"foreignKey:StartTrailerId"`
-	EndTrailerDump    []modelorder.Order `gorm:"foreignKey:EndTrailerId"`
-	ContainerDump     []modelorder.Order `gorm:"foreignKey:ContainerId"`
-	CustomerWarehouse []modelorder.Order `gorm:"foreignKey:CustomerWarehouseId"`
+	Title             string          `json:"title" gorm:"column:title;size:255;not null"`
+	Latitude          decimal.Decimal `json:"latitude" gorm:"column:latitude;type:DECIMAL(19,17);not null"`
+	Longitude         decimal.Decimal `json:"longitude" gorm:"column:longitude;type:DECIMAL(20,17);not null"`
+	Status            string          `json:"status" gorm:"column:status;size:10;not null"`
+	Type              string          `json:"type" gorm:"column:type;size:10;not null"`
+	UserId            int64           `json:"userId" gorm:"column:user_id"`
+	PortDump          []Order         `gorm:"foreignKey:PortId"`
+	StartTrailerDump  []Order         `gorm:"foreignKey:StartTrailerId"`
+	EndTrailerDump    []Order         `gorm:"foreignKey:EndTrailerId"`
+	ContainerDump     []Order         `gorm:"foreignKey:ContainerId"`
+	CustomerWarehouse []Order         `gorm:"foreignKey:CustomerWarehouseId"`
 }
 
 func (Dump) TableName() string {
@@ -40,7 +39,6 @@ const (
 )
 
 var (
-	ErrTitleIsEmpty          = errors.New("Title cannot be empty")
 	ErrValueExceedsPrecision = errors.New("Value exceeds total precision")
 	ErrValueExceedsScale     = errors.New("Value exceeds scale")
 	ErrInvalidLatitude       = errors.New("Latitude cannot be empty")
@@ -58,11 +56,6 @@ type DumpGetList struct {
 	Latitude  float64 `json:"latitude" gorm:"column:latitude"`
 	Longitude float64 `json:"longitude" gorm:"column:longitude"`
 	Status    string  `json:"status" gorm:"column:status"`
-}
-
-type Filter struct {
-	Type   string `json:"type" form:"type"`
-	Status string `json:"status" form:"status"`
 }
 
 type CustomerWarehouseCreated struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/biz"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/storage"
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ import (
 
 func GetListTruck(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var filter modeltruck.Filter
+		var filter entitymodel.Filter
 
 		if err := c.ShouldBind(&filter); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))

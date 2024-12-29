@@ -1,4 +1,4 @@
-package ginuser
+package ginorder
 
 import (
 	"net/http"
@@ -7,14 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
 	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/biz"
-	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/user/storage"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/biz"
+	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/storage"
 	"gorm.io/gorm"
 )
 
-func UpdateUser(db *gorm.DB) func(*gin.Context) {
+func UpdateOrder(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data *entitymodel.UserUpdated
+		var data *entitymodel.OrderUpdated
 
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -30,9 +30,9 @@ func UpdateUser(db *gorm.DB) func(*gin.Context) {
 
 		store := storage.NewSqlStore(db)
 
-		business := biz.NewUpdateUserBiz(store)
+		business := biz.NewUpdateOrderBiz(store)
 
-		if err := business.UpdateUserById(c, id, data); err != nil {
+		if err := business.UpdateOrderById(c, id, data); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 
 			return

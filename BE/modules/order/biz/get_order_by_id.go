@@ -3,11 +3,11 @@ package biz
 import (
 	"context"
 
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 )
 
 type GetOrderStorage interface {
-	GetOrder(ctx context.Context, cond map[string]interface{}) (*modelorder.Order, error)
+	GetOrder(ctx context.Context, cond map[string]interface{}) (*entitymodel.Order, error)
 }
 
 type getOrderBiz struct {
@@ -18,7 +18,7 @@ func NewGetOrderBiz(store GetOrderStorage) *getOrderBiz {
 	return &getOrderBiz{store: store}
 }
 
-func (biz *getOrderBiz) GetOrderById(ctx context.Context, id int) (*modelorder.Order, error) {
+func (biz *getOrderBiz) GetOrderById(ctx context.Context, id int) (*entitymodel.Order, error) {
 	data, err := biz.store.GetOrder(ctx, map[string]interface{}{"id": id})
 
 	if err != nil {

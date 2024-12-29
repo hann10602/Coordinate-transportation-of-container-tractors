@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"gorm.io/gorm"
 )
 
-func (s *sqlStore) GetDump(ctx context.Context, cond map[string]interface{}) (*modeldump.Dump, error) {
-	var data modeldump.Dump
+func (s *sqlStore) GetDump(ctx context.Context, cond map[string]interface{}) (*entitymodel.Dump, error) {
+	var data entitymodel.Dump
 
 	if err := s.db.Where(cond).First(&data).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {

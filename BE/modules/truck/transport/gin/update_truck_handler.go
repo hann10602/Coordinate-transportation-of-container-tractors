@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeltruck "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/truck"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/biz"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/truck/storage"
 	"gorm.io/gorm"
@@ -14,7 +14,7 @@ import (
 
 func UpdateTruck(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data *modeltruck.TruckUpdated
+		var data *entitymodel.TruckUpdated
 
 		id, err := strconv.Atoi(c.Param("id"))
 

@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modeldump "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/dump"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/biz"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/storage"
 	"gorm.io/gorm"
@@ -13,7 +13,7 @@ import (
 
 func GetNearestTrailerDump(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var latLong modeldump.DumpGetNearestTrailer
+		var latLong entitymodel.DumpGetNearestTrailer
 
 		if err := c.ShouldBind(&latLong); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))

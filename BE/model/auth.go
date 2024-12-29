@@ -1,4 +1,4 @@
-package modelauth
+package entitymodel
 
 import "errors"
 

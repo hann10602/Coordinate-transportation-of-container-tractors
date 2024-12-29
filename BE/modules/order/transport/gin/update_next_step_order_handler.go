@@ -6,15 +6,15 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/common"
-	modelorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/model/order"
+	entitymodel "github.com/hann10602/Coordinate-transportation-of-container-tractors/model"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/biz"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/storage"
 	"gorm.io/gorm"
 )
 
-func UpdateOrder(db *gorm.DB) func(*gin.Context) {
+func UpdateNextStepOrder(db *gorm.DB) func(*gin.Context) {
 	return func(c *gin.Context) {
-		var data *modelorder.OrderUpdated
+		var data *entitymodel.OrderUpdated
 
 		id, err := strconv.Atoi(c.Param("id"))
 
@@ -30,9 +30,9 @@ func UpdateOrder(db *gorm.DB) func(*gin.Context) {
 
 		store := storage.NewSqlStore(db)
 
-		business := biz.NewUpdateOrderBiz(store)
+		business := biz.NewUpdateNextStepOrderBiz(store)
 
-		if err := business.UpdateOrderById(c, id, data); err != nil {
+		if err := business.UpdateNextStepOrderById(c, id, data); err != nil {
 			c.JSON(http.StatusBadRequest, err)
 
 			return
