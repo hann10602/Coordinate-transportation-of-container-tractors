@@ -24,7 +24,7 @@ export const Login = () => {
         localStorage.setItem('token', res.data.data);
         navigate('/trang-chu');
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   return (

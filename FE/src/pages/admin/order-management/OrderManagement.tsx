@@ -138,7 +138,7 @@ export const OrderManagement = () => {
         handleGetList();
         setIsOpenDeleteConfirmModal(false);
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   const handleAssignOrderAutomatically = () => {
@@ -148,7 +148,7 @@ export const OrderManagement = () => {
         openNotification(api, 'success');
         handleGetList();
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   useEffect(() => {

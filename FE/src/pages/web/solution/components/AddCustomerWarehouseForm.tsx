@@ -47,7 +47,7 @@ export const AddCustomerWarehouseForm = ({ setIsOpenAddForm, setCustomerWarehous
       ])
       .then(() => {
         setIsOpenAddForm(false);
-        
+
         if (!userId) {
           navigate('/login');
         }
@@ -61,9 +61,9 @@ export const AddCustomerWarehouseForm = ({ setIsOpenAddForm, setCustomerWarehous
           })
           .then((res) => res.data.data)
           .then((dumpList: TDump[]) => setCustomerWarehouseList(dumpList.map((dump) => ({ ...dump, value: dump.id }))))
-          .catch((err) => openNotification(api, 'error', err.response.data.log));
+          .catch((err) => openNotification(api, 'error', err.response.data.message));
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   return (

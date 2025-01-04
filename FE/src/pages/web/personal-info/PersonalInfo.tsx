@@ -27,7 +27,7 @@ export const PersonalInfo: React.FC = () => {
         openNotification(api, 'success');
         handleGetList();
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   const handleGetList = () => {

@@ -99,7 +99,7 @@ export const ContainerDumpManagement = () => {
         handleGetList();
         setIsOpenDeleteConfirmModal(false);
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   useEffect(() => {

@@ -72,7 +72,7 @@ export const AddAndUpdateOrderForm = ({
           setCurrentInstance((prev) => prev && { ...prev, currentPosition: prev.currentPosition + 1 });
         }
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   return (

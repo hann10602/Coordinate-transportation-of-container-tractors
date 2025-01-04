@@ -148,7 +148,7 @@ export const IEFillInformation = () => {
     axiosInstance
       .delete(`dump/${id}`)
       .then(() => userId && handleGetCustomerWarehouseList(userId))
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   const handleCheckContainerType = (type: ECONTAINER_TYPE) => {
@@ -225,7 +225,7 @@ export const IEFillInformation = () => {
         }));
         setCustomerWarehouseList(dumpList.map((dump) => ({ ...dump, value: dump.id })));
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   useEffect(() => {
