@@ -78,7 +78,7 @@ export const AddCustomerWarehouseForm = ({ setIsOpenAddForm, setCustomerWarehous
         />
         {errors.title && <p className="text-red-400 mt-2 text-sm">Thông tin này được yêu cầu</p>}
       </div>
-      <div className="h-full">
+      <div className="h-full w-[1000px]">
         <Controller
           name="warehouseAddress"
           control={control}

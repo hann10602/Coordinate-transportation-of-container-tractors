@@ -110,10 +110,8 @@ export const TrailerDumpManagement = () => {
     <div className="flex flex-col">
       {contextHolder}
       <div className="flex justify-between items-center mb-10">
-        <p className="text-2xl font-semibold">Trailer dump</p>
-        <Button className="px-10 py-5" onClick={() => setIsOpenAddAndUpdateForm(true)}>
-          Add
-        </Button>
+        <p className="text-2xl font-semibold">Order</p>
+        <Button className="px-10 py-5" onClick={() => setIsOpenAddAndUpdateForm(true)}></Button>
         <AddAndUpdateTrailerDumpForm
           currentInstance={currentInstance}
           setCurrentInstance={setCurrentInstance}

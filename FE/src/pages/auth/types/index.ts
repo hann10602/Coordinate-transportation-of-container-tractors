@@ -4,6 +4,8 @@ export type TLoginField = {
 };
 
 export type TRegisterField = {
+  fullName: string;
+  phoneNumber: string;
   username: string;
   password: string;
   secondPassword: string;

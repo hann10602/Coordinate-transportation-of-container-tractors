@@ -1,4 +1,4 @@
-import { Flex, Spin, Table } from 'antd';
+import { Button, Flex, Modal, notification, Spin, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
@@ -6,15 +6,31 @@ import { useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../../../api/axios';
 import { TJWTToken, TOrder, TUserDetails } from '../../../types';
 import { Icon } from '@iconify/react/dist/iconify.js';
-import { convertStatus } from '../../../utils';
+import { convertStatus, openNotification } from '../../../utils';
+import { TrackingForm } from './TrackingForm';
 
 export const PersonalInfo: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const [userDetails, setUserDetails] = useState<TUserDetails | undefined>(undefined);
+  const [currentInstance, setCurrentInstance] = useState<TOrder | undefined>(undefined);
+  const [isOpenTrackingForm, setIsOpenTrackingForm] = useState<boolean>(false);
+  const [isOpenDeleteConfirmModal, setIsOpenDeleteConfirmModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
+  const [api, contextHolder] = notification.useNotification();
+
+  const handleDelete = (id: number) => {
+    axiosInstance
+      .delete(`order/${id}`)
+      .then(() => {
+        openNotification(api, 'success');
+        handleGetList();
+      })
+      .catch((err) => openNotification(api, 'error', err.response.data.log));
+  };
+
+  const handleGetList = () => {
     if (token) {
       const decodedToken: TJWTToken = jwtDecode(token);
 
@@ -29,10 +45,16 @@ export const PersonalInfo: React.FC = () => {
           setUserDetails(res.data.data);
         })
         .catch(() => navigate('/trang-chu'))
-        .finally(() => setLoading(false));
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
       navigate('/login');
     }
+  };
+
+  useEffect(() => {
+    handleGetList();
   }, [token]);
 
   if (loading || userDetails === undefined) {
@@ -54,7 +76,7 @@ export const PersonalInfo: React.FC = () => {
       }
     },
     {
-      title: 'Trạng thái',
+      title: <p className="text-center">Trạng thái</p>,
       dataIndex: 'status',
       render: (_, record) => {
         const status = convertStatus(record.status);
@@ -68,33 +90,97 @@ export const PersonalInfo: React.FC = () => {
       }
     },
     {
-      title: 'Tổng giá đơn hàng',
+      title: <p className="text-center">Tổng giá đơn hàng</p>,
       dataIndex: 'totalPrice',
-      render: (_, record) => <div className="text-center">{record.totalPrice}$</div>
+      render: (_, record) => <div className="text-center">{record.totalPrice / 100}$</div>
     },
     {
-      title: 'Hành động',
+      title: <p className="text-center">Hủy đơn hàng</p>,
       key: 'action',
       render: (_, record) => (
-        <div className="flex items-center gap-x-2">
-          <div
-            className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer"
-            // onClick={() => {}}
-          >
-            <Icon icon="ic:round-edit-note" width="24" height="24" />
-          </div>
+        <div className="flex items-center justify-center">
+          {record.status === 'Pending' && (
+            <div
+              className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer"
+              onClick={() => {
+                setCurrentInstance(record);
+                setIsOpenDeleteConfirmModal(true);
+              }}
+            >
+              <Icon icon="mdi:receipt-text-remove-outline" width="24" height="24" />
+            </div>
+          )}
+          {record.status === 'OnGoing' && (
+            <div
+              className="px-1 py-0.5 rounded-sm bg-yellow-400 text-white cursor-pointer"
+              onClick={() => handleGetOrder(record.id)}
+            >
+              <Icon icon="mdi:location-circle" width="24" height="24" />{' '}
+            </div>
+          )}
         </div>
       )
     }
   ];
 
+  const handleGetOrder = (id: number) => {
+    axiosInstance
+      .get(`order/${id}`)
+      .then((res) => setCurrentInstance(res.data.data))
+      .then(() => setIsOpenTrackingForm(true));
+  };
+
   return (
     <div>
-      <h1>User Details</h1>
-      <p>ID: {userDetails.fullName}</p>
-      <p>Name: {userDetails.phoneNumber}</p>
-      <h2>Orders</h2>
-      <Table dataSource={userDetails.orders} columns={columns} rowKey="id" />
+      {contextHolder}
+      {isOpenTrackingForm && (
+        <TrackingForm
+          currentInstance={currentInstance}
+          setCurrentInstance={setCurrentInstance}
+          handleGetList={handleGetList}
+          isOpenTrackingForm={isOpenTrackingForm}
+          setIsOpenTrackingForm={setIsOpenTrackingForm}
+        />
+      )}
+      {isOpenDeleteConfirmModal && currentInstance && (
+        <Modal
+          open={isOpenDeleteConfirmModal}
+          footer={null}
+          title={`Confirm to delete order`}
+          onCancel={() => {
+            setCurrentInstance(undefined);
+            setIsOpenDeleteConfirmModal(false);
+          }}
+        >
+          <div className="flex justify-end">
+            <Button
+              className="text font-semibold mt-4 hover:!border-red-500 hover:!text-red-500 border-red-300 text-red-300 transition ease-in-out"
+              onClick={() => handleDelete(currentInstance.id)}
+            >
+              Delete
+            </Button>
+          </div>
+        </Modal>
+      )}
+      <div className="container mx-auto p-4">
+        <div className="bg-white shadow-xl rounded-lg p-6 mb-10">
+          <h1 className="text-2xl font-bold mb-4">User Details</h1>
+          <div className="user-info">
+            <div className="info-item flex justify-between p-4 border-b border-gray-200">
+              <span className="info-label font-semibold">Full Name:</span>
+              <span className="info-value text-gray-600 font-semibold">{userDetails.fullName}</span>
+            </div>
+            <div className="info-item flex justify-between p-4 border-b border-gray-200">
+              <span className="info-label font-semibold">Phone Number:</span>
+              <span className="info-value text-gray-600 font-semibold">{userDetails.phoneNumber}</span>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white shadow-xl rounded-lg p-6">
+          <h2 className="text-xl font-bold mb-4">Orders</h2>
+          <Table dataSource={userDetails.orders} columns={columns} rowKey="id" />
+        </div>
+      </div>
     </div>
   );
 };

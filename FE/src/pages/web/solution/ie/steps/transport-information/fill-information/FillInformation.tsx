@@ -213,7 +213,7 @@ export const IEFillInformation = () => {
       .get('dump', {
         params: {
           type: 'Customer',
-          id: userId
+          userId: userId
         }
       })
       .then((res) => res.data.data)
@@ -327,6 +327,7 @@ export const IEFillInformation = () => {
         title="Thông tin chi tiết"
         onClick={() => handleChangeSection(EIESteps.DETAIL_INFORMATION)}
         isSelected={section === EIESteps.DETAIL_INFORMATION}
+        className="h-fit"
       >
         <div className="mb-5">
           <p className="mb-4 font-medium">Loại container:</p>

@@ -1,29 +1,25 @@
-import { Button, Modal, notification } from 'antd';
+import { Modal } from 'antd';
 import { LatLngExpression } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { useEffect, useMemo } from 'react';
-import { axiosInstance } from '../../../api/axios';
+import React, { useMemo } from 'react';
 import { TLatLng, TOrder } from '../../../types';
-import { destinationConvertion, openNotification } from '../../../utils';
-import { RoutineMachineMap } from '../../web/solution/components/map/RoutineMachineMap';
+import { destinationConvertion } from '../../../utils';
+import { RoutineMachineMap } from '../solution/components/map/RoutineMachineMap';
 
 type Props = {
   currentInstance?: TOrder;
   setCurrentInstance: React.Dispatch<React.SetStateAction<TOrder | undefined>>;
   handleGetList: () => void;
-  isOpenAddAndUpdateForm: boolean;
-  setIsOpenAddAndUpdateForm: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpenTrackingForm: boolean;
+  setIsOpenTrackingForm: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const AddAndUpdateOrderForm = ({
+export const TrackingForm = ({
   currentInstance,
   setCurrentInstance,
-  setIsOpenAddAndUpdateForm,
-  isOpenAddAndUpdateForm,
+  setIsOpenTrackingForm,
+  isOpenTrackingForm,
   handleGetList
 }: Props) => {
-  const [api, contextHolder] = notification.useNotification();
-
   const routingList: LatLngExpression[] = useMemo(
     () =>
       currentInstance
@@ -55,38 +51,17 @@ export const AddAndUpdateOrderForm = ({
     [currentInstance]
   );
 
-  const handleNextStep = () => {
-    axiosInstance
-      .put(`order/next-step/${currentInstance?.id}/${currentInstance?.truckId}`, {
-        currentPosition: currentInstance && currentInstance?.currentPosition + 1,
-        truckId: currentInstance?.truckId,
-        status: currentInstance?.status
-      })
-      .then(() => {
-        openNotification(api, 'success');
-        handleGetList();
-        if (currentInstance?.currentPosition === 2) {
-          setCurrentInstance(undefined);
-          setIsOpenAddAndUpdateForm(false);
-        } else {
-          setCurrentInstance((prev) => prev && { ...prev, currentPosition: prev.currentPosition + 1 });
-        }
-      })
-      .catch((err) => openNotification(api, 'error', err.response.data.log));
-  };
-
   return (
     <Modal
-      open={isOpenAddAndUpdateForm}
+      open={isOpenTrackingForm}
       footer={null}
       title={`Order ${currentInstance && currentInstance.id}`}
       onCancel={() => {
         setCurrentInstance(undefined);
-        setIsOpenAddAndUpdateForm(false);
+        setIsOpenTrackingForm(false);
       }}
     >
       <div className="overflow-y-auto w-[1000px]">
-        {contextHolder}
         <div className="relative w-full space-y-2 mt-8">
           <label className="mb-2 font-semibold">Position</label>{' '}
           <div className="h-[480px]">
@@ -96,14 +71,6 @@ export const AddAndUpdateOrderForm = ({
               currentDestination={currentInstance ? routingList[currentInstance.currentPosition] : undefined}
             />
           </div>
-        </div>
-        <div className="flex justify-end">
-          <Button
-            className="text font-semibold mt-12 hover:bg-cyan-700 border-cyan-700 transition ease-in-out"
-            onClick={handleNextStep}
-          >
-            Next step
-          </Button>
         </div>
       </div>
     </Modal>

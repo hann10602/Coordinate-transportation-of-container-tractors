@@ -3,6 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { TJWTToken } from '../../types';
+import { Dropdown, MenuProps } from 'antd';
 
 const SOLUTION_LIST = [
   {
@@ -48,6 +49,31 @@ export const Header = () => {
       navigate('/trang-chu');
     }
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+  };
+
+  const items: MenuProps['items'] = [
+    {
+      label: (
+        <Link className="flex items-center gap-x-3 py-2" to="/personal-info">
+          <Icon icon="ic:round-medical-information" width="24" height="24" />
+          <p className="text-sm font-semibold">{username}</p>
+        </Link>
+      ),
+      key: '1'
+    },
+    {
+      label: (
+        <div className="flex items-center gap-x-3 py-2" onClick={handleLogout}>
+          <Icon icon="mdi-light:logout" width="24" height="24" />
+          <p className="text-sm font-semibold">Đăng xuất</p>
+        </div>
+      ),
+      key: '2'
+    }
+  ];
 
   return (
     <div className="fixed top-0 h-20 z-20 w-full px-10 flex justify-between items-center bg-blue-500">
@@ -107,7 +133,9 @@ export const Header = () => {
         <div className="cursor-pointer text-gray-100 text-md whitespace-pre font-semibold h-10 flex items-center">
           {username ? (
             <Link className="hover:text-white hover:underline text-lg" to="/personal-info">
-              {username}
+              <Dropdown menu={{ items }}>
+                <Icon icon="material-symbols:user-attributes" width="32" height="32" />
+              </Dropdown>
             </Link>
           ) : (
             <>

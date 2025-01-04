@@ -21,7 +21,11 @@ export const LandingPage = () => {
         <div className="absolute top-0 w-full z-10 h-full bg-black bg-opacity-50 flex flex-col justify-center items-center px-4 text-center">
           <p className="text-white font-black text-3xl md:text-5xl">Giải pháp tối ưu về Logistic</p>
           <div className="mt-6 md:mt-10 space-x-2 flex flex-wrap justify-center items-center">
-            <Button className="text-white bg-sky-900 hover:bg-sky-800 w-36 md:w-40 duration-100">Xem hành trình</Button>
+            <Link to="/personal-info">
+              <Button className="text-white bg-sky-900 hover:bg-sky-800 w-36 md:w-40 duration-100">
+                Xem hành trình
+              </Button>
+            </Link>
             <Button
               className="text-white bg-cyan-500 hover:bg-cyan-400 w-36 md:w-40 duration-100"
               onClick={handleScrollToConsultingForm}

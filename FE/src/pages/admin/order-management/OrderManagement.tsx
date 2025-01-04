@@ -6,6 +6,7 @@ import { axiosInstance } from '../../../api/axios';
 import { TOrder } from '../../../types';
 import { convertStatus, openNotification } from '../../../utils';
 import { AddAndUpdateOrderForm } from './AddAndUpdateOrderForm';
+import dayjs from 'dayjs';
 
 export const OrderManagement = () => {
   const [currentInstance, setCurrentInstance] = useState<TOrder | undefined>(undefined);
@@ -24,6 +25,11 @@ export const OrderManagement = () => {
         compare: (a, b) => a.id - b.id,
         multiple: 3
       }
+    },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      render: (_, record) => <div className="text-center">{record.user.username}</div>
     },
     {
       title: 'Total price',
@@ -46,7 +52,10 @@ export const OrderManagement = () => {
     },
     {
       title: 'Delivery date',
-      dataIndex: 'deliveryDate'
+      dataIndex: 'deliveryDate',
+      render: (_, record) => {
+        return <div className="flex justify-center">{dayjs(record.deliveryDate).format('DD MMM YYYY')}</div>;
+      }
     },
     {
       title: 'Note',
@@ -57,6 +66,13 @@ export const OrderManagement = () => {
       dataIndex: 'detailAddress'
     },
     {
+      title: 'Truck',
+      dataIndex: 'truckId',
+      render: (_, record) => (
+        <div className="flex justify-center items-center">{record.truckId === 0 ? `None` : record.truckId}</div>
+      )
+    },
+    {
       title: 'Type',
       dataIndex: 'type'
     },
@@ -65,7 +81,7 @@ export const OrderManagement = () => {
       key: 'action',
       render: (_, record) => (
         <div className="flex items-center justify-center gap-x-2">
-          {record.status === 'Ongoing' && (
+          {record.status === 'OnGoing' && (
             <div
               className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer"
               onClick={() => handleGetOrder(record.id)}
@@ -76,6 +92,7 @@ export const OrderManagement = () => {
           <div
             className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer"
             onClick={() => {
+              setCurrentInstance(record);
               setIsOpenDeleteConfirmModal(true);
             }}
           >
@@ -94,16 +111,42 @@ export const OrderManagement = () => {
   };
 
   const handleGetList = () => {
-    axiosInstance.get('order').then((res) => setOrderList(res.data.data));
+    axiosInstance.get('order').then((res) => {
+      const data = res.data.data;
+      setOrderList(
+        data.map((order: TOrder) => {
+          if (currentInstance && order.id === currentInstance.id && order.status === 'Done') {
+            setCurrentInstance(undefined);
+            setIsOpenAddAndUpdateForm(false);
+          }
+
+          return {
+            ...order,
+            totalPrice: order.totalPrice / 100
+          };
+        })
+      );
+    });
   };
 
   const handleDelete = (id: number) => {
     axiosInstance
-      .delete(`dump/${id}`)
+      .delete(`order/${id}`)
+      .then(() => {
+        openNotification(api, 'success');
+        setCurrentInstance(undefined);
+        handleGetList();
+        setIsOpenDeleteConfirmModal(false);
+      })
+      .catch((err) => openNotification(api, 'error', err.response.data.log));
+  };
+
+  const handleAssignOrderAutomatically = () => {
+    axiosInstance
+      .put(`order/automatic-delivery-assigned-order`)
       .then(() => {
         openNotification(api, 'success');
         handleGetList();
-        setIsOpenDeleteConfirmModal(false);
       })
       .catch((err) => openNotification(api, 'error', err.response.data.log));
   };
@@ -115,14 +158,21 @@ export const OrderManagement = () => {
   return (
     <div className="flex flex-col">
       {contextHolder}
-      <AddAndUpdateOrderForm
-        currentInstance={currentInstance}
-        setCurrentInstance={setCurrentInstance}
-        handleGetList={handleGetList}
-        isOpenAddAndUpdateForm={isOpenAddAndUpdateForm}
-        setIsOpenAddAndUpdateForm={setIsOpenAddAndUpdateForm}
-        handleCloseModal={() => setIsOpenAddAndUpdateForm(false)}
-      />
+      <div className="flex justify-between items-center mb-10">
+        <p className="text-2xl font-semibold">Order list</p>
+        <Button className="px-10 py-5" onClick={handleAssignOrderAutomatically}>
+          Automatic assign order
+        </Button>
+        {isOpenAddAndUpdateForm && (
+          <AddAndUpdateOrderForm
+            currentInstance={currentInstance}
+            setCurrentInstance={setCurrentInstance}
+            handleGetList={handleGetList}
+            isOpenAddAndUpdateForm={isOpenAddAndUpdateForm}
+            setIsOpenAddAndUpdateForm={setIsOpenAddAndUpdateForm}
+          />
+        )}
+      </div>
       {isOpenDeleteConfirmModal && currentInstance && (
         <Modal
           open={isOpenDeleteConfirmModal}

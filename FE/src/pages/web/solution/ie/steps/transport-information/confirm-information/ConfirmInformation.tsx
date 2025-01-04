@@ -133,7 +133,7 @@ export const IEConfirmInformation = () => {
           <p>{totalPrice}$</p>
         </div>
         <div className="flex justify-end mt-10">
-          <Button className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleCheckout}>
+          <Button className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white" disabled={totalPrice === 0} onClick={handleCheckout}>
             Xác nhận thanh toán
           </Button>
         </div>

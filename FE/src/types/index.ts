@@ -56,6 +56,9 @@ export type TOrder = {
   deliveryDate: string;
   currentPosition: number;
   truckId: number;
+  user: {
+    username: string;
+  };
   status: string;
   totalPrice: number;
   note: string;

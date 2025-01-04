@@ -5,22 +5,14 @@ import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { TJWTToken } from '../../types';
 
-const items: MenuProps['items'] = [
-  {
-    label: (
-      <Link className="flex items-center gap-x-3" to="/login">
-        <Icon icon="mdi-light:logout" width="24" height="24" />
-        <p>Logout</p>
-      </Link>
-    ),
-    key: '1'
-  }
-];
-
 export const AdminLayout = () => {
   const navigate = useNavigate();
   const [isOpenSidebar, setIsOpenSidebar] = useState<boolean>(false);
   const location = useLocation().pathname;
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -34,6 +26,18 @@ export const AdminLayout = () => {
       navigate('/trang-chu');
     }
   }, []);
+
+  const items: MenuProps['items'] = [
+    {
+      label: (
+        <div className="flex items-center gap-x-3" onClick={handleLogout}>
+          <Icon icon="mdi-light:logout" width="24" height="24" />
+          <p>Logout</p>
+        </div>
+      ),
+      key: '1'
+    }
+  ];
 
   return (
     <div className="flex h-screen">

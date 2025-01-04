@@ -44,12 +44,12 @@ export const convertStatus = (status: string) => {
         title: 'Đã xóa',
         class: 'bg-red-500'
       };
-    case 'Ongoing':
+    case 'OnGoing':
       return {
         title: 'Đang vận chuyển',
         class: 'bg-blue-500'
       };
-    case 'Wait':
+    case 'Waiting':
       return {
         title: 'Chờ Vận chuyển',
         class: 'bg-yellow-500'
@@ -64,5 +64,24 @@ export const convertStatus = (status: string) => {
         title: 'Chờ duyệt',
         class: 'bg-gray-500'
       };
+  }
+};
+
+export const destinationConvertion = {
+  IE: {
+    startPoint: 'customerWarehouse',
+    endPoint: 'container'
+  },
+  IF: {
+    startPoint: 'port',
+    endPoint: 'customerWarehouse'
+  },
+  OE: {
+    startPoint: 'container',
+    endPoint: 'customerWarehouse'
+  },
+  OF: {
+    startPoint: 'customerWarehouse',
+    endPoint: 'port'
   }
 };
