@@ -28,13 +28,13 @@ func Init() *gin.Engine {
 			auth.GET("/login", ginauth.Login(dbInstance))
 		}
 
-		user := v1.Group("/user", middleware.JWTAuthMiddleware())
+		user := v1.Group("/user")
 		{
-			user.GET("", ginuser.GetListUser(dbInstance))
-			user.GET("/:id", ginuser.GetUser(dbInstance))
+			user.GET("", ginuser.GetListUser(dbInstance), middleware.JWTAuthMiddleware())
+			user.GET("/:id", ginuser.GetUser(dbInstance), middleware.JWTAuthMiddleware())
 			user.POST("", ginuser.CreateUser(dbInstance))
-			user.PUT("/:id", ginuser.UpdateUser(dbInstance))
-			user.DELETE("/:id", ginuser.DeleteUser(dbInstance))
+			user.PUT("/:id", ginuser.UpdateUser(dbInstance), middleware.JWTAuthMiddleware())
+			user.DELETE("/:id", ginuser.DeleteUser(dbInstance), middleware.JWTAuthMiddleware())
 		}
 
 		dump := v1.Group("/dump", middleware.JWTAuthMiddleware())
@@ -54,7 +54,8 @@ func Init() *gin.Engine {
 			order.GET("/:id", ginorder.GetOrder(dbInstance))
 			order.POST("", ginorder.CreateOrder(dbInstance))
 			order.PUT("/:id", ginorder.UpdateOrder(dbInstance))
-			order.PUT("/next-step/:id", ginorder.UpdateNextStepOrder(dbInstance))
+			order.PUT("/next-step/:id/:truck-id", ginorder.UpdateNextStepOrder(dbInstance))
+			order.PUT("/automatic-delivery-assigned-order", ginorder.AutomaticDeliveryAssignedOrder(dbInstance))
 			order.DELETE("/:id", ginorder.DeleteOrder(dbInstance))
 		}
 

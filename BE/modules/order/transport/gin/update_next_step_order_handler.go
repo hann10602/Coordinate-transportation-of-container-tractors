@@ -24,6 +24,14 @@ func UpdateNextStepOrder(db *gorm.DB) func(*gin.Context) {
 			return
 		}
 
+		truckId, err := strconv.Atoi(c.Param("truck-id"))
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
+
+			return
+		}
+
 		if err := c.ShouldBind(&data); err != nil {
 			c.JSON(http.StatusBadRequest, common.ErrInvalidRequest(err))
 		}
@@ -32,10 +40,34 @@ func UpdateNextStepOrder(db *gorm.DB) func(*gin.Context) {
 
 		business := biz.NewUpdateNextStepOrderBiz(store)
 
-		if err := business.UpdateNextStepOrderById(c, id, data); err != nil {
-			c.JSON(http.StatusBadRequest, err)
+		if data.CurrentPosition == 2 {
+			if err := business.ChangeBetweenOrder(c, int64(truckId), id, data); err != nil {
+				c.JSON(http.StatusBadRequest, err)
 
-			return
+				return
+			}
+		} else {
+			if data.CurrentPosition == 3 {
+				data.Status = entitymodel.DONE
+
+				if err := business.UpdateNextStepOrderById(c, id, data); err != nil {
+					c.JSON(http.StatusBadRequest, err)
+
+					return
+				}
+
+				if err := business.ImplementOrder(c, int64(truckId)); err != nil {
+					c.JSON(http.StatusBadRequest, err)
+
+					return
+				}
+			} else {
+				if err := business.UpdateNextStepOrderById(c, id, data); err != nil {
+					c.JSON(http.StatusBadRequest, err)
+
+					return
+				}
+			}
 		}
 
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse("Successfully"))

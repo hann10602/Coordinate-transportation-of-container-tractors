@@ -13,7 +13,7 @@ func (s *sqlStore) GetListOrder(ctx context.Context, filter entitymodel.Filter) 
 
 	s.db = s.db.Table(entitymodel.Order{}.TableName())
 
-	if err := s.db.Where(filter).Find(&data).Error; err != nil {
+	if err := s.db.Preload("User").Where(filter).Find(&data).Error; err != nil {
 		return nil, common.ErrDB(err)
 	}
 

@@ -25,12 +25,30 @@ func DeleteOrder(db *gorm.DB) func(*gin.Context) {
 
 		business := biz.NewDeleteOrderBiz(store)
 
+		order, err := business.GetOrderById(c, id)
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, err)
+
+			return
+		}
+
 		err = business.DeleteOrderById(c, id)
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, err)
 
 			return
+		}
+
+		if order.Status == "OnGoing" {
+			err = business.ImplementOrder(c, order.TruckId)
+
+			if err != nil {
+				c.JSON(http.StatusBadRequest, err)
+
+				return
+			}
 		}
 
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse("Successfully"))

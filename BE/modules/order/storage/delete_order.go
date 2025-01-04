@@ -9,9 +9,9 @@ import (
 )
 
 func (s *sqlStore) DeleteOrder(ctx context.Context, cond map[string]interface{}) error {
-	if err := s.db.Table(entitymodel.Order{}.TableName()).Where(cond).Updates(map[string]interface{}{
-		"status": entitymodel.DELETED,
-	}).Error; err != nil {
+	query := s.db.Session(&gorm.Session{}).Table(entitymodel.Order{}.TableName()).Where(cond).Delete(&entitymodel.Order{}, cond)
+
+	if err := query.Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return common.ErrRecordNotFound(err)
 		}

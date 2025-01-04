@@ -34,6 +34,10 @@ type TruckGetList struct {
 	Status      string `json:"status" gorm:"column:status"`
 }
 
+type TruckId struct {
+	Id int64 `json:"id" gorm:"column:id"`
+}
+
 type TruckCreated struct {
 	Id          int64      `json:"id" gorm:"column:id"`
 	Title       string     `json:"title" gorm:"column:title"`

@@ -11,7 +11,9 @@ import (
 func (s *sqlStore) GetOrder(ctx context.Context, cond map[string]interface{}) (*entitymodel.Order, error) {
 	var data entitymodel.Order
 
-	if err := s.db.Where(cond).
+	query := s.db.Session(&gorm.Session{})
+
+	if err := query.Where(cond).
 		Preload("Port").
 		Preload("CustomerWarehouse").
 		Preload("StartTrailer").
