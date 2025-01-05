@@ -151,7 +151,7 @@ func ErrNoPermission(err error) *AppError {
 func ErrUserExist(err error) *AppError {
 	return NewCustomError(
 		err,
-		fmt.Sprintf("User already exists"),
+		fmt.Sprintf("Số điện thoại hoặc tên người dùng đã tồn tại"),
 		fmt.Sprintf("ErrDuplicatedKey"),
 	)
 }

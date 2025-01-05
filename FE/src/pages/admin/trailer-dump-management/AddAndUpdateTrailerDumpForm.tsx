@@ -66,7 +66,7 @@ export const AddAndUpdateTrailerDumpForm = ({
         reset();
         setCurrentInstance(undefined);
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.message));
+      .catch(() => openNotification(api, 'error', 'Thông tin đã tồn tại'));
   };
 
   useEffect(() => {

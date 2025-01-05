@@ -37,8 +37,6 @@ export const AddAndUpdateUserForm = ({
 
   const passwordWatch = watch('password');
 
-  console.log(errors);
-
   const handleSubmitAddForm = (e: TAddAndUpdateUser) => {
     const result = currentInstance
       ? axiosInstance.put(`user/${currentInstance.id}`, {
@@ -61,7 +59,7 @@ export const AddAndUpdateUserForm = ({
         reset();
         setCurrentInstance(undefined);
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.message));
+      .catch(() => openNotification(api, 'error', 'Thông tin đã tồn tại'));
   };
 
   useEffect(() => {
@@ -156,7 +154,7 @@ export const AddAndUpdateUserForm = ({
           </label>
           <input
             id="phoneNumber"
-            type="text"
+            type="number"
             className={`${errors.phoneNumber ? 'border-red-600' : 'border-black'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
             {...register('phoneNumber', { required: 'Phone number is required' })}
           />

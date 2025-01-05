@@ -23,19 +23,19 @@ export const Dashboard = () => {
 
   const handleGetStatistics = useCallback(() => {
     const monthList = {
-      January: {
+      Jan: {
         orders: 0,
         income: 0
       },
-      February: {
+      Feb: {
         orders: 0,
         income: 0
       },
-      March: {
+      Mar: {
         orders: 0,
         income: 0
       },
-      April: {
+      Apr: {
         orders: 0,
         income: 0
       },
@@ -43,38 +43,38 @@ export const Dashboard = () => {
         orders: 0,
         income: 0
       },
-      June: {
+      Jun: {
         orders: 0,
         income: 0
       },
-      July: {
+      Jul: {
         orders: 0,
         income: 0
       },
-      August: {
+      Aug: {
         orders: 0,
         income: 0
       },
-      September: {
+      Sep: {
         orders: 0,
         income: 0
       },
-      October: {
+      Oct: {
         orders: 0,
         income: 0
       },
-      November: {
+      Nov: {
         orders: 0,
         income: 0
       },
-      December: {
+      Dec: {
         orders: 0,
         income: 0
       }
     };
 
     orderList.map((order) => {
-      const month = dayjs(order.createdAt).format('MMMM') as keyof typeof monthList;
+      const month = dayjs(order.createdAt).format('MMM') as keyof typeof monthList;
       monthList[month].orders += 1;
       monthList[month].income += order.totalPrice;
     });

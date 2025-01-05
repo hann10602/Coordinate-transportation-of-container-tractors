@@ -9,9 +9,7 @@ import (
 )
 
 func (s *sqlStore) DeleteTruck(ctx context.Context, cond map[string]interface{}) error {
-	if err := s.db.Table(entitymodel.Truck{}.TableName()).Where(cond).Updates(map[string]interface{}{
-		"status": entitymodel.MAINTENANCE,
-	}).Error; err != nil {
+	if err := s.db.Table(entitymodel.Truck{}.TableName()).Where(cond).Delete(&entitymodel.Truck{}, cond).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return common.ErrRecordNotFound(err)
 		}

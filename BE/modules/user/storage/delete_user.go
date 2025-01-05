@@ -9,9 +9,7 @@ import (
 )
 
 func (s *sqlStore) DeleteUser(ctx context.Context, cond map[string]interface{}) error {
-	if err := s.db.Table(entitymodel.User{}.TableName()).Where(cond).Updates(map[string]interface{}{
-		"status": entitymodel.DELETED,
-	}).Error; err != nil {
+	if err := s.db.Table(entitymodel.User{}.TableName()).Where(cond).Delete(&entitymodel.Order{}, cond).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return common.ErrRecordNotFound(err)
 		}

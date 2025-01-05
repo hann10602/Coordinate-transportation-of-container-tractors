@@ -25,7 +25,7 @@ export const Register = () => {
       .post('user', {
         ...e
       })
-      .then(() => navigate('/trang-chu'))
+      .then(() => navigate('/login'))
       .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 

@@ -98,7 +98,7 @@ export const UserManagement = () => {
         handleGetList();
         setIsOpenDeleteConfirmModal(false);
       })
-      .catch((err) => openNotification(api, 'error', err.response.data.message));
+      .catch(() => openNotification(api, 'error', "Orders owned by this user haven't been completed yet"));
   };
 
   useEffect(() => {

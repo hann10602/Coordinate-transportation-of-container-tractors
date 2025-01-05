@@ -390,6 +390,7 @@ export const OFFillInformation = () => {
           <p className="mb-4 font-medium">Địa chỉ chi tiết:</p>
           <input
             type="text"
+            value={information.detailAddress}
             onChange={handleSetDetailAddress}
             className={`block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
           />
@@ -399,6 +400,7 @@ export const OFFillInformation = () => {
           <p className="mb-4 font-medium">Ghi chú:</p>
           <input
             type="text"
+            value={information.note}
             onChange={handleSetNote}
             className={`block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
           />

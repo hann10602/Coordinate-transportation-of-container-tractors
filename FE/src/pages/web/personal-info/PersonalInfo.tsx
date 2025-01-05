@@ -8,6 +8,7 @@ import { TJWTToken, TOrder, TUserDetails } from '../../../types';
 import { Icon } from '@iconify/react/dist/iconify.js';
 import { convertStatus, openNotification } from '../../../utils';
 import { TrackingForm } from './TrackingForm';
+import dayjs from 'dayjs';
 
 export const PersonalInfo: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +25,9 @@ export const PersonalInfo: React.FC = () => {
     axiosInstance
       .delete(`order/${id}`)
       .then(() => {
-        openNotification(api, 'success');
+        openNotification(api, 'success', 'Xóa đơn hàng thành công');
+        setIsOpenDeleteConfirmModal(false);
+        setCurrentInstance(undefined);
         handleGetList();
       })
       .catch((err) => openNotification(api, 'error', err.response.data.message));
@@ -93,6 +96,11 @@ export const PersonalInfo: React.FC = () => {
           </div>
         );
       }
+    },
+    {
+      title: <p className="text-center">Ngày giao hàng</p>,
+      dataIndex: 'deliveryDate',
+      render: (_, record) => <div className="text-center">{dayjs(record.deliveryDate).format('DD/MM/YYYY')}</div>
     },
     {
       title: <p className="text-center">Tổng giá đơn hàng</p>,
