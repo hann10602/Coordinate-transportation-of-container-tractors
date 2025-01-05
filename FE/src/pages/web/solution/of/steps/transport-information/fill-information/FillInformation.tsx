@@ -79,7 +79,7 @@ export const OFFillInformation = () => {
           }
         })
         .then((res) => res.data.data)
-        .then((data) => getNearestTrailerFromStartPoint([data.latitude, data.longitude]));
+        .then((data) => getNearestTrailerFromStartPoint(data.id, [data.latitude, data.longitude]));
     }
 
     if (information.portDump) {
@@ -91,7 +91,7 @@ export const OFFillInformation = () => {
           }
         })
         .then((res) => res.data.data)
-        .then((data) => getNearestTrailerFromEndPoint([data.latitude, data.longitude]));
+        .then((data) => getNearestTrailerFromEndPoint(data.id, [data.latitude, data.longitude]));
     }
 
     fillInformation({
@@ -213,7 +213,7 @@ export const OFFillInformation = () => {
       .get('dump', {
         params: {
           type: 'Customer',
-          id: userId
+          userId: userId
         }
       })
       .then((res) => res.data.data)
@@ -276,7 +276,7 @@ export const OFFillInformation = () => {
         title="Kho của bạn"
         onClick={() => handleChangeSection(EOFSteps.START_LOCATION)}
         isSelected={section === EOFSteps.START_LOCATION}
-        className="h-[472px]"
+        className="h-472"
       >
         <Modal
           title="Thêm địa chỉ kho của bạn"
@@ -327,6 +327,7 @@ export const OFFillInformation = () => {
         title="Thông tin chi tiết"
         onClick={() => handleChangeSection(EOFSteps.DETAIL_INFORMATION)}
         isSelected={section === EOFSteps.DETAIL_INFORMATION}
+        className="h-fit"
       >
         <div className="mb-5">
           <p className="mb-4 font-medium">Loại container:</p>

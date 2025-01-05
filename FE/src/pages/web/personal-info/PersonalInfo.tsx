@@ -76,6 +76,11 @@ export const PersonalInfo: React.FC = () => {
       }
     },
     {
+      title: <p className="text-center">Loại vận chuyển</p>,
+      dataIndex: 'type',
+      render: (_, record) => <div className="flex justify-center items-center">{record.type} </div>
+    },
+    {
       title: <p className="text-center">Trạng thái</p>,
       dataIndex: 'status',
       render: (_, record) => {
@@ -95,7 +100,7 @@ export const PersonalInfo: React.FC = () => {
       render: (_, record) => <div className="text-center">{record.totalPrice / 100}$</div>
     },
     {
-      title: <p className="text-center">Hủy đơn hàng</p>,
+      title: <p className="text-center">Hành động</p>,
       key: 'action',
       render: (_, record) => (
         <div className="flex items-center justify-center">

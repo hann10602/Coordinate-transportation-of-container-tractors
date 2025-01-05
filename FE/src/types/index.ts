@@ -47,6 +47,7 @@ export type TUserDetails = {
 };
 
 export type TLatLng = {
+  id: number;
   latitude: string;
   longitude: string;
 };

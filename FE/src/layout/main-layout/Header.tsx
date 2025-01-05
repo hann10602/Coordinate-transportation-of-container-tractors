@@ -58,7 +58,7 @@ export const Header = () => {
     {
       label: (
         <Link className="flex items-center gap-x-3 py-2" to="/personal-info">
-          <Icon icon="ic:round-medical-information" width="24" height="24" />
+          <Icon icon="material-symbols-light:medical-information-outline" width="24" height="24" />
           <p className="text-sm font-semibold">{username}</p>
         </Link>
       ),

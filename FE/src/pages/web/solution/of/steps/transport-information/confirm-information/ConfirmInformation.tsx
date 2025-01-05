@@ -1,5 +1,5 @@
 import { useContext, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { axiosInstance } from '../../../../../../../api/axios';
 import { Button } from '../../../../../../../components';
 import { Card } from '../../../../../../../components/Card';
@@ -9,6 +9,8 @@ import { useOFTransportInformationStore } from '../../../store';
 import { StepContext } from '../OFTransportInformation';
 import { RoutineMachineMap } from '../../../../components/map/RoutineMachineMap';
 import { LatLngExpression } from 'leaflet';
+import { TJWTToken } from '../../../../../../../types';
+import { jwtDecode } from 'jwt-decode';
 
 const containerTypeConvert = {
   [ECONTAINER_TYPE.SMALL]: {
@@ -22,6 +24,8 @@ const containerTypeConvert = {
 };
 
 export const OFConfirmInformation = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
   const { setStep } = useContext(StepContext);
   const { informationStore, nearestTrailerFromStartPoint, nearestTrailerFromEndPoint } =
     useOFTransportInformationStore();
@@ -42,10 +46,10 @@ export const OFConfirmInformation = () => {
       nearestTrailerFromStartPoint &&
       nearestTrailerFromEndPoint
         ? [
-            nearestTrailerFromStartPoint,
+            [Number(nearestTrailerFromStartPoint.latitude), Number(nearestTrailerFromStartPoint.longitude)],
             [Number(informationStore.customerWarehouse.latitude), Number(informationStore.customerWarehouse.longitude)],
             [Number(informationStore.portDump.latitude), Number(informationStore.portDump.longitude)],
-            nearestTrailerFromEndPoint
+            [Number(nearestTrailerFromEndPoint.latitude), Number(nearestTrailerFromEndPoint.longitude)]
           ]
         : [],
     [
@@ -57,10 +61,32 @@ export const OFConfirmInformation = () => {
   );
 
   const handleCheckout = async () => {
+    let userId;
+
+    if (token) {
+      const decodedToken: TJWTToken = jwtDecode(token);
+
+      if (!decodedToken.userId) {
+        navigate('/login');
+      }
+
+      userId = decodedToken.userId;
+    } else {
+      navigate('/login');
+    }
+
     axiosInstance
       .post('payment/create-checkout-session', {
-        price: Number(totalPrice.toString().replace('.', '')),
-        'delivery-type': 'Delivery request OF'
+        totalPrice: totalPrice.toString().replace('.', ''),
+        type: 'OF',
+        deliveryDate: informationStore.deliveryDate,
+        detailAddress: informationStore.detailAddress,
+        note: informationStore.note,
+        userId: String(userId),
+        customerWarehouseId: String(informationStore.customerWarehouse?.id),
+        startTrailerId: String(nearestTrailerFromStartPoint?.id),
+        endTrailerId: String(nearestTrailerFromEndPoint?.id),
+        portId: String(informationStore.portDump?.id)
       })
       .then((res) => window.open(res.data.data));
   };
@@ -105,7 +131,11 @@ export const OFConfirmInformation = () => {
           <p>{totalPrice}$</p>
         </div>
         <div className="flex justify-end mt-10">
-          <Button className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white" onClick={handleCheckout}>
+          <Button
+            className="h-10 bg-emerald-600 hover:bg-emerald-500 text-white"
+            disabled={totalPrice === 0}
+            onClick={handleCheckout}
+          >
             Xác nhận thanh toán
           </Button>
         </div>

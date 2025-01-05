@@ -4,12 +4,12 @@ import { LatLngExpression } from 'leaflet';
 import { TDump } from '../../../../../types';
 
 export type TOFTransportInformationState = {
-  nearestTrailerFromStartPoint?: LatLngExpression;
-  nearestTrailerFromEndPoint?: LatLngExpression;
+  nearestTrailerFromStartPoint?: TDump;
+  nearestTrailerFromEndPoint?: TDump;
   informationStore: TTransportInformation;
   fillInformation: (information: TTransportInformation) => void;
-  getNearestTrailerFromStartPoint: (trailer: LatLngExpression) => void;
-  getNearestTrailerFromEndPoint: (trailer: LatLngExpression) => void;
+  getNearestTrailerFromStartPoint: (id: number, trailer: LatLngExpression) => void;
+  getNearestTrailerFromEndPoint: (id: number, trailer: LatLngExpression) => void;
 };
 
 export type TTransportInformation = {
@@ -33,7 +33,36 @@ export const useOFTransportInformationStore = create<TOFTransportInformationStat
     portDump: undefined
   },
   fillInformation: (information: TTransportInformation) => set(() => ({ informationStore: information })),
-  getNearestTrailerFromStartPoint: (trailer: LatLngExpression) =>
-    set(() => ({ nearestTrailerFromStartPoint: trailer })),
-  getNearestTrailerFromEndPoint: (trailer: LatLngExpression) => set(() => ({ nearestTrailerFromEndPoint: trailer }))
+  getNearestTrailerFromStartPoint: (id: number, trailer: any) =>
+    set((state) => {
+      const dump: TDump = {
+        id: id,
+        latitude: trailer[0],
+        longitude: trailer[1],
+        title: '',
+        status: '',
+        createdAt: ''
+      };
+
+      return {
+        ...state,
+        nearestTrailerFromStartPoint: dump
+      };
+    }),
+  getNearestTrailerFromEndPoint: (id: number, trailer: any) =>
+    set((state) => {
+      const dump: TDump = {
+        id: id,
+        latitude: trailer[0],
+        longitude: trailer[1],
+        title: '',
+        status: '',
+        createdAt: ''
+      };
+
+      return {
+        ...state,
+        nearestTrailerFromEndPoint: dump
+      };
+    })
 }));

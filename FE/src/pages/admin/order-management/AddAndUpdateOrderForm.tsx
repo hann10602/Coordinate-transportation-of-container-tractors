@@ -1,7 +1,7 @@
 import { Button, Modal, notification } from 'antd';
 import { LatLngExpression } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { axiosInstance } from '../../../api/axios';
 import { TLatLng, TOrder } from '../../../types';
 import { destinationConvertion, openNotification } from '../../../utils';
@@ -58,6 +58,7 @@ export const AddAndUpdateOrderForm = ({
   const handleNextStep = () => {
     axiosInstance
       .put(`order/next-step/${currentInstance?.id}/${currentInstance?.truckId}`, {
+        endTrailerId: currentInstance && (currentInstance[destinationConvertion[currentInstance.type].endPoint as keyof TOrder] as TLatLng).id,
         currentPosition: currentInstance && currentInstance?.currentPosition + 1,
         truckId: currentInstance?.truckId,
         status: currentInstance?.status
