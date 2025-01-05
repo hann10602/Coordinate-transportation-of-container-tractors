@@ -23,6 +23,7 @@ import {
 import { Completed } from '../pages/web/solution/components/completed/Completed';
 import { Failure } from '../pages/web/solution/components/failure/Failure';
 import { PersonalInfo } from '../pages/web/personal-info';
+import { AdvisoryManagement } from '../pages/admin/advisory-management';
 
 export const router = createBrowserRouter([
   {
@@ -167,6 +168,10 @@ export const router = createBrowserRouter([
               {
                 path: '/admin/order',
                 element: <OrderManagement />
+              },
+              {
+                path: '/admin/advisory',
+                element: <AdvisoryManagement />
               },
               {
                 path: '/admin/truck',

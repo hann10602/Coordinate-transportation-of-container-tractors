@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/db"
 	"github.com/hann10602/Coordinate-transportation-of-container-tractors/middleware"
+	ginadvisory "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/advisory/transport/gin"
 	ginauth "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/auth/transport/gin"
 	gindump "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/dump/transport/gin"
 	ginorder "github.com/hann10602/Coordinate-transportation-of-container-tractors/modules/order/transport/gin"
@@ -26,6 +27,13 @@ func Init() *gin.Engine {
 		auth := v1.Group("/auth")
 		{
 			auth.GET("/login", ginauth.Login(dbInstance))
+		}
+
+		advisory := v1.Group("/advisory")
+		{
+			advisory.GET("", ginadvisory.GetListAdvisory(dbInstance), middleware.JWTAuthMiddleware())
+			advisory.POST("", ginadvisory.CreateAdvisory(dbInstance))
+			advisory.DELETE("/:id", ginadvisory.DeleteAdvisory(dbInstance), middleware.JWTAuthMiddleware())
 		}
 
 		user := v1.Group("/user")

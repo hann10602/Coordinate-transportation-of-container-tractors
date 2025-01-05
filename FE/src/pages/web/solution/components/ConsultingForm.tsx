@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { Button } from '../../../../components';
-import { emailValidation } from '../../../../utils';
+import { emailValidation, openNotification } from '../../../../utils';
 import { TConsultingField } from './types';
+import { axiosInstance } from '../../../../api/axios';
+import { notification } from 'antd';
 
 export const ConsultingForm = () => {
   const {
@@ -10,12 +12,22 @@ export const ConsultingForm = () => {
     formState: { errors }
   } = useForm<TConsultingField>();
 
+  const [api, contextHolder] = notification.useNotification();
+
   const handleSubmitConsultingForm = (e: TConsultingField) => {
-    console.log(e);
+    axiosInstance
+      .post('advisory', {
+        ...e
+      })
+      .then(() => {
+        openNotification(api, 'success', 'Tạo yêu cầu tư vấn thành công');
+      })
+      .catch((err) => openNotification(api, 'error', err.response.data.message));
   };
 
   return (
     <div className="w-full text-white">
+      {contextHolder}
       <p className="mb-10 text-4xl font-bold">Tư vấn giải pháp quản lý vận tải</p>
       <p className="mb-10 text-xl font-semibold">
         Điền thông tin vào đăng ký dưới đây, Transportation sẽ liên lạc để hẹn một buổi demo giải pháp quản lý vận tải

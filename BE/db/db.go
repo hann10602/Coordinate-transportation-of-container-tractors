@@ -20,7 +20,7 @@ func DbConnection() {
 }
 
 func DbMigrate() {
-	db.AutoMigrate(&entitymodel.User{}, &entitymodel.Dump{}, &entitymodel.Truck{}, &entitymodel.Order{})
+	db.AutoMigrate(&entitymodel.User{}, &entitymodel.Dump{}, &entitymodel.Truck{}, &entitymodel.Order{}, &entitymodel.Advisory{})
 }
 
 func DbManager() *gorm.DB {

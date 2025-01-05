@@ -1,20 +1,106 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
-
-const orderData = [
-  { month: 'January', orders: 65, income: 1000 },
-  { month: 'February', orders: 59, income: 1200 },
-  { month: 'March', orders: 80, income: 1500 },
-  { month: 'April', orders: 81, income: 1700 },
-  { month: 'May', orders: 56, income: 1100 },
-  { month: 'June', orders: 55, income: 1300 },
-  { month: 'July', orders: 40, income: 900 }
-];
+import { axiosInstance } from '../../../api/axios';
+import { useCallback, useEffect, useState } from 'react';
+import { TOrder } from '../../../types';
+import dayjs from 'dayjs';
 
 export const Dashboard = () => {
+  const [orderList, setOrderList] = useState<TOrder[]>([]);
+
+  const handleGetList = () => {
+    axiosInstance.get('order').then((res) => {
+      const data = res.data.data;
+      setOrderList(
+        data.map((order: TOrder) => {
+          return {
+            ...order,
+            totalPrice: order.totalPrice / 100
+          };
+        })
+      );
+    });
+  };
+
+  const handleGetStatistics = useCallback(() => {
+    const monthList = {
+      January: {
+        orders: 0,
+        income: 0
+      },
+      February: {
+        orders: 0,
+        income: 0
+      },
+      March: {
+        orders: 0,
+        income: 0
+      },
+      April: {
+        orders: 0,
+        income: 0
+      },
+      May: {
+        orders: 0,
+        income: 0
+      },
+      June: {
+        orders: 0,
+        income: 0
+      },
+      July: {
+        orders: 0,
+        income: 0
+      },
+      August: {
+        orders: 0,
+        income: 0
+      },
+      September: {
+        orders: 0,
+        income: 0
+      },
+      October: {
+        orders: 0,
+        income: 0
+      },
+      November: {
+        orders: 0,
+        income: 0
+      },
+      December: {
+        orders: 0,
+        income: 0
+      }
+    };
+
+    orderList.map((order) => {
+      const month = dayjs(order.createdAt).format('MMMM') as keyof typeof monthList;
+      monthList[month].orders += 1;
+      monthList[month].income += order.totalPrice;
+    });
+
+    return {
+      orders: Object.keys(monthList).map((month) => ({
+        month,
+        orders: monthList[month as keyof typeof monthList].orders
+      })),
+      income: Object.keys(monthList).map((month) => ({
+        month,
+        income: monthList[month as keyof typeof monthList].income
+      }))
+    };
+  }, [orderList]);
+
+  const { orders, income } = handleGetStatistics();
+
+  useEffect(() => {
+    handleGetList();
+  }, []);
+
   return (
     <div>
-      <h2>Order Statistics</h2>
-      <LineChart width={600} height={300} data={orderData}>
+      <p className="font-semibold text-xl mb-4">Order quantity</p>
+      <LineChart width={600} height={300} data={orders}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
@@ -22,14 +108,13 @@ export const Dashboard = () => {
         <Legend />
         <Line type="monotone" dataKey="orders" stroke="#8884d8" activeDot={{ r: 8 }} />
       </LineChart>
-      <h2>Order Quantity and Total Income</h2>
-      <BarChart width={600} height={300} data={orderData}>
+      <p className="font-semibold text-xl mb-4 mt-5">Total income</p>
+      <BarChart width={600} height={300} data={income}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="month" />
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="orders" fill="#8884d8" />
         <Bar dataKey="income" fill="#82ca9d" />
       </BarChart>
     </div>

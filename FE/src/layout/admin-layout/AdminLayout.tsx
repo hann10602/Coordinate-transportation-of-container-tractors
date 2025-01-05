@@ -92,8 +92,15 @@ export const AdminLayout = () => {
               to="/admin/order"
               className={`${location === '/admin/order' ? 'bg-gray-700' : 'hover:bg-gray-700'} px-2 py-2 rounded flex items-center gap-x-3`}
             >
-              <Icon icon="ic:outline-border-color" width="32" height="32" />
+              <Icon icon="material-symbols-light:order-approve-outline-rounded" width="32" height="32" />
               {isOpenSidebar && <p className="font-semibold text-sm">Order</p>}
+            </Link>
+            <Link
+              to="/admin/advisory"
+              className={`${location === '/admin/advisory' ? 'bg-gray-700' : 'hover:bg-gray-700'} px-2 py-2 rounded flex items-center gap-x-3`}
+            >
+              <Icon icon="ic:outline-border-color" width="32" height="32" />
+              {isOpenSidebar && <p className="font-semibold text-sm">Advisory</p>}
             </Link>
             <Link
               to="/admin/truck"

@@ -24,6 +24,14 @@ export type TUser = {
   createdAt: string;
 };
 
+export type TAdvisory = {
+  id: number;
+  phoneNumber: string;
+  email: string;
+  note: string;
+  createdAt: string;
+};
+
 export type TTruck = {
   id: number;
   title: string;
@@ -70,6 +78,7 @@ export type TOrder = {
   startTrailer: TLatLng;
   endTrailer: TLatLng;
   container: TLatLng;
+  createdAt: string;
 };
 
 export type NotificationType = 'success' | 'info' | 'warning' | 'error';
