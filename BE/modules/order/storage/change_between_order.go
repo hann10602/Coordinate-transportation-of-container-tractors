@@ -24,7 +24,7 @@ func (s *sqlStore) ChangeBetweenOrder(ctx context.Context, truckId int64, cond m
 				if err == gorm.ErrRecordNotFound {
 					return common.ErrRecordNotFound(err)
 				}
-		
+
 				return common.ErrDB(err)
 			}
 		}
@@ -42,7 +42,8 @@ func (s *sqlStore) ChangeBetweenOrder(ctx context.Context, truckId int64, cond m
 		if err := nextOrderQuery.
 			Model(&order).
 			Updates(entitymodel.OrderUpdatedSequently{
-				Status: "OnGoing",
+				StartTrailerId: dataUpdated.EndTrailerId,
+				Status:         "OnGoing",
 			}).Error; err != nil {
 			return common.ErrDB(err)
 		}

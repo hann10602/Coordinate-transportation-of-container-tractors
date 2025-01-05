@@ -74,7 +74,7 @@ type OrderGetList struct {
 	Type                string     `json:"type" gorm:"column:type"`
 	TruckId             int64      `json:"truckId" gorm:"column:truck_id"`
 	UserId              int64      `json:"userId" gorm:"column:user_id"`
-	User   User       `json:"user" gorm:"foreignKey:UserId"`
+	User                User       `json:"user" gorm:"foreignKey:UserId"`
 	PortId              int64      `json:"portId" gorm:"column:port_id"`
 	CustomerWarehouseId int64      `json:"customerWarehouseId" gorm:"column:customer_warehouse_id"`
 	StartTrailerId      int64      `json:"startTrailerId" gorm:"column:start_trailer_id"`
@@ -83,7 +83,7 @@ type OrderGetList struct {
 }
 
 type Filter struct {
-	UserId   string `gorm:"column:user_id" json:"userId" form:"userId"`
+	UserId string `gorm:"column:user_id" json:"userId" form:"userId"`
 	Type   string `json:"type" form:"type"`
 	Status string `json:"status" form:"status"`
 }
@@ -129,6 +129,7 @@ func (OrderCreated) TableName() string {
 
 type OrderUpdated struct {
 	CurrentPosition int8       `json:"currentPosition" gorm:"column:current_position"`
+	EndTrailerId    int64      `json:"endTrailerId" gorm:"column:end_trailer_id"`
 	Status          string     `json:"status" gorm:"column:status"`
 	UpdatedAt       *time.Time `json:"updatedAt" gorm:"column:updated_at"`
 }
