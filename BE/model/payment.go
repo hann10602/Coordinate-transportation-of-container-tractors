@@ -16,5 +16,6 @@ type TPaymentCheckout struct {
 	EndTrailerId        string `json:"endTrailerId"`
 	ContainerId         string `json:"containerId"`
 	TotalPrice          string `json:"totalPrice"`
+	Distance            string `json:"Distance"`
 	DeliveryType        string `json:"deliveryType"`
 }

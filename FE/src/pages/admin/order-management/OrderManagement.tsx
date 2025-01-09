@@ -1,22 +1,63 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import type { TableColumnsType } from 'antd';
-import { Button, Modal, notification, Table } from 'antd';
+import { Button, Checkbox, Modal, notification, Table } from 'antd';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../../api/axios';
-import { TOrder } from '../../../types';
+import { TLatLng, TOrder, TTruck } from '../../../types';
 import { convertStatus, openNotification } from '../../../utils';
 import { AddAndUpdateOrderForm } from './AddAndUpdateOrderForm';
-import dayjs from 'dayjs';
+import { TruckColumn } from './TruckColumn';
 
 export const OrderManagement = () => {
-  const [currentInstance, setCurrentInstance] = useState<TOrder | undefined>(undefined);
+  const [currentInstance, setCurrentInstance] = useState<
+    | (TOrder & {
+        totalDistance: number;
+        routingList: {
+          id: number;
+          port: TLatLng;
+          customerWarehouse: TLatLng;
+          startTrailer: TLatLng;
+          endTrailer: TLatLng;
+          container: TLatLng;
+        }[];
+      })
+    | undefined
+  >(undefined);
   const [isOpenAddAndUpdateForm, setIsOpenAddAndUpdateForm] = useState<boolean>(false);
+  const [isDoneAndExpiredOrders, setIsDoneAndExpiredOrders] = useState<boolean>(false);
   const [isOpenDeleteConfirmModal, setIsOpenDeleteConfirmModal] = useState<boolean>(false);
-  const [orderList, setOrderList] = useState<TOrder[]>([]);
+  const [truckList, setTruckList] = useState<TTruck[]>([]);
+
+  const [orderList, setOrderList] = useState<
+    (TOrder & {
+      totalDistance: number;
+      routingList: {
+        id: number;
+        port: TLatLng;
+        customerWarehouse: TLatLng;
+        startTrailer: TLatLng;
+        endTrailer: TLatLng;
+        container: TLatLng;
+      }[];
+    })[]
+  >([]);
 
   const [api, contextHolder] = notification.useNotification();
 
-  const columns: TableColumnsType<TOrder> = [
+  const columns: TableColumnsType<
+    TOrder & {
+      totalDistance: number;
+      routingList: {
+        id: number;
+        port: TLatLng;
+        customerWarehouse: TLatLng;
+        startTrailer: TLatLng;
+        endTrailer: TLatLng;
+        container: TLatLng;
+      }[];
+    }
+  > = [
     {
       key: '',
       title: 'ID',
@@ -35,6 +76,11 @@ export const OrderManagement = () => {
       title: 'Total price',
       dataIndex: 'totalPrice',
       render: (_, record) => <div className="text-center">{record.totalPrice}$</div>
+    },
+    {
+      title: 'Distance',
+      dataIndex: 'distance',
+      render: (_, record) => <div className="text-center">{record.distance} km</div>
     },
     {
       title: 'Status',
@@ -68,9 +114,7 @@ export const OrderManagement = () => {
     {
       title: 'Truck',
       dataIndex: 'truckId',
-      render: (_, record) => (
-        <div className="flex justify-center items-center">{record.truckId === 0 ? `None` : record.truckId}</div>
-      )
+      render: (_, record) => <TruckColumn record={record} truckList={truckList} handleGetOrderList={handleGetList} />
     },
     {
       title: 'Type',
@@ -84,7 +128,7 @@ export const OrderManagement = () => {
           {record.status === 'OnGoing' && (
             <div
               className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer"
-              onClick={() => handleGetOrder(record.id)}
+              onClick={() => handleGetOrder(record.id, record.truckId)}
             >
               <Icon icon="ic:round-edit-road" width="24" height="24" />
             </div>
@@ -103,10 +147,15 @@ export const OrderManagement = () => {
     }
   ];
 
-  const handleGetOrder = (id: number) => {
-    axiosInstance
-      .get(`order/${id}`)
-      .then((res) => setCurrentInstance(res.data.data))
+  const handleGetOrder = (id: number, truckId: number) => {
+    const getOrderById = axiosInstance.get(`order/${id}`).then((res) => res.data.data);
+
+    const getOrderRoutingList = axiosInstance.get(`order/routing-list/${truckId}`).then((res) => res.data.data);
+
+    Promise.all([getOrderById, getOrderRoutingList])
+      .then((res) => {
+        setCurrentInstance({ ...res[0], totalDistance: res[1].totalDistance, routingList: res[1].routingList });
+      })
       .then(() => setIsOpenAddAndUpdateForm(true));
   };
 
@@ -126,6 +175,13 @@ export const OrderManagement = () => {
           };
         })
       );
+    });
+  };
+
+  const handleGetTruckList = () => {
+    axiosInstance.get('truck').then((res) => {
+      const data = res.data.data;
+      setTruckList(data);
     });
   };
 
@@ -153,12 +209,13 @@ export const OrderManagement = () => {
 
   useEffect(() => {
     handleGetList();
+    handleGetTruckList();
   }, []);
 
   return (
     <div className="flex flex-col">
       {contextHolder}
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-center mb-2">
         <p className="text-2xl font-semibold">Order list</p>
         <Button className="px-10 py-5" onClick={handleAssignOrderAutomatically}>
           Automatic assign order
@@ -172,6 +229,9 @@ export const OrderManagement = () => {
             setIsOpenAddAndUpdateForm={setIsOpenAddAndUpdateForm}
           />
         )}
+      </div>
+      <div className="mb-2">
+        <Checkbox onChange={(e) => setIsDoneAndExpiredOrders(e.target.checked)}>Done and expired orders</Checkbox>
       </div>
       {isOpenDeleteConfirmModal && currentInstance && (
         <Modal
@@ -194,7 +254,28 @@ export const OrderManagement = () => {
         </Modal>
       )}
       <div className="flex-1">
-        <Table<TOrder> rowKey="id" columns={columns} pagination={{ pageSize: 8 }} dataSource={orderList} />
+        <Table<
+          TOrder & {
+            totalDistance: number;
+            routingList: {
+              id: number;
+              port: TLatLng;
+              customerWarehouse: TLatLng;
+              startTrailer: TLatLng;
+              endTrailer: TLatLng;
+              container: TLatLng;
+            }[];
+          }
+        >
+          rowKey="id"
+          columns={columns}
+          pagination={{ pageSize: 8 }}
+          dataSource={orderList.filter((order) =>
+            isDoneAndExpiredOrders
+              ? ['Done', 'Expired'].some((status) => order.status.includes(status))
+              : !['Done', 'Expired'].some((status) => order.status.includes(status))
+          )}
+        />
       </div>
     </div>
   );

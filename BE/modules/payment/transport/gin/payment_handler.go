@@ -79,6 +79,7 @@ func CreateCheckoutSession(db *gorm.DB) func(*gin.Context) {
 			Metadata: map[string]string{
 				"type":                order.Type,
 				"totalPrice":          order.TotalPrice,
+				"distance":            order.Distance,
 				"deliveryDate":        order.DeliveryDate,
 				"detailAddress":       order.DetailAddress,
 				"note":                order.Note,
@@ -130,7 +131,8 @@ func HandleStripeWebhook(db *gorm.DB) func(*gin.Context) {
 			}
 
 			order := &entitymodel.OrderCreated{
-				TotalPrice:          func() int32 { i, _ := strconv.Atoi(session.Metadata["totalPrice"]); return int32(i) }(),
+				TotalPrice:          func() int64 { i, _ := strconv.Atoi(session.Metadata["totalPrice"]); return int64(i) }(),
+				Distance:            func() int32 { i, _ := strconv.Atoi(session.Metadata["distance"]); return int32(i) }(),
 				CurrentPosition:     0,
 				DetailAddress:       session.Metadata["detailAddress"],
 				Note:                session.Metadata["note"],

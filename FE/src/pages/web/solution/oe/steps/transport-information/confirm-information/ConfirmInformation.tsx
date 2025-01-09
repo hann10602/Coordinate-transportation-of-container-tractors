@@ -78,6 +78,7 @@ export const OEConfirmInformation = () => {
     axiosInstance
       .post('payment/create-checkout-session', {
         totalPrice: totalPrice.toString().replace('.', ''),
+        distance: Math.floor(distance).toString(),
         type: 'OE',
         deliveryDate: informationStore.deliveryDate,
         detailAddress: informationStore.detailAddress,

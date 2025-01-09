@@ -59,6 +59,11 @@ export const convertStatus = (status: string) => {
         title: 'Chờ duyệt',
         class: 'bg-gray-500'
       };
+    case 'Expired':
+      return {
+        title: 'Đơn hết hạn',
+        class: 'bg-gray-300'
+      };
     default:
       return {
         title: 'Chờ duyệt',

@@ -10,6 +10,7 @@ func main() {
 	env.InitializeENV()
 	db.DbConnection()
 	db.DbMigrate()
+	db.ScheduleDailyTask()
 	r := routes.Init()
 
 	r.Run()

@@ -70,6 +70,7 @@ export type TOrder = {
   };
   status: string;
   totalPrice: number;
+  distance: number;
   note: string;
   detailAddress: string;
   type: 'IE' | 'IF' | 'OE' | 'OF';

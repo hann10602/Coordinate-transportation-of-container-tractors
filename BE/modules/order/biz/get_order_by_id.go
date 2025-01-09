@@ -8,6 +8,7 @@ import (
 
 type GetOrderStorage interface {
 	GetOrder(ctx context.Context, cond map[string]interface{}) (*entitymodel.Order, error)
+	CountRoutingDistance(ctx context.Context, truckId int) (int64, error)
 }
 
 type getOrderBiz struct {

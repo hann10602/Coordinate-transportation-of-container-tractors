@@ -78,6 +78,7 @@ export const OFConfirmInformation = () => {
     axiosInstance
       .post('payment/create-checkout-session', {
         totalPrice: totalPrice.toString().replace('.', ''),
+        distance: Math.floor(distance).toString(),
         type: 'OF',
         deliveryDate: informationStore.deliveryDate,
         detailAddress: informationStore.detailAddress,

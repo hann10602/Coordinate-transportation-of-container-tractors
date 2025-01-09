@@ -60,6 +60,7 @@ func Init() *gin.Engine {
 		{
 			order.GET("", ginorder.GetListOrder(dbInstance))
 			order.GET("/:id", ginorder.GetOrder(dbInstance))
+			order.GET("/routing-list/:truck-id", ginorder.GetRoutingByTruckId(dbInstance))
 			order.POST("", ginorder.CreateOrder(dbInstance))
 			order.PUT("/:id", ginorder.UpdateOrder(dbInstance))
 			order.PUT("/next-step/:id/:truck-id", ginorder.UpdateNextStepOrder(dbInstance))

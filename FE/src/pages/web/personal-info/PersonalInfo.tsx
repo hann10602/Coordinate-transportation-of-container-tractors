@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, notification, Spin, Table } from 'antd';
+import { Button, Checkbox, Flex, Modal, notification, Spin, Table } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +15,7 @@ export const PersonalInfo: React.FC = () => {
   const token = localStorage.getItem('token');
   const [userDetails, setUserDetails] = useState<TUserDetails | undefined>(undefined);
   const [currentInstance, setCurrentInstance] = useState<TOrder | undefined>(undefined);
+  const [isDoneAndExpiredOrders, setIsDoneAndExpiredOrders] = useState<boolean>(false);
   const [isOpenTrackingForm, setIsOpenTrackingForm] = useState<boolean>(false);
   const [isOpenDeleteConfirmModal, setIsOpenDeleteConfirmModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -191,7 +192,20 @@ export const PersonalInfo: React.FC = () => {
         </div>
         <div className="bg-white shadow-xl rounded-lg p-6">
           <h2 className="text-xl font-bold mb-4">Orders</h2>
-          <Table dataSource={userDetails.orders} columns={columns} rowKey="id" />
+          <div className="mb-2">
+            <Checkbox onChange={(e) => setIsDoneAndExpiredOrders(e.target.checked)}>
+              Đơn hàng đã hoàn thành và hết hạn
+            </Checkbox>
+          </div>
+          <Table
+            dataSource={userDetails.orders.filter((order) =>
+              isDoneAndExpiredOrders
+                ? ['Done', 'Expired'].some((status) => order.status.includes(status))
+                : !['Done', 'Expired'].some((status) => order.status.includes(status))
+            )}
+            columns={columns}
+            rowKey="id"
+          />
         </div>
       </div>
     </div>

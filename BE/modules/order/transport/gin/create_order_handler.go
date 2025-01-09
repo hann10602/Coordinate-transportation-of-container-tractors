@@ -19,6 +19,7 @@ func ConvertOrderCreatedFromInput(ordersInput []*entitymodel.OrderCreatedInput) 
 
 		orders[i] = &entitymodel.OrderCreated{
 			TotalPrice:          order.TotalPrice,
+			Distance:            order.Distance,
 			DeliveryDate:        deliveryDatePointer,
 			Status:              entitymodel.WAIT,
 			DetailAddress:       order.DetailAddress,
