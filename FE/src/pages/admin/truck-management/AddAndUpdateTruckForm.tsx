@@ -59,6 +59,8 @@ export const AddAndUpdateTruckForm = ({
   useEffect(() => {
     setValue('title', currentInstance ? currentInstance.title : '');
     setValue('numberPlate', currentInstance ? currentInstance.numberPlate : '');
+    setValue('driverName', currentInstance ? currentInstance.driverName : '');
+    setValue('phoneNumber', currentInstance ? currentInstance.phoneNumber : '');
   }, [currentInstance]);
 
   return (
@@ -85,6 +87,30 @@ export const AddAndUpdateTruckForm = ({
             {...register('title', { required: 'Title is required' })}
           />
           {errors.title && <p className="text-red-400 absolute -bottom-7 mt-2">{errors.title.message}</p>}
+        </div>
+        <div className="relative w-full space-y-2 mt-5">
+          <label className="mb-2 font-semibold" htmlFor="driverName">
+            Driver name
+          </label>
+          <input
+            id="driverName"
+            type="text"
+            className={`${errors.driverName ? 'border-red-600' : 'border-black'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
+            {...register('driverName', { required: 'Driver name is required' })}
+          />
+          {errors.driverName && <p className="text-red-400 absolute -bottom-7 mt-2">{errors.driverName.message}</p>}
+        </div>
+        <div className="relative w-full space-y-2 mt-5">
+          <label className="mb-2 font-semibold" htmlFor="phoneNumber">
+            Phone number
+          </label>
+          <input
+            id="phoneNumber"
+            type="text"
+            className={`${errors.phoneNumber ? 'border-red-600' : 'border-black'} block rounded-md w-full px-4 py-2 text-black placeholder:text-xl border outline-none`}
+            {...register('phoneNumber', { required: 'Phone number is required' })}
+          />
+          {errors.phoneNumber && <p className="text-red-400 absolute -bottom-7 mt-2">{errors.phoneNumber.message}</p>}
         </div>
         <div className="relative w-full space-y-2 mt-5">
           <label className="mb-2 font-semibold" htmlFor="numberPlate">

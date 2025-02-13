@@ -27,9 +27,13 @@ const createRoutineMachineLayer = (props) => {
   instance.on('routeselected', function (e) {
     if (props.currentDestination) {
       const map = instance._map;
-      const waypoints = e.route.waypoints;
-      if (waypoints.length > 0) {
+      const truckWaypoints = e.route.waypoints;
+      if (truckWaypoints.length > 0) {
         addTruckMarker(map, props.currentDestination);
+      }
+      const waypoints = e.route.waypoints;
+      if (waypoints.length > 1) {
+        addOrangeWaypointMarker(map, waypoints[props.nextPoint].latLng);
       }
     }
   });
@@ -51,29 +55,52 @@ const addTruckMarker = (map, latlng) => {
   L.marker(latlng, { icon: truckIcon }).addTo(map);
 };
 
+const createOrangeWaypointIcon = () => {
+  return L.icon({
+    iconUrl: '/public/images/orange-waypoint-icon.jpg',
+    iconSize: [40, 40], // size of the icon
+    iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
+    popupAnchor: [0, -20], // point from which the popup should open relative to the iconAnchor
+    className: 'orange-waypoint-icon' // add a custom class to the icon
+  });
+};
+
+const addOrangeWaypointMarker = (map, latlng) => {
+  const orangeWaypointIcon = createOrangeWaypointIcon();
+  const marker = L.marker(latlng, { icon: orangeWaypointIcon }).addTo(map);
+  marker.setZIndexOffset(1000);
+};
+
 // Takes only 1 argument:
 const RoutingMachine = createControlComponent(createRoutineMachineLayer);
 
 export const RoutineMachineMap = ({
   routingList,
   setDistance,
-  currentDestination
+  currentDestination,
+  nextPoint
 }: {
   routingList: LatLngExpression[];
   setDistance?: React.Dispatch<React.SetStateAction<number>>;
   currentDestination?: LatLngExpression;
+  nextPoint?: number;
 }) => {
   return (
     <MapContainer
       center={currentDestination ? currentDestination : routingList[0] && routingList[0]}
-      zoom={13}
+      zoom={5}
       scrollWheelZoom={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <RoutingMachine waypoints={routingList} setDistance={setDistance} currentDestination={currentDestination} />
+      <RoutingMachine
+        waypoints={routingList}
+        setDistance={setDistance}
+        currentDestination={currentDestination}
+        nextPoint={nextPoint}
+      />
     </MapContainer>
   );
 };

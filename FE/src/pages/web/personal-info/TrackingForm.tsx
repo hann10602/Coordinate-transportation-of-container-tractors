@@ -69,6 +69,7 @@ export const TrackingForm = ({
               key={currentInstance?.currentPosition}
               routingList={routingList}
               currentDestination={currentInstance ? routingList[currentInstance.currentPosition] : undefined}
+              nextPoint={currentInstance ? currentInstance.currentPosition + 1 : undefined}
             />
           </div>
         </div>

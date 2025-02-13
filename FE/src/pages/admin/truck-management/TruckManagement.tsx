@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import type { TableColumnsType } from 'antd';
-import { Button, Modal, notification, Table } from 'antd';
+import { Button, Modal, notification, Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../../api/axios';
 import { openNotification } from '../../../utils';
@@ -34,6 +34,14 @@ export const TruckManagement = () => {
       }
     },
     {
+      title: 'Driver name',
+      dataIndex: 'driverName',
+    },
+    {
+      title: 'Phone number',
+      dataIndex: 'phoneNumber',
+    },
+    {
       title: 'Number plate',
       dataIndex: 'numberPlate'
     },
@@ -54,24 +62,28 @@ export const TruckManagement = () => {
       key: 'action',
       render: (_, record) => (
         <div className="flex items-center gap-x-2">
-          <div
-            className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer"
-            onClick={() => {
-              setCurrentInstance(record);
-              setIsOpenAddAndUpdateForm(true);
-            }}
-          >
-            <Icon icon="ic:round-edit-note" width="24" height="24" />
-          </div>
-          <div
-            className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer"
-            onClick={() => {
-              setCurrentInstance(record);
-              setIsOpenDeleteConfirmModal(true);
-            }}
-          >
-            <Icon icon="mdi:garbage-can-outline" width="24" height="24" />
-          </div>
+          <Tooltip placement="top" title="Edit truck">
+            <div
+              className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer"
+              onClick={() => {
+                setCurrentInstance(record);
+                setIsOpenAddAndUpdateForm(true);
+              }}
+            >
+              <Icon icon="ic:round-edit-note" width="24" height="24" />
+            </div>
+          </Tooltip>
+          <Tooltip placement="top" title="Delete truck">
+            <div
+              className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer"
+              onClick={() => {
+                setCurrentInstance(record);
+                setIsOpenDeleteConfirmModal(true);
+              }}
+            >
+              <Icon icon="mdi:garbage-can-outline" width="24" height="24" />
+            </div>
+          </Tooltip>
         </div>
       )
     }

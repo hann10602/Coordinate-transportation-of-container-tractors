@@ -36,3 +36,7 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+.orange-waypoint-icon {
+   z-index: 1000;
+ }

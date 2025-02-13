@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react/dist/iconify.js';
 import type { TableColumnsType } from 'antd';
-import { Button, Checkbox, Modal, notification, Table } from 'antd';
+import { Button, Checkbox, Modal, notification, Table, Tooltip } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '../../../api/axios';
@@ -126,22 +126,26 @@ export const OrderManagement = () => {
       render: (_, record) => (
         <div className="flex items-center justify-center gap-x-2">
           {record.status === 'OnGoing' && (
-            <div
-              className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer"
-              onClick={() => handleGetOrder(record.id, record.truckId)}
-            >
-              <Icon icon="ic:round-edit-road" width="24" height="24" />
-            </div>
+            <Tooltip placement="top" title="Tracking order">
+              <div
+                className="px-1 py-0.5 rounded-sm bg-blue-400 text-white cursor-pointer"
+                onClick={() => handleGetOrder(record.id, record.truckId)}
+              >
+                <Icon icon="ic:round-edit-road" width="24" height="24" />
+              </div>
+            </Tooltip>
           )}
-          <div
-            className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer"
-            onClick={() => {
-              setCurrentInstance(record);
-              setIsOpenDeleteConfirmModal(true);
-            }}
-          >
-            <Icon icon="mdi:garbage-can-outline" width="24" height="24" />
-          </div>
+          <Tooltip placement="top" title="Delete order">
+            <div
+              className="px-1 py-0.5 rounded-sm bg-red-400 text-white cursor-pointer"
+              onClick={() => {
+                setCurrentInstance(record);
+                setIsOpenDeleteConfirmModal(true);
+              }}
+            >
+              <Icon icon="mdi:garbage-can-outline" width="24" height="24" />
+            </div>
+          </Tooltip>
         </div>
       )
     }

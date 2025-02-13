@@ -128,7 +128,7 @@ export const AddAndUpdateOrderForm = ({
           <span className="ml-2">{currentInstance?.totalDistance} km</span>
         </div>
         <div className="flex items-center">
-          <label className="font-semibold">Routing List:</label>
+          <label className="font-semibold">Order List:</label>
           <div className="ml-2 flex items-center">
             {currentInstance?.routingList.map((routing, index) => (
               <li key={index}>
@@ -148,6 +148,7 @@ export const AddAndUpdateOrderForm = ({
                 key={currentInstance?.currentPosition}
                 routingList={routingList}
                 currentDestination={currentInstance ? routingList[currentInstance.currentPosition] : undefined}
+                nextPoint={currentInstance ? currentInstance.currentPosition + 1 : undefined}
               />
             </div>
           </div>

@@ -35,6 +35,8 @@ export type TAdvisory = {
 export type TTruck = {
   id: number;
   title: string;
+  driverName: string;
+  phoneNumber: string;
   numberPlate: string;
   status: string;
   createdAt: string;

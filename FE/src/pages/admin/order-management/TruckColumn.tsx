@@ -48,7 +48,7 @@ export const TruckColumn = ({ record, truckList, handleGetOrderList }: Props) =>
       {record.truckId !== 0 && record.status === 'Waiting' && (
         <div className="cursor-pointer">
           <Dropdown menu={{ items }} placement="bottomLeft">
-            <Icon icon="material-symbols-light:change-circle-outline" width="24" height="24" />
+            <Icon icon="ic:baseline-edit-note" width="24" height="24" />
           </Dropdown>
         </div>
       )}
